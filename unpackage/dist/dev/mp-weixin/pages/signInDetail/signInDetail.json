@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "youlan-sign-in": "/components/youlan-SignIn/youlan-SignIn"
+  }
+}

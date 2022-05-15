@@ -1,0 +1,1 @@
+<view><youlan-sign-in vue-id="e7464a40-1" type="sign" history="{{history}}" bgday="#fe5568" bgweek="#fe5568" data-event-opts="{{[['^change',[['signDate']]]]}}" bind:change="__e" bind:__l="__l"></youlan-sign-in></view>

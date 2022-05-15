@@ -1,0 +1,53 @@
+{
+	"bsonType": "object",
+	"required": [],
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"title": {
+			"bsonType": "string",
+			"title": "标题",
+			"description": "密码，加密存储",
+			"trim": "both"
+		},
+		"content_img": {
+			"bsonType": "array",
+			"title": "图片",
+			"description": "多张图片",
+			"arrayType": "file",
+			"fileMediaType": "image"
+		},
+		"old_price": {
+			"bsonType": "int"
+		},
+		"price": {
+			"bsonType": "int"
+		},
+		"status": {
+			"bsonType": "int"
+		},
+		"groupsize": {
+			"bsonType": "int"
+		},
+		"endtime": {
+			"bsonType": "int"
+		},
+		"create_date": {
+			"bsonType": "timestamp",
+			"description": "注册时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			},
+			"title": "注册时间"
+		},
+		"update_date": {
+			"bsonType": "timestamp",
+			"description": "注册时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			},
+			"title": "注册时间"
+		}
+	}
+}

@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "u-search": "/node-modules/uview-ui/components/u-search/u-search",
+    "u--image": "/node-modules/uview-ui/components/u--image/u--image",
+    "load-more": "/pages/components/LoadMore"
+  }
+}

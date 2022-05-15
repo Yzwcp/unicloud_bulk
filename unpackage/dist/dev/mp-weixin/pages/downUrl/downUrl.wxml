@@ -1,0 +1,1 @@
+<view><block wx:for="{{downurl}}" wx:for-item="item" wx:for-index="index" wx:key="index"><view data-event-opts="{{[['tap',[['copy',['$0',index+1],[[['downurl','',index]]]]]]]}}" bindtap="__e">{{''+(index+1)+"号下载地址(点击复制):"}}<u--text vue-id="{{'f20f5138-1-'+index}}" text="{{item}}" bind:__l="__l"></u--text></view></block><view>如有提取码请在文章中查看</view></view>
