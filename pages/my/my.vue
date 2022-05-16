@@ -64,7 +64,8 @@
 			async handleLogin(p){
 				const r = await this.$store.dispatch('login',p)
 			},
-			go(url){
+			async go(url){
+				await this.handleLogin()
 				uni.navigateTo({
 					url:url
 				})

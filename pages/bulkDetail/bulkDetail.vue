@@ -96,8 +96,8 @@
 				if(this.isEnding) return uni.showToast({title:'活动结束！',icon:'none'})
 				await this.$store.dispatch('login')
 				this.$api.bulkordercenter({bulk_id:this.allData._id,},'add').then(({data,success})=>{
-					let title = '发起拼团成功！'
-					if(!success && data && data._id) title='您有正在进行的活动...'
+					let title = '活动参加成功！'
+					if(!success && data && data._id) title='这个活动已经开始!...'
 					uni.showToast({
 						title,
 						icon:'none',

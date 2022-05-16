@@ -1,0 +1,48 @@
+{
+	"bsonType": "object",
+	"required": ["bulk_id", "user_id"],
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"bulk_id": {
+			"bsonType": "String",
+			"description": "商品信息ID，uni-id-users表",
+			"foreignKey": "wx_bulk._id"
+		},
+		"user_id": {
+			"bsonType": "String",
+			"description": "下单用户ID，uni-id-users表",
+			"foreignKey": "uni-id-users._id",
+			"forceDefaultValue": {
+				"$env": "uid"
+			}
+		},
+		"endtime": {
+			"bsonType": "timestamp",
+			"description": "订单结束时间"
+		},
+		"status": {
+			"bsonType": "int",
+			"minimum": -1,
+			"maximum": 4,
+			"description": "订单状态，1：正在进行，2：完成，-1:异常，3:发货，4:签收"
+		},
+		"create_date": {
+			"bsonType": "timestamp",
+			"description": "注册时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			},
+			"title": "注册时间"
+		},
+		"update_date": {
+			"bsonType": "timestamp",
+			"description": "注册时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			},
+			"title": "注册时间"
+		}
+	}
+}

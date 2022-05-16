@@ -53,7 +53,7 @@
 			},
 			go(item){
 				uni.navigateTo({
-					url:'/pages/myBulk/myBulk?id='+item.id
+					url:'/pages/myBulk/myBulk?_id='+item._id
 				})
 			}
 		}

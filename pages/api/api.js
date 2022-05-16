@@ -9,6 +9,9 @@ export const API = {
 	bulkordercenter:(data,action)=>{
 	    return request({url:'/bulkorder',method:'post',data:{data:{...data},ex:{action}}})
 	},
+	signincenter:(data,action)=>{
+	    return request({url:'/signin',method:'post',data:{data:{...data},ex:{action}}})
+	},
     upload:(data,action)=>{
         return request({url:'/upload',method:'post',data:{data:{...data},ex:{action}}})
     },

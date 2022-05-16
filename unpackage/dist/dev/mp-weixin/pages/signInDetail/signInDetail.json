@@ -2,6 +2,7 @@
   "navigationBarTitleText": "",
   "enablePullDownRefresh": false,
   "usingComponents": {
+    "unicloud-db": "/node-modules/@dcloudio/uni-cli-shared/components/unicloud-db",
     "youlan-sign-in": "/components/youlan-SignIn/youlan-SignIn"
   }
 }

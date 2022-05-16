@@ -1,18 +1,18 @@
 <template>
 	<view class="my_bulk">
 		<view class="bulk_headers">
-			<image :src="headerImgUrl"></image>
+			<image :src="bannerList.url"></image>
 			<view>
 				<view class="headers_title">
-					{{allResult.bulk.title}}
+					{{bulkData.title}}
 				</view>
 				<view class="headers_details">
-					<text>￥{{allResult.bulk.oldprice}}</text>
-					<text>参团人数:{{allResult.bulk.okpeople}}</text>
+					<text>￥{{bulkData.old_price}}</text>
+					<text>参团人数:{{0}}</text>
 				</view>
 				<view class="headers_bulk">
 					<view>拼团价<text>￥200</text></view>
-					<view>{{ status[allResult.status]}}</view>
+					<view>{{0}}</view>
 				</view>
 			</view>
 		</view>
@@ -36,10 +36,10 @@
 				    </u-count-down>
 			</view>
 			<view class="people_totle">
-				<image v-for="item in group_adds" :src="item.avatars"></image>
+				<image v-for="item in group_adds" :src="item.header_url"></image>
 			</view>
 			<button class="people_invitation" v-if="!invited" data-name="" open-type="share">邀请好友</button>
-			<button class="people_invitation" @click="handleHelp" v-if="invited">帮助好友</button>
+			<button class="people_invitation" @click="handleHelp" v-if="invited" >帮助好友</button>
 		</view>
 	</view>
 </template>
@@ -63,17 +63,17 @@
 				timeData:{},
 				time:9999999999,
 				invited:false,//是否受邀
-				group_adds:[]
+				group_adds:[],
+				bulkData:{}
 			}
 		},
 		onShareAppMessage(options){
 			  var that = this;
 			  // 设置菜单中的转发按钮触发转发事件时的转发内容
-			  const {token} = getApp().globalData.getLocalUserInfo()
 			  console.log(token);
 			  var shareObj = {
 				title: "就差一人",    // 默认是小程序的名称(可以写slogan等)
-				path: `/pages/myBulk/myBulk?id=${that.allResult.id}&creator=${token}`,    // 默认是当前页面，必须是以‘/'开头的完整路径
+				path: `/pages/myBulk/myBulk?_id=${that.allResult._id}&creator=${1}`,    // 默认是当前页面，必须是以‘/'开头的完整路径
 				imageUrl: '',   //自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。显示图片长宽比是 5:4
 			  };
 			  // 来自页面内的按钮的转发
@@ -84,7 +84,7 @@
 			  return shareObj;
 		},
 		onLoad(options) {
-			let id = options.id
+			let _id = options._id
 			uni.showModal({
 			content:JSON.stringify(options)
 			})
@@ -92,34 +92,47 @@
 				//受邀嘉宾
 				this.invited = true
 			}
-			this.initData(id);
+			this.initData({order_id:_id},'detail');
 		},
 		methods: {
 			async handleHelp(){
-				const {userInfo} = await getApp().globalData.handleLogin()
+				const r = await this.$store.dispatch('login')
 				let data = {
-					bulk_id:this.allResult.bulk.id,
-					order_id:this.allResult.id,
-					avatars:userInfo.avatarUrl,
-					nickname:userInfo.nickName,
+					order_id:this.allResult._id,
+					bulk_id:this.bulkData._id,
+					user_id:this.allResult.user_id
 				}
 				this.$showLoading()
-				const {result,success}  = await this.$request({url:'/group/save',data:data})
-				uni.hideLoading()
+				this.$api.bulkordercenter(data,'groupadd').then(res=>{
+					if(res.success ){
+					}
+				}).finally(()=>{
+					uni.hideLoading()
+				})
 				if(success){
-					this.$showToast('助理成功')
+					this.$showToast('助力成功')
 				}else{
 					this.$showToast(result)
 				}
 			},
-			async initData(id){
-		       const {result} = await this.$request({url:'/order/detail',data:{id}})
-			   this.allResult =result
-			   // this.calcTime(result.orderesult.endtime)
-			   this.bannerList =result.bulk.image && result.bulk.image.split(',')
-			   this.headerImgUrl = this.baseImgUrl + this.bannerList[0]
-			   this.group_adds=result.group_adds
-			   this.time =Number(result.endtime) - new Date().getTime()  > 0 ? Number(result.endtime) - new Date().getTime() : 0
+			async initData(data,action){
+				this.$api.bulkordercenter(data,action).then(res=>{
+					if(res.success ){
+						this.allResult = res.data
+						this.bulkData = res.data.bulk[0]
+						this.bannerList = res.data.bulk[0].content_img[0]
+						this.group_adds = res.data.group
+						this.time =Number(this.bulkData.endtime) - new Date().getTime()  > 0 ? Number(this.bulkData.endtime) - new Date().getTime() : 0
+					}
+				}).finally(()=>{
+				})
+		    //    const {result} = await this.$request({url:'/order/detail',data:{_id}})
+			   // this.allResult =result
+			   // // this.calcTime(result.orderesult.endtime)
+			   // this.bannerList =result.bulk.image && result.bulk.image.split(',')
+			   // this.headerImgUrl = this.baseImgUrl + this.bannerList[0]
+			   // this.group_adds=result.group_adds
+			   // this.time =Number(result.endtime) - new Date().getTime()  > 0 ? Number(result.endtime) - new Date().getTime() : 0
 			},
 			onChange(e) {
 				// console.log(e);÷
