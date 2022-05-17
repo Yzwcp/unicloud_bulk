@@ -96,7 +96,7 @@ var components
 try {
   components = {
     uSubsection: function() {
-      return Promise.all(/*! import() | node-modules/uview-ui/components/u-subsection/u-subsection */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-subsection/u-subsection")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-subsection/u-subsection.vue */ 246))
+      return Promise.all(/*! import() | node-modules/uview-ui/components/u-subsection/u-subsection */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-subsection/u-subsection")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-subsection/u-subsection.vue */ 248))
     }
   }
 } catch (e) {
@@ -153,7 +153,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; //
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;function ownKeys(object, enumerableOnly) {var keys = Object.keys(object);if (Object.getOwnPropertySymbols) {var symbols = Object.getOwnPropertySymbols(object);if (enumerableOnly) symbols = symbols.filter(function (sym) {return Object.getOwnPropertyDescriptor(object, sym).enumerable;});keys.push.apply(keys, symbols);}return keys;}function _objectSpread(target) {for (var i = 1; i < arguments.length; i++) {var source = arguments[i] != null ? arguments[i] : {};if (i % 2) {ownKeys(Object(source), true).forEach(function (key) {_defineProperty(target, key, source[key]);});} else if (Object.getOwnPropertyDescriptors) {Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));} else {ownKeys(Object(source)).forEach(function (key) {Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));});}}return target;}function _defineProperty(obj, key, value) {if (key in obj) {Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });} else {obj[key] = value;}return obj;} //
 //
 //
 //
@@ -169,7 +169,7 @@ var _default =
 {
   data: function data() {
     return {
-      list: ['进行中', '全部订单'],
+      list: ['进行中', '已完成'],
       // 或者如下，也可以配置keyName参数修改对象键名
       // list: [{name: '未付款'}, {name: '待评价'}, {name: '已付款'}],
       current: 0,
@@ -179,8 +179,14 @@ var _default =
       app: getApp().globalData.baseImageUrl };
 
   },
-  onLoad: function onLoad() {
-    this.initData({ status: 1 }, "query");
+  onLoad: function onLoad() {var query = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { status: 1 };
+    if (query.status == 2) {
+      this.current = 1;
+    } else {
+      this.current = 0;
+    }
+    this.initData({ status: query.status }, "query");
+
   },
   methods: {
     filterbulk: function filterbulk(item) {
@@ -191,7 +197,7 @@ var _default =
       }
     },
     initData: function initData(data, action) {var _this = this;
-      this.$api.bulkordercenter({ status: this.current == 0 ? 1 : 0 }, action).then(function (res) {
+      this.$api.bulkordercenter(_objectSpread({}, data), action).then(function (res) {
         console.log(res);
         if (res.success && res.data && res.data.affectedDocs > 0) {
           _this.allList = res.data.data;
@@ -204,7 +210,7 @@ var _default =
     },
     change: function change(index) {
       this.current = index;
-      this.initData(index == 1 ? 0 : 1);
+      this.initData({ status: index == 1 ? 2 : 1 }, 'query');
     },
     go: function go(item) {
       uni.navigateTo({

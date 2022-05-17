@@ -1,46 +1,85 @@
 <template>
 	<view class="my_bulk">
-		<view class="bulk_headers">
-			<image :src="bannerList.url"></image>
-			<view>
-				<view class="headers_title">
-					{{bulkData.title}}
-				</view>
-				<view class="headers_details">
-					<text>￥{{bulkData.old_price}}</text>
-					<text>参团人数:{{0}}</text>
-				</view>
-				<view class="headers_bulk">
-					<view>拼团价<text>￥200</text></view>
-					<view>{{0}}</view>
+		<u-skeleton :loading="loading" :animate="true" rows="16"  rowsHeight='18'>
+			
+			<view class="bulk_headers">
+				<image :src="bannerList.url"></image>
+				<view>
+					<view class="headers_title">
+						{{bulkData.title}}
+					</view>
+					<view class="headers_details">
+						<text>￥{{bulkData.old_price}}</text>
+						<text>需参加人数:{{bulkData.groupsize}}</text>
+					</view>
+					<view class="headers_bulk">
+						<view>拼团价<text>￥200</text></view>
+						<view v-if='allResult.status'>{{statusObj[allResult.status]}}</view>
+					</view>
 				</view>
 			</view>
-		</view>
-		<view class="bulk_people">
-			<view class="people_title">还差1人，快喊小伙伴一起拼团吧</view>
-			<view class="people_countdown">
-				<u-count-down
-				        :time="time"
-				        format="SSS"
-				        autoStart
-				        @change="onChange"
-						@finish="finish"
-				    >
-				        <view class="time">
-							距结束仅剩:
-				            <text class="time__item">{{ timeData.days }}&nbsp;</text>天
-				            <text class="time__item">{{ timeData.hours>10?timeData.hours:'0'+timeData.hours}}&nbsp;</text>时
-				            <text class="time__item">{{ timeData.minutes }}&nbsp;</text>分
-				            <text class="time__item">{{ timeData.seconds }}&nbsp;</text>秒
-				        </view>
-				    </u-count-down>
+			<view class="bulk_people" v-if="allResult.status==1">
+				<view class="people_title" v-if="!isOrderFinish">还差{{needsPeople}}人，快喊小伙伴一起拼团吧</view>
+				<view class="people_title" v-if="isOrderFinish ">恭喜完成啦</view>
+				<view class="people_countdown">
+					<u-count-down
+							:time="time"
+							format="SSS"
+							autoStart
+							@change="onChange"
+							@finish="finish"
+						>
+							<view class="time">
+								距结束仅剩:
+								<text class="time__item">{{ timeData.days }}&nbsp;</text>天
+								<text class="time__item">{{ timeData.hours>10?timeData.hours:'0'+timeData.hours}}&nbsp;</text>时
+								<text class="time__item">{{ timeData.minutes }}&nbsp;</text>分
+								<text class="time__item">{{ timeData.seconds }}&nbsp;</text>秒
+							</view>
+						</u-count-down>
+				</view>
+				<view class="people_totle">
+					<image v-for="item in group_adds" :src="item.header_url"></image>
+				</view>
+				<button class="people_invitation" v-if="!invited && !isOrderFinish" data-name="" open-type="share">邀请好友</button>
+				<button class="people_invitation" @click="handleHelp" v-if="invited && !isOrderFinish" >帮助好友</button>
+				<button class="people_invitation" @click="setAddr" v-if="isOrderFinish" >该订单已完成请填写收货信息</button>
 			</view>
-			<view class="people_totle">
-				<image v-for="item in group_adds" :src="item.header_url"></image>
+			<view class="bulk_people" v-if="allResult.status==2">
+				<view class="people_title" >正在准备发货</view>
+				<view class="">
+					<view>
+					  地址：
+					  {{allResult.address.provinceName}}
+					  {{allResult.address.cityName}}
+					  {{allResult.address.countyName}}
+					  {{allResult.address.detailInfo}}
+					</view>
+					<view>
+						电话：{{allResult.address.telNumber}}
+					</view>
+					<view>邮编：{{allResult.address.postalCode}}</view>
+				</view>
+				<view class="people_totle">
+				</view>
 			</view>
-			<button class="people_invitation" v-if="!invited" data-name="" open-type="share">邀请好友</button>
-			<button class="people_invitation" @click="handleHelp" v-if="invited" >帮助好友</button>
-		</view>
+		</u-skeleton>
+		
+		<u-modal :show="addrShow"  title="请确定地址" :showCancelButton='true' @cancel='addrcancel' @confirm='addrconfirm' cancelText='重新选择地址'>
+			<view class="slot-content">
+				  <view>
+					  地址：
+					  {{addrString.provinceName}}
+					  {{addrString.cityName}}
+					  {{addrString.countyName}}
+					  {{addrString.detailInfo}}
+				  </view>
+				  <view>
+					  电话：{{addrString.telNumber}}
+				  </view>
+				  <view>邮编：{{addrString.postalCode}}</view>
+			</view>
+		</u-modal>
 	</view>
 </template>
 
@@ -64,7 +103,18 @@
 				time:9999999999,
 				invited:false,//是否受邀
 				group_adds:[],
-				bulkData:{}
+				bulkData:{},
+				isOrderFinish:false,
+				addrShow:false,
+				addrString:'',
+				statusObj:{
+					"1":'正在进行',
+					"2":'完成待发货',
+					"-1":'异常',
+					"3":'发货',
+					"4":'签收'
+				},
+				loading:false
 			}
 		},
 		onShareAppMessage(options){
@@ -83,11 +133,16 @@
 			  // 返回shareObj
 			  return shareObj;
 		},
+		computed:{
+			needsPeople(){
+				return (this.bulkData.groupsize - this.group_adds.length) || 0
+			}
+		},
 		onLoad(options) {
 			let _id = options._id
-			uni.showModal({
-			content:JSON.stringify(options)
-			})
+			// uni.showModal({
+			// content:JSON.stringify(options)
+			// })
 			if(options.creator){
 				//受邀嘉宾
 				this.invited = true
@@ -116,6 +171,7 @@
 				}
 			},
 			async initData(data,action){
+				this.loading =true
 				this.$api.bulkordercenter(data,action).then(res=>{
 					if(res.success ){
 						this.allResult = res.data
@@ -123,8 +179,10 @@
 						this.bannerList = res.data.bulk[0].content_img[0]
 						this.group_adds = res.data.group
 						this.time =Number(this.bulkData.endtime) - new Date().getTime()  > 0 ? Number(this.bulkData.endtime) - new Date().getTime() : 0
+						this.orderFinish()
 					}
 				}).finally(()=>{
+					this.loading =false
 				})
 		    //    const {result} = await this.$request({url:'/order/detail',data:{_id}})
 			   // this.allResult =result
@@ -133,6 +191,44 @@
 			   // this.headerImgUrl = this.baseImgUrl + this.bannerList[0]
 			   // this.group_adds=result.group_adds
 			   // this.time =Number(result.endtime) - new Date().getTime()  > 0 ? Number(result.endtime) - new Date().getTime() : 0
+			},
+			orderFinish(){
+				this.needsPeople<1? this.isOrderFinish=true :  this.isOrderFinish=false
+			},
+			setAddr(){
+				let that = this
+				uni.chooseAddress({
+				  success(res) {
+				    console.log(res.userName)
+				    console.log(res.postalCode)
+				    console.log(res.provinceName)
+				    console.log(res.cityName)
+				    console.log(res.countyName)
+				    console.log(res.detailInfo)
+				    console.log(res.nationalCode)
+				    console.log(res.telNumber)
+					that.addrShow=true
+					that.addrString = res
+				  }
+				})
+			},
+			addrcancel(){
+				this.addrShow=false
+				this.addrString={}
+			},
+			addrconfirm(){
+				this.$api.bulkordercenter({
+				order_id:this.allResult._id,
+				address:this.addrString,
+				bulk_id:this.bulkData._id
+				},'modify').then(res=>{
+					if(res.success){
+						this.initData({order_id:this.allResult._id},'detail');
+						uni.navigateTo({
+							url:'/pages/orderList/orderList?status=2'
+						})
+					}
+				})
 			},
 			onChange(e) {
 				// console.log(e);÷

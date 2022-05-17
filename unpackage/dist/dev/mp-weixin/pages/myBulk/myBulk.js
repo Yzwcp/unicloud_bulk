@@ -95,8 +95,14 @@ __webpack_require__.r(__webpack_exports__);
 var components
 try {
   components = {
+    uSkeleton: function() {
+      return Promise.all(/*! import() | node-modules/uview-ui/components/u-skeleton/u-skeleton */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-skeleton/u-skeleton")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-skeleton/u-skeleton.vue */ 475))
+    },
     uCountDown: function() {
-      return Promise.all(/*! import() | node-modules/uview-ui/components/u-count-down/u-count-down */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-count-down/u-count-down")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-count-down/u-count-down.vue */ 237))
+      return Promise.all(/*! import() | node-modules/uview-ui/components/u-count-down/u-count-down */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-count-down/u-count-down")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-count-down/u-count-down.vue */ 239))
+    },
+    uModal: function() {
+      return Promise.all(/*! import() | node-modules/uview-ui/components/u-modal/u-modal */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-modal/u-modal")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-modal/u-modal.vue */ 225))
     }
   }
 } catch (e) {
@@ -199,6 +205,45 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 var _default =
 {
   data: function data() {
@@ -219,7 +264,18 @@ var _default =
       time: 9999999999,
       invited: false, //是否受邀
       group_adds: [],
-      bulkData: {} };
+      bulkData: {},
+      isOrderFinish: false,
+      addrShow: false,
+      addrString: '',
+      statusObj: {
+        "1": '正在进行',
+        "2": '完成待发货',
+        "-1": '异常',
+        "3": '发货',
+        "4": '签收' },
+
+      loading: false };
 
   },
   onShareAppMessage: function onShareAppMessage(options) {
@@ -238,11 +294,16 @@ var _default =
     // 返回shareObj
     return shareObj;
   },
+  computed: {
+    needsPeople: function needsPeople() {
+      return this.bulkData.groupsize - this.group_adds.length || 0;
+    } },
+
   onLoad: function onLoad(options) {
     var _id = options._id;
-    uni.showModal({
-      content: JSON.stringify(options) });
-
+    // uni.showModal({
+    // content:JSON.stringify(options)
+    // })
     if (options.creator) {
       //受邀嘉宾
       this.invited = true;
@@ -271,6 +332,7 @@ var _default =
                 }case 7:case "end":return _context.stop();}}}, _callee);}))();
     },
     initData: function initData(data, action) {var _this2 = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee2() {return _regenerator.default.wrap(function _callee2$(_context2) {while (1) {switch (_context2.prev = _context2.next) {case 0:
+                _this2.loading = true;
                 _this2.$api.bulkordercenter(data, action).then(function (res) {
                   if (res.success) {
                     _this2.allResult = res.data;
@@ -278,8 +340,10 @@ var _default =
                     _this2.bannerList = res.data.bulk[0].content_img[0];
                     _this2.group_adds = res.data.group;
                     _this2.time = Number(_this2.bulkData.endtime) - new Date().getTime() > 0 ? Number(_this2.bulkData.endtime) - new Date().getTime() : 0;
+                    _this2.orderFinish();
                   }
                 }).finally(function () {
+                  _this2.loading = false;
                 });
                 //    const {result} = await this.$request({url:'/order/detail',data:{_id}})
                 // this.allResult =result
@@ -288,7 +352,45 @@ var _default =
                 // this.headerImgUrl = this.baseImgUrl + this.bannerList[0]
                 // this.group_adds=result.group_adds
                 // this.time =Number(result.endtime) - new Date().getTime()  > 0 ? Number(result.endtime) - new Date().getTime() : 0
-              case 1:case "end":return _context2.stop();}}}, _callee2);}))();},
+              case 2:case "end":return _context2.stop();}}}, _callee2);}))();},
+    orderFinish: function orderFinish() {
+      this.needsPeople < 1 ? this.isOrderFinish = true : this.isOrderFinish = false;
+    },
+    setAddr: function setAddr() {
+      var that = this;
+      uni.chooseAddress({
+        success: function success(res) {
+          console.log(res.userName);
+          console.log(res.postalCode);
+          console.log(res.provinceName);
+          console.log(res.cityName);
+          console.log(res.countyName);
+          console.log(res.detailInfo);
+          console.log(res.nationalCode);
+          console.log(res.telNumber);
+          that.addrShow = true;
+          that.addrString = res;
+        } });
+
+    },
+    addrcancel: function addrcancel() {
+      this.addrShow = false;
+      this.addrString = {};
+    },
+    addrconfirm: function addrconfirm() {var _this3 = this;
+      this.$api.bulkordercenter({
+        order_id: this.allResult._id,
+        address: this.addrString,
+        bulk_id: this.bulkData._id },
+      'modify').then(function (res) {
+        if (res.success) {
+          _this3.initData({ order_id: _this3.allResult._id }, 'detail');
+          uni.navigateTo({
+            url: '/pages/orderList/orderList?status=2' });
+
+        }
+      });
+    },
     onChange: function onChange(e) {
       // console.log(e);÷
       this.timeData = e;

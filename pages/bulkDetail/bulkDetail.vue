@@ -117,10 +117,10 @@
 				this.timeData = e
 			},
 			finish(){
-				uni.showToast({
-					title:'活动结束了，请关注其他活动',
-					icon:'none'
-				})
+				// uni.showToast({
+				// 	title:'活动结束了，请关注其他活动',
+				// 	icon:'none'
+				// })
 				this.isEnding = true
 			}
 		}

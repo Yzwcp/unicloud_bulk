@@ -20,25 +20,12 @@
 				<image src="../../static/icon-order.png"></image>
 				<text>订单记录</text>
 			</view>
-			<view @click="addr">
-				<image src="../../static/icon-order.png"></image>
-				<text>收货地址</text>
-			</view>
-			<view @click="addr">
+		
+<!-- 			<view @click="addr">
 				<image src="../../static/icon-order.png"></image>
 				<text>待发货</text>
-			</view>
+			</view> -->
 		</view>
-		<u-modal :show="addrShow"  :title="title" >
-			<view class="slot-content"> 
-				<u--input
-					    placeholder="地址"
-					    suffixIcon="map-fill"
-						:value='address'
-					    suffixIconStyle="color: #909399"
-					></u--input>
-			</view>
-		</u-modal>
 		<view class="version" @click="clear">版本号：2.0.1</view>
 	</view>
 </template>

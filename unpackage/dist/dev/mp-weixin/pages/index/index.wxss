@@ -41,4 +41,7 @@
   width: 100vw;
   background-color: white;
 }
+.hightColor.data-v-57280228 {
+  color: #ff7883;
+}
 

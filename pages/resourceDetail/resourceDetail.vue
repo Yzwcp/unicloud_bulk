@@ -49,15 +49,13 @@
 				})
 			},
 			initData(){
-				
-				this.$request({url:'/hulu/post/detail',method:'GET',data:{post_id:this.id}}).then(({result,success})=>{
-					if(success){
-						// console.log(s.match(/(?<=<image>).*?(?=((,*,*<\/image>)|$))/g));
-						this.postsData = result.post
-						this.postsData.detail =result.post.detail.replace(/(\s\s)|(\n)/g,'<br/>')
-						this.filterData(this.postsData.detail,this.postsData.images)
-					}
+				this.$api.signincenter({post_id:this.id},'postsDetail').then(result=>{
+					console.log(result);
+					this.postsData = result.post
+					this.postsData.detail =result.post.detail.replace(/(\s\s)|(\n)/g,'<br/>')
+					this.filterData(this.postsData.detail,this.postsData.images)
 				})
+				
 			},
 			filterData(result,img=[]){
 				// const detailList=result.match(/(?<=<image>).*?(?=((,*,*<\/image>)|$))/g)

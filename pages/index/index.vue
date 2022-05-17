@@ -6,7 +6,7 @@
 		</view>
 		<view style="height: 80rpx;"> </view>
 		<Bulk :reachBottom='reachBottom' :bulkData='dataSource' v-show="currentIndex==891" />
-		<!-- <Resources :bulkData='bulkData' v-show="currentIndex==892" /> -->
+		<Resources  v-show="currentIndex==892" />
 		<view class="wrap">
 			<u-back-top :scroll-top="scrollTop" :iconStyle="iconStyle" :customStyle='customstyle'></u-back-top>
 		</view>
@@ -99,5 +99,9 @@
 			background-color: white;
 		}
 		
+		
+	}
+	.hightColor{
+		color: $uni-text-color-pink;
 	}
 </style>

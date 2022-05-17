@@ -46,7 +46,8 @@ exports.main = async (event, context) => {
 				let queryRes = await db.collection('wx_bulk_order')
 				.aggregate()
 				.match({
-				  user_id: payload.uid
+				  user_id: payload.uid,
+				  status:reqData.status
 				})
 				.lookup({
 				  from: 'wx_bulk',
@@ -88,6 +89,35 @@ exports.main = async (event, context) => {
 				let reRes = await blukOrderCollection.doc(reqData._id).remove()
 				if(!reRes) throw reRes
 				return formatResult(reRes,true)
+			case 'modify':
+				if(!reqData.order_id)return formatResult({},false,'没有id')
+				//拿到bulk找需要多少人成团
+				const blukCollection = db.collection('wx_bulk');
+				let m_bulkRes =await blukCollection.where({
+					_id:reqData.bulk_id
+				}).get()
+				if(m_bulkRes.affectedDocs>0){
+					let {data:[record]} = m_bulkRes
+					let groupsize = record.groupsize
+					const groupCollection =await db.collection('wx_group_add').where({
+						order_id:reqData.order_id
+					}).count()
+					if(groupCollection.total>=groupsize){
+						let modifyRes = await blukOrderCollection.doc(reqData.order_id)
+						.update({
+						  address:reqData.address,
+						  status:2
+						});
+						if(!modifyRes) throw '更新失败'
+						return formatResult(modifyRes)
+					}else{
+						return formatResult(groupCollection,false,'没有达到条件')
+					}
+					
+				}
+				return formatResult(blukCollection)
+				
+				
 			case 'detail':
 				
 				if(!reqData.order_id) return formatResult({},false,'没有id')

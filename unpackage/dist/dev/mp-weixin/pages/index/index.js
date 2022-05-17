@@ -96,7 +96,7 @@ var components
 try {
   components = {
     uBackTop: function() {
-      return Promise.all(/*! import() | node-modules/uview-ui/components/u-back-top/u-back-top */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-back-top/u-back-top")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-back-top/u-back-top.vue */ 201))
+      return Promise.all(/*! import() | node-modules/uview-ui/components/u-back-top/u-back-top */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-back-top/u-back-top")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-back-top/u-back-top.vue */ 203))
     }
   }
 } catch (e) {
@@ -153,7 +153,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var Bulk = function Bulk() {__webpack_require__.e(/*! require.ensure | pages/components/bulk */ "pages/components/bulk").then((function () {return resolve(__webpack_require__(/*! ../components/bulk.vue */ 209));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Resources = function Resources() {__webpack_require__.e(/*! require.ensure | pages/components/resources */ "pages/components/resources").then((function () {return resolve(__webpack_require__(/*! ../components/resources.vue */ 216));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var Bulk = function Bulk() {__webpack_require__.e(/*! require.ensure | pages/components/bulk */ "pages/components/bulk").then((function () {return resolve(__webpack_require__(/*! ../components/bulk.vue */ 211));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var Resources = function Resources() {__webpack_require__.e(/*! require.ensure | pages/components/resources */ "pages/components/resources").then((function () {return resolve(__webpack_require__(/*! ../components/resources.vue */ 218));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
 
 
 

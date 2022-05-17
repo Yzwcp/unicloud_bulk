@@ -1,9 +1,10 @@
 <template>
 	<view>
-		<unicloud-db ref='udb' v-slot:default="{data, loading, error, options}" collection="wx_sign_in"  >
-			{{data}}
-		     <youlanSignIn  type="sign" @change="signDate" :history='history'  bgday="#fe5568" bgweek="#fe5568"/>
-		    </unicloud-db>
+		<unicloud-db ref='udb' v-slot:default="{data, loading, error, options}" collection="wx_sign_in" :where="where" loadtime="manual">
+		  <view>
+			<youlanSignIn  type="sign" @change="signDate" :history='data'  bgday="#fe5568" bgweek="#fe5568"/>
+		  </view>
+		</unicloud-db>
 	</view>
 </template>
 
@@ -13,7 +14,8 @@
 		name:'SignInDetail',
 		data() {
 			return {
-				history:[]
+				history:[],
+				where:{}
 			};
 		},
 		components:{youlanSignIn},
@@ -24,12 +26,12 @@
 			this.initData()
 		},
 		methods:{
-			signDate(e){
+			async signDate(e){
 				this.$refs.udb.add({}, {
 				  action:'sign_action',
-				  toastTitle: '新增成功', // toast提示语
+				  toastTitle: '签到成功', // toast提示语
 				  success: (res) => { // 新增成功后的回调
-				    const { code, message } = res
+					this.$refs.udb.loadData()
 				  },
 				  fail: (err) => { // 新增失败后的回调
 				    const { message } = err
@@ -39,26 +41,30 @@
 				})
 			},
 			initData(){
+			
 				const db = uniCloud.database() //代码块为cdb
 				const dbCmd = db.command
 				const date = new Date()
 				const y = date.getFullYear()
 				const m = date.getMonth()+1
 				const md = "01"
-				const nowD = date.getDay()
-				console.log(nowD);
-				return
-				db.collection('wx_sign_in')
-				  .where({
-					  create_date:dbCmd.and(dbCmd.gte(50), dbCmd.lte(100)),
-				  })
-					.get()
-				  .then((res)=>{
-				    // res 为数据库查询结果
-				  }).catch((err)=>{
-				    console.log(err.code); // 打印错误码
-						console.log(err.message); // 打印错误内容
-				  })
+				const nowD = date.getDate()
+				let start = y+'-'+m+'-'+md
+				let end = y+'-'+m+'-'+nowD
+				this.where=`sign_date>=${new Date(start).getTime()} && sign_date<=${new Date(end).getTime()}`
+				this.$nextTick(() => {
+				  this.$refs.udb.loadData()
+				})
+				// db.collection('wx_sign_in')
+				//   .where()
+				// 	.get()
+				//   .then((res)=>{
+				//     // res 为数据库查询结果
+				// 	this.history=res.result.data
+				//   }).catch((err)=>{
+				//     console.log(err.code); // 打印错误码
+				// 	console.log(err.message); // 打印错误内容
+				//   })
 				// this.$request({url:'/signIn/list',loading:true}).then(({success,result})=>{
 				// 	this.history = result
 				// })

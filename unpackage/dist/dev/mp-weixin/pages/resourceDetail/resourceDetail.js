@@ -96,13 +96,13 @@ var components
 try {
   components = {
     uParse: function() {
-      return Promise.all(/*! import() | node-modules/uview-ui/components/u-parse/u-parse */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-parse/u-parse")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-parse/u-parse.vue */ 254))
+      return Promise.all(/*! import() | node-modules/uview-ui/components/u-parse/u-parse */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-parse/u-parse")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-parse/u-parse.vue */ 256))
     },
     uAlbum: function() {
-      return Promise.all(/*! import() | node-modules/uview-ui/components/u-album/u-album */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-album/u-album")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-album/u-album.vue */ 263))
+      return Promise.all(/*! import() | node-modules/uview-ui/components/u-album/u-album */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-album/u-album")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-album/u-album.vue */ 265))
     },
     uButton: function() {
-      return Promise.all(/*! import() | node-modules/uview-ui/components/u-button/u-button */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-button/u-button")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-button/u-button.vue */ 271))
+      return Promise.all(/*! import() | node-modules/uview-ui/components/u-button/u-button */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-button/u-button")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-button/u-button.vue */ 273))
     }
   }
 } catch (e) {
@@ -210,15 +210,13 @@ var _default = {
 
     },
     initData: function initData() {var _this = this;
-
-      this.$request({ url: '/hulu/post/detail', method: 'GET', data: { post_id: this.id } }).then(function (_ref) {var result = _ref.result,success = _ref.success;
-        if (success) {
-          // console.log(s.match(/(?<=<image>).*?(?=((,*,*<\/image>)|$))/g));
-          _this.postsData = result.post;
-          _this.postsData.detail = result.post.detail.replace(/(\s\s)|(\n)/g, '<br/>');
-          _this.filterData(_this.postsData.detail, _this.postsData.images);
-        }
+      this.$api.signincenter({ post_id: this.id }, 'postsDetail').then(function (result) {
+        console.log(result);
+        _this.postsData = result.post;
+        _this.postsData.detail = result.post.detail.replace(/(\s\s)|(\n)/g, '<br/>');
+        _this.filterData(_this.postsData.detail, _this.postsData.images);
       });
+
     },
     filterData: function filterData(result) {var img = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
       // const detailList=result.match(/(?<=<image>).*?(?=((,*,*<\/image>)|$))/g)

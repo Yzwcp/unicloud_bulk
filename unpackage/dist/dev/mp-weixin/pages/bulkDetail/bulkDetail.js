@@ -96,7 +96,7 @@ var components
 try {
   components = {
     uCountDown: function() {
-      return Promise.all(/*! import() | node-modules/uview-ui/components/u-count-down/u-count-down */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-count-down/u-count-down")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-count-down/u-count-down.vue */ 237))
+      return Promise.all(/*! import() | node-modules/uview-ui/components/u-count-down/u-count-down */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/uview-ui/components/u-count-down/u-count-down")]).then(__webpack_require__.bind(null, /*! uview-ui/components/u-count-down/u-count-down.vue */ 239))
     }
   }
 } catch (e) {
@@ -281,10 +281,10 @@ var _default =
       this.timeData = e;
     },
     finish: function finish() {
-      uni.showToast({
-        title: '活动结束了，请关注其他活动',
-        icon: 'none' });
-
+      // uni.showToast({
+      // 	title:'活动结束了，请关注其他活动',
+      // 	icon:'none'
+      // })
       this.isEnding = true;
     } } };exports.default = _default;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))

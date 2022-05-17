@@ -25,11 +25,36 @@ exports.main = async (event, context) => {
 	
 	const db = uniCloud.database();
 	const blukCollection = db.collection('wx_bulk');
-	
+	const dbCmd = db.command
+	const $ = db.command.aggregate
+					// .lookup({
+					//   from: 'wx_group_add',
+					//   localField: '_id',
+					//   foreignField: 'bulk_id',
+					//   as: 'group'
+					// })
+					// .limit(3)
+					// .end()
 	try{
 		switch(action){
 			case 'query':
-				let queryRes =await blukCollection.get()
+				let queryRes = await db.collection('wx_bulk')
+				.aggregate()
+				.lookup({
+				    from: 'wx_group_add',
+				    let: {
+				      bulk_id: '$_id', //连接wx_bulk
+				    },
+				    pipeline: $.pipeline() //连接wx_group_add
+				      .match(dbCmd.expr($.eq(['$bulk_id', '$$bulk_id'])))
+					  .sort({
+						  create_date:-1
+					  })
+					  .limit(3)
+				      .done(),
+				    as: 'group',
+				  })
+				  .end()
 				return queryRes
 			case 'add':
 				reqData['create_date'] = timeStamp

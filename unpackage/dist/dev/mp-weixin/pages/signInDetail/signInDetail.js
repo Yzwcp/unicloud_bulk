@@ -94,7 +94,7 @@ var components
 try {
   components = {
     unicloudDb: function() {
-      return Promise.all(/*! import() | node-modules/@dcloudio/uni-cli-shared/components/unicloud-db */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/@dcloudio/uni-cli-shared/components/unicloud-db")]).then(__webpack_require__.bind(null, /*! @dcloudio/uni-cli-shared/components/unicloud-db.vue */ 462))
+      return Promise.all(/*! import() | node-modules/@dcloudio/uni-cli-shared/components/unicloud-db */[__webpack_require__.e("common/vendor"), __webpack_require__.e("node-modules/@dcloudio/uni-cli-shared/components/unicloud-db")]).then(__webpack_require__.bind(null, /*! @dcloudio/uni-cli-shared/components/unicloud-db.vue */ 289))
     }
   }
 } catch (e) {
@@ -118,19 +118,6 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  var m0 = _vm.$hasScopedSlotsParams("e7464a40-1")
-  var m1 = m0
-    ? _vm.$getScopedSlotsParams("e7464a40-1", "default", "data")
-    : null
-  _vm.$mp.data = Object.assign(
-    {},
-    {
-      $root: {
-        m0: m0,
-        m1: m1
-      }
-    }
-  )
 }
 var recyclableRender = false
 var staticRenderFns = []
@@ -164,7 +151,8 @@ __webpack_require__.r(__webpack_exports__);
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(uniCloud) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var youlanSignIn = function youlanSignIn() {Promise.all(/*! require.ensure | components/youlan-SignIn/youlan-SignIn */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/youlan-SignIn/youlan-SignIn")]).then((function () {return resolve(__webpack_require__(/*! @/components/youlan-SignIn/youlan-SignIn.vue */ 287));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+/* WEBPACK VAR INJECTION */(function(uniCloud) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _regenerator = _interopRequireDefault(__webpack_require__(/*! ./node_modules/@babel/runtime/regenerator */ 15));function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {try {var info = gen[key](arg);var value = info.value;} catch (error) {reject(error);return;}if (info.done) {resolve(value);} else {Promise.resolve(value).then(_next, _throw);}}function _asyncToGenerator(fn) {return function () {var self = this,args = arguments;return new Promise(function (resolve, reject) {var gen = fn.apply(self, args);function _next(value) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);}function _throw(err) {asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);}_next(undefined);});};}var youlanSignIn = function youlanSignIn() {Promise.all(/*! require.ensure | components/youlan-SignIn/youlan-SignIn */[__webpack_require__.e("common/vendor"), __webpack_require__.e("components/youlan-SignIn/youlan-SignIn")]).then((function () {return resolve(__webpack_require__(/*! @/components/youlan-SignIn/youlan-SignIn.vue */ 300));}).bind(null, __webpack_require__)).catch(__webpack_require__.oe);};var _default =
+
 
 
 
@@ -179,7 +167,8 @@ __webpack_require__.r(__webpack_exports__);
   name: 'SignInDetail',
   data: function data() {
     return {
-      history: [] };
+      history: [],
+      where: {} };
 
   },
   components: { youlanSignIn: youlanSignIn },
@@ -190,46 +179,50 @@ __webpack_require__.r(__webpack_exports__);
     this.initData();
   },
   methods: {
-    signDate: function signDate(e) {
-      this.$refs.udb.add({}, {
-        action: 'sign_action',
-        toastTitle: '新增成功', // toast提示语
-        success: function success(res) {// 新增成功后的回调
-          var code = res.code,message = res.message;
-        },
-        fail: function fail(err) {// 新增失败后的回调
-          var message = err.message;
-        },
-        complete: function complete() {// 完成后的回调
-        } });
+    signDate: function signDate(e) {var _this = this;return _asyncToGenerator( /*#__PURE__*/_regenerator.default.mark(function _callee() {return _regenerator.default.wrap(function _callee$(_context) {while (1) {switch (_context.prev = _context.next) {case 0:
+                _this.$refs.udb.add({}, {
+                  action: 'sign_action',
+                  toastTitle: '签到成功', // toast提示语
+                  success: function success(res) {// 新增成功后的回调
+                    _this.$refs.udb.loadData();
+                  },
+                  fail: function fail(err) {// 新增失败后的回调
+                    var message = err.message;
+                  },
+                  complete: function complete() {// 完成后的回调
+                  } });case 1:case "end":return _context.stop();}}}, _callee);}))();
 
     },
-    initData: function initData() {
+    initData: function initData() {var _this2 = this;
+
       var db = uniCloud.database(); //代码块为cdb
       var dbCmd = db.command;
       var date = new Date();
       var y = date.getFullYear();
       var m = date.getMonth() + 1;
       var md = "01";
-      var nowD = date.getDay();
-      console.log(nowD);
-      return;
-      db.collection('wx_sign_in').
-      where({
-        create_date: dbCmd.and(dbCmd.gte(50), dbCmd.lte(100)) }).
-
-      get().
-      then(function (res) {
-        // res 为数据库查询结果
-      }).catch(function (err) {
-        console.log(err.code); // 打印错误码
-        console.log(err.message); // 打印错误内容
+      var nowD = date.getDate();
+      var start = y + '-' + m + '-' + md;
+      var end = y + '-' + m + '-' + nowD;
+      this.where = "sign_date>=".concat(new Date(start).getTime(), " && sign_date<=").concat(new Date(end).getTime());
+      this.$nextTick(function () {
+        _this2.$refs.udb.loadData();
       });
+      // db.collection('wx_sign_in')
+      //   .where()
+      // 	.get()
+      //   .then((res)=>{
+      //     // res 为数据库查询结果
+      // 	this.history=res.result.data
+      //   }).catch((err)=>{
+      //     console.log(err.code); // 打印错误码
+      // 	console.log(err.message); // 打印错误内容
+      //   })
       // this.$request({url:'/signIn/list',loading:true}).then(({success,result})=>{
       // 	this.history = result
       // })
     } } };exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/uni-cloud/dist/index.js */ 467)["default"]))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/vue-cli-plugin-uni/packages/uni-cloud/dist/index.js */ 201)["default"]))
 
 /***/ })
 

@@ -2,11 +2,11 @@
 	<view class="calendar-box">
 		<view class="top">
 			<view>
-				<h4>已连续签到 <span> {{g_integral.signcount}} </span> 天</h4>
-				<p>今日获得+{{g_integral.signcount>7?7:g_integral.signcount}}积分</p>
+				<h4>积分 <span> {{jf}} </span> </h4>
+				<p>连续签到{{lx}}天</p>
 			</view>
 			<view class="rig">
-				<span>补签</span>
+				<!-- <span>补签</span> -->
 			</view>
 		</view>
 		<view class="miss_box">
@@ -74,20 +74,27 @@
 				year: new Date().getFullYear(), // 当前年
 				month: new Date().getMonth() + 1, // 当前月
 				weekArr: ['日', '一', '二', '三', '四', '五', '六'], // 每周
-				aheadDay: 0,	// 前方空白天数数量
+				aheadDay: 0,	// 前方空白天数数量，
+				jf:0,//积分
+				lx:0//连续签到天数
 			}
 		},
 		watch:{
-			history(val){
-				console.log(val);
+			history(val=[]){
 				val && this.dayArr.forEach(res=>{
 					val.map(item=>{
-						let a =item.createdAt.split(' ')[0] 
+						let a = new Date(item.sign_date).toLocaleDateString()
+						console.log(a);
 						if(a ===res.date ){
 							res.flag=true
 						}
 					})
 				})
+				if(val.length>0){
+					console.log(val);
+					this.lx = val[val.length-1].continuous
+					this.jf = val[val.length-1].points
+				}
 			}
 		},
 		computed:{
@@ -175,7 +182,7 @@
 					}
 					// 添加本月日期
 					let obj = {};
-					obj.date = that.year + '-' + that.formatNum(that.month) + '-' + that.formatNum(i);
+					obj.date = that.year + '/' + that.formatNum(that.month) + '/' + that.formatNum(i);
 					obj.day = i;
 					obj.flag = false;
 					that.dayArr.push(obj);
@@ -206,7 +213,7 @@
 			},
 			// 格式化日期位数
 			formatNum(num) {
-				return num < 10 ? ('0' + num) : num;
+				return  num;
 			},
 			// 上一个月
 			lastMonth() {

@@ -23,8 +23,9 @@ module.exports = {
 		// }
 		let timeStamp = todayTimestamp()
 		let {data: [record]} = await signInTable
-		.where({user_id:state.auth.uid})
-		.orderBy("create_date", "desc")
+		//筛选最新签到的数据第一条
+		.where({user_id:state.auth.uid,type:1})
+		.orderBy("sign_date", "desc")
 		.limit(1)
 		.get()
 		if(record){
@@ -35,7 +36,7 @@ module.exports = {
 			if(islx==1){
 				state.newData.continuous =record.continuous+1
 				state.newData.points = record.points + (state.newData.continuous>6?7:state.newData.continuous)
-				state.newData.scores =state.newData.continuous
+				state.newData.scores = (state.newData.continuous>6?7:state.newData.continuous)
 			}else{
 				state.newData.continuous =1
 				state.newData.points = record.points+1
@@ -48,6 +49,7 @@ module.exports = {
 		state.newData.type = 1
 	},
 	after: async (state, event, error, result) => {
+
 		if (error) {
 			throw error
 		}

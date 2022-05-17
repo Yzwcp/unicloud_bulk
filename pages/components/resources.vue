@@ -82,19 +82,15 @@
 				data.count=this.page.count
 				data.start=this.page.start
 				if(key)data.keyword=key
-				this.$request({url:'/hulu/posts/search',method:'GET',data}).then(({result,success})=>{
-					if(success){
-						this.filterData(result)
-					}
+				this.$api.signincenter(data,'postsListSearch').then(result=>{
+					this.filterData(result)
 				})
 			},
 			initData(){
 				let data={}
 				data.count=this.page.count
-				this.$request({url:'/hulu/posts',method:'GET',data}).then(({result,success})=>{
-					if(success){
-						this.filterData(result)
-					}
+				this.$api.signincenter(data,'postsList').then(res=>{
+					this.filterData(res)
 				})
 			},
 			godetail(item){

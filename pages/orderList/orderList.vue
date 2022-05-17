@@ -14,7 +14,7 @@
 	export default {
 		data() {
 			return {
-				list: ['进行中', '全部订单'],
+				list: ['进行中', '已完成'],
 				// 或者如下，也可以配置keyName参数修改对象键名
 				// list: [{name: '未付款'}, {name: '待评价'}, {name: '已付款'}],
 				current: 0,
@@ -24,8 +24,14 @@
 				app:getApp().globalData.baseImageUrl
 			}
 		},
-		onLoad() {
-			this.initData({status:1},"query")
+		onLoad(query={status:1}) {
+			if(query.status==2){
+				this.current=1
+			}else{
+				this.current=0
+			}
+			this.initData({status:query.status},"query")
+			
 		},
 		methods: {
 			filterbulk(item){
@@ -36,7 +42,7 @@
 				}
 			},
 			initData(data,action){
-				this.$api.bulkordercenter({status:this.current==0?1:0},action).then(res=>{
+				this.$api.bulkordercenter({...data},action).then(res=>{
 					console.log(res);
 					if(res.success && res.data && res.data.affectedDocs>0){
 						this.allList = res.data.data
@@ -49,7 +55,7 @@
 			},
 			change(index){
 				this.current=index
-				this.initData(index==1?0:1)
+				this.initData({status:index==1?2:1},'query')
 			},
 			go(item){
 				uni.navigateTo({
