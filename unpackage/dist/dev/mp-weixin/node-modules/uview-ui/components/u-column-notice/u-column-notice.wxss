@@ -11,7 +11,7 @@
  *
  * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
  */
-.u-back-top.data-v-fdbb9fe6 {
+.u-back-top.data-v-515940d7 {
   background: red;
 }
 /* 颜色变量 */
@@ -27,7 +27,7 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
-view.data-v-fdbb9fe6, scroll-view.data-v-fdbb9fe6, swiper-item.data-v-fdbb9fe6 {
+view.data-v-515940d7, scroll-view.data-v-515940d7, swiper-item.data-v-515940d7 {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -36,61 +36,35 @@ view.data-v-fdbb9fe6, scroll-view.data-v-fdbb9fe6, swiper-item.data-v-fdbb9fe6 {
   align-items: stretch;
   align-content: flex-start;
 }
-.u-input.data-v-fdbb9fe6 {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  flex: 1;
-}
-.u-input--radius.data-v-fdbb9fe6, .u-input--square.data-v-fdbb9fe6 {
-  border-radius: 4px;
-}
-.u-input--no-radius.data-v-fdbb9fe6 {
-  border-radius: 0;
-}
-.u-input--circle.data-v-fdbb9fe6 {
-  border-radius: 100px;
-}
-.u-input__content.data-v-fdbb9fe6 {
-  flex: 1;
+.u-notice.data-v-515940d7 {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
 }
-.u-input__content__field-wrapper.data-v-fdbb9fe6 {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  margin: 0;
-  flex: 1;
+.u-notice__left-icon.data-v-515940d7 {
+  align-items: center;
+  margin-right: 5px;
 }
-.u-input__content__field-wrapper__field.data-v-fdbb9fe6 {
-  line-height: 26px;
-  text-align: left;
-  color: #303133;
-  height: 24px;
-  font-size: 15px;
-  flex: 1;
+.u-notice__right-icon.data-v-515940d7 {
+  margin-left: 5px;
+  align-items: center;
 }
-.u-input__content__clear.data-v-fdbb9fe6 {
-  width: 20px;
-  height: 20px;
-  border-radius: 100px;
-  background-color: #c6c7cb;
+.u-notice__swiper.data-v-515940d7 {
+  height: 16px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  -webkit-transform: scale(0.82);
-          transform: scale(0.82);
-  margin-left: 4px;
+  flex: 1;
 }
-.u-input__content__subfix-icon.data-v-fdbb9fe6 {
-  margin-left: 4px;
+.u-notice__swiper__item.data-v-515940d7 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  overflow: hidden;
 }
-.u-input__content__prefix-icon.data-v-fdbb9fe6 {
-  margin-right: 4px;
+.u-notice__swiper__item__text.data-v-515940d7 {
+  font-size: 14px;
+  color: #f9ae3d;
 }
 

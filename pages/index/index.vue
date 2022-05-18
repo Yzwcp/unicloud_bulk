@@ -1,10 +1,15 @@
 <template>
 	<view class="home">
 		<!-- <web-view :src="'http://192.168.2.225:8070/doctor_train/ui/module/Vrmsg.htm?unstate=0&trainid=29295&time='+new Date().getTime()"></web-view> -->
-		<view class="home_topbar">
+<!-- 		<view class="home_topbar">
 			<text @click="handleTabItem(item)" v-for="item in topBar" :key='item.id' :class="item.id==currentIndex?'hightColor':''">{{item.name}}</text>
+		</view> -->
+		<!-- <view style="height: 80rpx;"> </view> -->
+		<u-notice-bar :text="notice" ></u-notice-bar>
+		<view class="banner">
+			<image src="../../static/top_backgrounnd.png"></image>
+			<image src="../../static/banner1.png"></image>
 		</view>
-		<view style="height: 80rpx;"> </view>
 		<Bulk :reachBottom='reachBottom' :bulkData='dataSource' v-show="currentIndex==891" />
 		<Resources  v-show="currentIndex==892" />
 		<view class="wrap">
@@ -41,6 +46,7 @@
 				customstyle:{
 					backgroundColor:'#f0ad4e'
 				},
+				notice:'通告模式，link-显示右箭头，closable-显示右侧关闭图标',
 				reachBottom:()=>{}
 			}
 		},
@@ -98,7 +104,22 @@
 			width: 100vw;
 			background-color: white;
 		}
-		
+		.banner{
+			height: 300rpx;
+			position: relative;
+			image:nth-child(1){
+				width: 100vw;
+				height: 220rpx;
+			}
+			image:nth-child(2){
+				width: 550rpx;
+				position: absolute;
+				left: 50%;
+				transform: translate(-50%);
+				top: 50rpx;
+				height:250rpx;
+			}
+		}
 		
 	}
 	.hightColor{

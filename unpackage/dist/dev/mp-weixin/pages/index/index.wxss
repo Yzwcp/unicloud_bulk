@@ -41,6 +41,23 @@
   width: 100vw;
   background-color: white;
 }
+.home .banner.data-v-57280228 {
+  height: 300rpx;
+  position: relative;
+}
+.home .banner image.data-v-57280228:nth-child(1) {
+  width: 100vw;
+  height: 220rpx;
+}
+.home .banner image.data-v-57280228:nth-child(2) {
+  width: 550rpx;
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translate(-50%);
+          transform: translate(-50%);
+  top: 50rpx;
+  height: 250rpx;
+}
 .hightColor.data-v-57280228 {
   color: #ff7883;
 }

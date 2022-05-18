@@ -1,6 +1,28 @@
 <template>
 	<view class="home_body">
-		<view class="body_detail" @click="handleGo(item)" v-for="item in bulkData" :key='item'>
+			<view class="body_title">
+				<image  src="../../static/tuijian.png" ></image>
+			</view>
+			<view class="body_list">
+				<view class="list_detail" v-for="item in bulkData" :key='item._id' @click="handleGo(item)">
+					<view class="img">
+						<image class="img1" :src="longUrl(item.content_img)"></image>
+						<image class="img2" src="../../static/hot.png"></image>
+					</view>
+					<view class="content">
+						<view class="content_title">{{item.title}}</view>
+						<view class="content_img"> 
+							<view>
+								<image v-for="sub_img in item.group" :src="sub_img.header_url"></image>
+							</view>
+							<view class="span">正在火热拼团</view>
+						</view>
+						<view class="old_price">￥{{item.old_price}}</view>
+						<view class="price">【包邮】￥{{item.price}}</view>
+					</view>
+				</view>
+			</view>
+<!-- 		<view class="body_detail" @click="handleGo(item)" v-for="item in bulkData" :key='item'>
 			<view class="detail_header">
 				<image class="header_avatar_img" :src="longUrl(item.content_img)"></image>
 				<text>{{item.creator}}</text>
@@ -13,7 +35,7 @@
 				<span>￥{{item.old_price}}</span>
 				<div><span>限时价格：</span><span>{{item.price}}元</span></div>
 			</view>
-		</view>
+		</view> -->
 		<u-divider text="暂无更多拼团"></u-divider>
 	</view>
 </template>
@@ -46,54 +68,86 @@
 <style lang="scss">
 	.home_body{
 		padding: 0 0 50rpx 0;
-	}
-	.body_detail{
-		background: white;
-		border-radius: 30rpx;
-		margin: 30rpx 30rpx 40rpx 30rpx;
-		.detail_header{
-			padding: 30rpx 40rpx;
-			.header_avatar_img{
-				width: 100rpx;
-				height: 100rpx;
-				border-radius: 50rpx;
-			}
-		}
-		.detail_content{
-			height: 500rpx;
+		.body_title{
 			display: flex;
-			flex-direction: column;
-			align-items: center;
-			padding:0rpx 40rpx 10rpx 40rpx;
+			justify-content: center;
+			padding: 50rpx;
 			image{
-				width: 100%;
-			}
-			.content_text{
-				font-size: 22rpx;
-				padding-top: 20rpx;
-				align-self: flex-start;
+				width: 250rpx;
+				height: 56rpx ;
 			}
 		}
-		.detail_foot{
-			border-top: 2rpx solid $uni-bg-color-grey;
-			padding: 20rpx 40rpx 20rpx 40rpx;
-			display: flex;
-			justify-content: space-between;
-			>span:nth-child(1){
-				font-size: 30rpx;
-				text-decoration:line-through;
-				color: $uni-text-color-deepgrey;
-			}
-			div{
-				span:nth-child(1){
-					font-size: 20rpx;
+		.body_list{
+			.list_detail{
+				position: relative;
+				height: 250rpx;
+				margin-bottom: 30rpx;
+				background-color: white;
+				display: flex;
+				padding: 0 30rpx;
+				align-items: center;
+				.img{
+					position: relative;
+					top:50%;
+					transform: translate(0,-50%);
+					width: 218rpx;
+					height: 230rpx;
+					.img1{
+						width: 218rpx;
+						height: 218rpx;
+						position: absolute;
+						left: 0;
+					}
+					.img2{
+						width: 218rpx;
+						height: 218rpx;
+						position: absolute;
+						left: 0;
+					}
 				}
-				span:nth-child(2){
-					color: red;
+				.content{
+					width:450rpx;
+					margin-left: 30rpx;
+					.content_title{
+						font-size: 28rpx;
+						font-weight: 700;
+						display: -webkit-box;
+						word-break: break-all;
+						text-overflow:ellipsis;
+						overflow: hidden;
+						white-space: pre-line;
+						-webkit-box-orient: vertical;
+						-webkit-line-clamp:2;
+					}
+					.content_img{
+						height: 60rpx;
+						margin: 8rpx 0;
+						font-size: 24rpx;
+						display: flex;
+						color: #ff4848;
+						align-items: center;
+						image{
+							width: 50rpx;
+							height: 50rpx;
+							border-radius: 25rpx;
+						}
+					}
+					.span{
+						margin-left: 8rpx;
+					}
+					.old_price{
+						color:$uni-text-color-deepgrey;
+						font-size: 26rpx;
+					}
+					.price{
+						font-size: 30rpx;
+						color: #ff4848;
+					}
 				}
 			}
 		}
-		
-		
 	}
+	
+		
+		
 </style>
