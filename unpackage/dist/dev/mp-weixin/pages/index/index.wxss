@@ -28,7 +28,7 @@
 /* 透明度 */
 /* 文章场景相关 */
 .home.data-v-57280228 {
-  background: #f6f6f6;
+  background: #f9f9f5;
 }
 .home .home_topbar.data-v-57280228 {
   display: flex;

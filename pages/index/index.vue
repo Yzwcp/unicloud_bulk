@@ -92,7 +92,7 @@
 
 <style scoped lang="scss">
 	.home{
-		background: $uni-bg-color-grey;
+		background: $my-bodybg;
 		.home_topbar{
 			display: flex;
 			padding: 20rpx 0;

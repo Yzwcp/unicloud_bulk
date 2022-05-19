@@ -1,5 +1,4 @@
 'use strict';
-const uniID = require('uni-id')
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	console.log('event : ', event)
@@ -63,12 +62,7 @@ exports.main = async (event, context) => {
 		}
 	}
 	
-	if(!tokenWhite.includes(action)){
-		payload = await uniID.checkToken(token)
-		if(payload.code!=0){
-			return formatResult(payload,false,'token错误')
-		}
-	}
+
 	
 	// HuoL.post('/category', async (ctx) => {
 	//   const HuoLResult =await koa2Req({url:'http://floor.huluxia.com/category/list/ANDROID/2.0',params:{...fiexdParams,is_hidden:1}})

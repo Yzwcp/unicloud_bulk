@@ -2,8 +2,7 @@
   "passwordSecret": "passwordSecret-demo", 
   "tokenSecret": "tokenSecret-demo", 
   "tokenExpiresIn": 7200,
-  "tokenExpiresThreshold": 600, 
-  "bindTokenToDevice": false, 
+  "bindTokenToDevice": true, 
   "passwordErrorLimit": 6,
   "passwordErrorRetryTime": 3600,
   "autoSetInviteCode": false, 
@@ -11,7 +10,6 @@
   "removePermissionAndRoleFromToken": false, 
   "preferedAppPlatform": "app", 
   "app": { 
-    "tokenExpiresIn": 2592000,
     "oauth": {
       "weixin": {
         "appid": "weixin appid",
@@ -27,7 +25,6 @@
     }
   },
   "mp-weixin": {
-    "tokenExpiresIn": 259200,
     "oauth": {
       "weixin": {
         "appid": "wx02ffce8331851305",
@@ -36,7 +33,6 @@
     }
   },
   "mp-qq": {
-    "tokenExpiresIn": 259200,
     "oauth": {
       "qq": {
         "appid": "qq appid",
@@ -45,7 +41,6 @@
     }
   },
   "mp-alipay": {
-    "tokenExpiresIn": 259200,
     "oauth": {
       "alipay": {
         "appid": "alipay appid",

@@ -13,6 +13,20 @@
           "query": "_id=62810108d3a5130001ffce6b",
           "launchMode": "default",
           "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/bulkDetail/bulkDetail",
+          "query": "_id=6280a0baf77dda0001370d65",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/myBulk/myBulk",
+          "query": "_id=62810fdaccfdfa0001453a84",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

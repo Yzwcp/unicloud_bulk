@@ -3,48 +3,102 @@
 		<view class="bulk_body">
 			<view class="body_detail" >
 				<view class="detail_content">
-					<image :src="longUrl(allData.content_img)"></image>
-					<text class="content_text">{{allData.title}}</text>
+					    <view class="u-demo-block">
+					        <u-swiper
+					                :list="imageList"
+					                @change="handleswiper"
+					                :autoplay="true"
+					                indicatorStyle="right: 20px"
+									height='375'
+					        >
+					            <view
+					                    slot="indicator"
+					                    class="indicator-num"
+					            >
+					                <text class="indicator-num__text">{{ currentNum + 1 }}/{{ imageList.length }}</text>
+					            </view>
+					        </u-swiper>
+					    </view>
+					<!-- <text class="content_text">{{allData.title}}</text> -->
 				</view>
 				<view class="detail_foot">
+					<!-- <image src="../../static/detailbg.png"></image> -->
+					<view class="foot_price">
+						<text>￥</text>
+						<text>{{allData.price || "-"}}</text>
+					</view>
+					<view class="foot_num">
+						<text>{{}}人正在参加</text>
+						<text>市场价{{allData.old_price || "-"}}</text>
+					</view>
+					<view class="foot_time">
+						<text>限时活动</text>
+						<text>
+							<u-count-down
+							        :time="time"
+							        format="SSS"
+							        autoStart
+							        @change="onChange"
+									@finish="finish"
+							    >
+							 </u-count-down> 
+							<text class="time__item">{{ timeData.days }}&nbsp;</text>天
+							<text class="time__item">{{ timeData.hours>10?timeData.hours:'0'+timeData.hours}}&nbsp;</text>时
+							<text class="time__item">{{ timeData.minutes }}&nbsp;</text>分
+							<text class="time__item">{{ timeData.seconds }}&nbsp;</text>秒
+						</text>
+					</view>
+					<!-- 
 					<span>￥{{allData.old_price || "..."}}</span>
-					<div><span>限时价格：</span><span>{{allData.price || 0}}元</span></div>
+					<div><span>限时价格：</span><span>{{allData.price || 0}}元</span></div> -->
 				</view>
 			</view>
 			<view class="body_countdown">
-				<view class="people_title">还差1人，快喊小伙伴一起拼团吧</view>
-				<view class="people_countdown">
-					<u-count-down
-					        :time="time"
-					        format="SSS"
-					        autoStart
-					        @change="onChange"
-							@finish="finish"
-					    >
-					        <view class="time">
-								距结束仅剩:
-					            <text class="time__item">{{ timeData.days }}&nbsp;</text>天
-					            <text class="time__item">{{ timeData.hours>10?timeData.hours:'0'+timeData.hours}}&nbsp;</text>时
-					            <text class="time__item">{{ timeData.minutes }}&nbsp;</text>分
-					            <text class="time__item">{{ timeData.seconds }}&nbsp;</text>秒
-					        </view>
-					    </u-count-down>
+				<view class="people_title">{{allData.title || ''}}呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵将就将就军将就将就军将就将就军将就将就军解决</view>
+				<view class="goodstype">
+					<view>
+						<text class="title">运费：</text>
+						<view style="width: 74rpx;display: inline-block;margin:0 10rpx">
+							<u-tag text="包邮" type="success" size='mini' plain plainFill></u-tag>
+						</view>
+					</view>
+					<view style="display: flex;align-items: center;" @click="open">
+						<text style="font-size: 22rpx;">不包邮地区</text>
+						<u-icon name="arrow-right"  color="#d6d6d6" size="18"></u-icon>
+					</view>
 				</view>
+				<view class="goodstype">
+					<view style="display: flex;">
+						<text class="title">服务：</text>
+						<view style="margin-left: 10rpx;display: flex;align-items: center;">
+							<u-icon name="checkmark-circle-fill" color="#ff4848"></u-icon>
+							<text style="margin-left: 4rpx;">72小时内发货</text>
+						</view>
+					</view>
+				</view>
+	<!-- 			<view class="goodstype">
+					<view style="display: flex;">
+						<text class="title">客服：</text>
+						<text style="margin-left: 8rpx;">9:00~18.00</text>
+					</view>
+				</view> -->
 			</view>
 			<view class="body_items">
 				<div>
 					<span>商品详请</span>
 					<div v-for="item in imageList" :key='item'>
-						<image v-if="item" :src="item.url"></image>
+						<image v-if="item" :src="item"></image>
 					</div>
 				</div>
 			</view>
 		</view>
 		<view style="height: 200rpx;"></view>
 		<view class="bottom_bar">
-			<view>联系客服</view>
-			<view>首页</view>
-			<view :class="isEnding?'greyColor': ''" @click="handleCreateOrder">{{isEnding?'活动结束':'立即开团'}}</view>
+			<view class="img">
+				<image  src="../../static/kf.png"  mode="widthFix"></image>
+				<text>联系客服</text>
+			</view>
+			<view class="create" :class="isEnding?'greyColor': ''" @click="handleCreateOrder">{{isEnding?'活动结束':'立即开团'}}</view>
 			
 		</view>
 	</view>
@@ -54,6 +108,17 @@
 	export default {
 		data() {
 			return {
+				list5: [
+					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
+					'https://cdn.uviewui.com/uview/swiper/swiper2.png',
+					'https://cdn.uviewui.com/uview/swiper/swiper1.png',
+				],
+				list6: [
+					'https://cdn.uviewui.com/uview/swiper/swiper2.png',
+					'https://cdn.uviewui.com/uview/swiper/swiper3.png',
+					'https://cdn.uviewui.com/uview/swiper/swiper1.png',
+				],
+				currentNum:0,
 				allData:{},
 				app:{},
 				endtime:{
@@ -82,11 +147,20 @@
 					if(res.success && res.data && res.data.affectedDocs>0){
 						let d = res.data.data[0]
 						this.allData = d
-						this.imageList =d.content_img
+						let arrimg = []
+						if(d.content_img.length>0){
+							d.content_img.map(item=>{
+								arrimg.push(item.url)
+							})
+						}
+						this.imageList =arrimg
 						this.time =Number(d.endtime) - new Date().getTime()  > 0 ? Number(d.endtime) - new Date().getTime() : 0
 					}
 				}).finally(()=>{
 				})
+			},
+			handleswiper(e){
+				this.currentNum =e.current
 			},
 			longUrl(item){
 				if(!item) return ''
@@ -112,6 +186,12 @@
 					})
 				})
 			},
+			open(){
+				uni.showModal({
+					title:'运费模板',
+					content:"新疆、西藏、宁夏、青海、内蒙古、海南（备选项：甘肃、云南、黑龙江、吉林、辽宁、山西）港澳台、海外。等偏远地区不发货"
+				})
+			},
 			onChange(e) {
 				// console.log(e);÷
 				this.timeData = e
@@ -128,15 +208,15 @@
 </script>
 
 <style lang="scss">
+	
 	.bulk{
 		background: $uni-bg-color-grey;
-		padding-top: 30rpx;
 		.bulk_body>view{
-			border-radius: 30rpx;
+			border-radius: 20rpx;
 			background: white;
 		}
 		.body_detail{
-			margin: 0rpx 30rpx 0 30rpx;
+			// margin: 0rpx 30rpx 0 30rpx;
 			.detail_content{
 				display: flex;
 				flex-direction: column;
@@ -152,42 +232,75 @@
 				}
 			}
 			.detail_foot{
-				border-top: 2rpx solid $uni-bg-color-grey;
-				padding: 20rpx 40rpx 20rpx 40rpx;
-				display: flex;
-				justify-content: space-between;
-				>span:nth-child(1){
-					font-size: 30rpx;
-					text-decoration:line-through;
-					color: $uni-text-color-deepgrey;
-				}
-				div{
-					span:nth-child(1){
-						font-size: 20rpx;
-					}
-					span:nth-child(2){
-						color: red;
+				height: 128rpx;
+				background: url(../../static/detailbg.png) no-repeat center;
+				background-size: 100% 100%;
+				color: white;
+				position: relative;
+				.foot_price{
+					position: absolute;
+					left: 30rpx;
+					bottom: 20rpx;
+					text:nth-child(2){
+						display: inline-block;
+						font-size: 56rpx;
 					}
 				}
+				.foot_num{
+					position: absolute;
+					left: 140rpx;
+					bottom: 26rpx;
+					display: flex;
+					flex-direction: column;
+					justify-content: space-between;
+					height: 80rpx;
+					text:nth-child(1){
+						display: inline-block;
+						font-size: 18rpx;
+						padding: 2rpx 8rpx;
+						background: #b8213f;
+						border-radius: 30rpx;
+						text-align: center;
+						line-height: 30prx;
+					}
+					text:nth-child(2){
+						display: inline-block;
+						font-size:28rpx;
+						text-decoration: line-through;
+					}
+				}
+				.foot_time{
+					position: absolute;
+					right: 30rpx;
+					bottom: 26rpx;
+					font-size: 28rpx;
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					align-items: center;
+					height: 80rpx;
+				}
+				
 			}
 		}
 		// 倒计时
 		.body_countdown{
-			padding: 40rpx 20rpx;
+			padding: 30rpx 30rpx 30rpx 30rpx ;
 			margin: 30rpx 30rpx 0 30rpx;
 			font-size: 26rpx;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			flex-direction: column;
-			.time__item{
-				border-radius: 8rpx;
-				color: white;
-				width: 38rpx;
-				display: inline-block;
-				text-align: center;
-				background-color: red;
-				margin:0 8rpx;
+			.people_title{
+				margin-bottom: 30rpx;
+				font-weight: 700;
+				font-size: 30rpx;
+			}
+			.goodstype{
+				display: flex;
+				align-items: center;
+				margin-bottom: 30rpx;
+				justify-content: space-between;
+				.title{
+					color: $uni-text-color-grey;
+				}
 			}
 		}
 		//详情
@@ -207,25 +320,67 @@
 			height: 50rpx;
 			position: fixed;
 			bottom: 0;
-			display: grid;
-			width: 100%;
+			display: flex;
+			width: 100vw;
+			box-sizing: border-box;
 			height: 100rpx;
-			grid-template-columns: .5fr 1fr 1fr;
 			align-items: center;
-			background:white;;
-			view{ text-align: center;line-height: 100rpx;}
-			view:nth-child(1){
+			background:white;
+			box-shadow: 0px 9rpx 10rpx 6rpx rgba(0, 0, 0, 9.17);
+			justify-content: space-between;
+			padding: 0 30rpx;
+			.img{
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				font-size: 20rpx;
+				color:grey;
+				image{
+					width: 40rpx;
+					height: 40rpx;
+				}
 			}
-			view:nth-child(2){
-				flex: 1;
-				background-color:$uni-text-color-pink;
+			.create{
+				display: inline-block;
+				width: 200rpx;
+				border-radius: 100rpx;
+				line-height: 80rpx;
+				background-color: #f9464a;
 				color: white;
-			}
-			view:nth-child(3){
-				flex: 1;
-				background:red;
-				color: white;
+				text-align: center;
 			}
 		}
 	}
+	.indicator {
+	        @include flex(row);
+	        justify-content: center;
+	
+	        &__dot {
+	             height: 6px;
+	             width: 6px;
+	             border-radius: 100px;
+	             background-color: rgba(255, 255, 255, 0.35);
+	             margin: 0 5px;
+	             transition: background-color 0.3s;
+	    
+	            &--active {
+	                 background-color: #ffffff;
+	             }
+	        }
+	    }
+	
+	    .indicator-num {
+	        padding: 2px 0;
+	        background-color: rgba(0, 0, 0, 0.35);
+	        border-radius: 100px;
+	        width: 35px;
+	        @include flex;
+	        justify-content: center;
+	
+	        &__text {
+	             color: #FFFFFF;
+	             font-size: 12px;
+	         }
+	    }
 </style>

@@ -1,8 +1,20 @@
 <template>
 	<view class="my_bulk">
-		<u-skeleton :loading="loading" :animate="true" rows="16"  rowsHeight='18'>
-			
-			<view class="bulk_headers">
+			<image class="bg" src="../../static/order-bg.png"></image>
+			<u-skeleton :loading="loading" :animate="true" rows="16"  rowsHeight='18'>
+			<view class="bulk_content">
+				<view></view>
+				<view class="bulk_headers">
+					<image :src="bannerList.url"></image>
+					<view class="headers_details"> 
+						<view class="title">{{bulkData.title}}哈哈哈哈哈哈哈哈哈哈或或或</view>
+						<view  style="color: grey;font-size: 24rpx;margin-top: 40rpx;">销量：55件</view>
+						<view class="title2">还差: <text style="color:  #f6484a;font-size: 48rpx;">{{bulkData.groupsize}}</text>人,即可完成</view>
+						<view class="title3">{{statusObj[allResult.status]}}</view>
+					</view>
+				</view>
+			</view>
+			<!-- <view class="bulk_headers">
 				<image :src="bannerList.url"></image>
 				<view>
 					<view class="headers_title">
@@ -62,7 +74,7 @@
 				</view>
 				<view class="people_totle">
 				</view>
-			</view>
+			</view> -->
 		</u-skeleton>
 		
 		<u-modal :show="addrShow"  title="请确定地址" :showCancelButton='true' @cancel='addrcancel' @confirm='addrconfirm' cancelText='重新选择地址'>
@@ -90,13 +102,6 @@
 				allResult:{},
 				bannerList:[],
 				baseImgUrl:getApp().globalData.baseImageUrl,
-				status:{
-					"-1":"结束了" ,
-					"0":"初始化",
-					'1':"正在进行中" ,
-					"-2":"活动异常" ,
-					"2":"完成拼团"
-				},
 				headerImgUrl:'',
 				isEnding:false,//活动是否结束
 				timeData:{},
@@ -109,7 +114,7 @@
 				addrString:'',
 				statusObj:{
 					"1":'正在进行',
-					"2":'完成待发货',
+					"2":'待发货',
 					"-1":'异常',
 					"3":'发货',
 					"4":'签收'
@@ -249,96 +254,53 @@
 	.my_bulk{
 		height: 100vh;
 		background: white;
-		.bulk_headers{
-			background-color: white;
-			box-shadow: 10rpx 2rpx 5rpx rgba(0, 0, 0, 0.1);
-			padding: 30rpx 40rpx;
-			image{
-				float: left;
-				width: 180rpx;
-				height: 180rpx;
-				margin-right: 30rpx;
-			}
-			.headers_title{
-				font-size:28rpx ;
-			}
-			.headers_details{
-				display: flex;
-				justify-content: space-between;
-				margin-top: 10rpx;
-				font-size: 22rpx;
-				text:nth-child(1){
-					text-decoration:line-through;
-				}
-				text{
-					color: $uni-text-color-deepgrey;
-				}
-			}
-			.headers_bulk{
-				display: flex;
-				font-size:28rpx ;
-				justify-content: space-between;
-				margin-top: 30rpx;
-				align-items: center;
-				view>text{
-					color: $uni-text-color-pink;
-					font-weight: 700;
-				}
-				view:nth-child(2){
-					padding: 5rpx 30rpx;
-					border-radius: 50rpx;
-					border: solid 2rpx $uni-text-color-pink;
-					color: red;
-				}
-			}
+		.bg{
+			width: 100vw;
+			height: 700rpx;
+			 display: block;  
 		}
-		.bulk_people{
-			margin-top: 20rpx;
-			background-color: white;
-			padding: 30rpx 80rpx 0rpx;
+		.bulk_content{
+			background-color: #f6484a;
 			display: flex;
-			justify-content: center;
 			flex-direction: column;
 			align-items: center;
-			.people_title{
-				font-size: 38rpx;
-			}
-			.people_countdown{
-				padding: 40rpx 20rpx;
-				margin: 30rpx 30rpx 0 30rpx;
-				font-size: 26rpx;
+			padding: 20rpx;
+			.bulk_headers{
 				display: flex;
-				justify-content: center;
-				align-items: center;
-				flex-direction: column;
-				.time__item{
-					border-radius: 8rpx;
-					color: white;
-					width: 38rpx;
-					display: inline-block;
-					text-align: center;
-					background-color: red;
-					margin:0 8rpx;
-				}
-			}
-			.people_totle{
-				display: grid;
-				grid-template-columns: 1fr 1fr 1fr;
-				grid-gap: 40rpx;
+				padding: 20rpx;
+				background-color: white;
+				border-radius: 20rpx;
 				image{
-					width: 100rpx;
-					height: 100rpx;
+					width: 188rpx;
+					height: 188rpx;
 				}
-			}
-			.people_invitation{
-				line-height: 100rpx;
-				background-color: #ff3546;
-				color: white;
-				width: 100%;
-				text-align: center;
-				margin-top: 80rpx;
-				position: fixed;
-				bottom: 0;
+				.headers_details{
+					margin-left: 30rpx;
+					position: relative;
+					.title{
+						width: 380rpx;
+						display: -webkit-box;
+						word-break: break-all;
+						text-overflow:ellipsis;
+						overflow: hidden;
+						white-space: pre-line;
+						-webkit-box-orient: vertical;
+						-webkit-line-clamp:1;
+					}
+					.title2{
+						font-size:22rpx ;
+					}
+					.title3{
+						position: absolute;
+						bottom: 0rpx;
+						right: 0rpx;
+						font-size: 28rpx;
+						background: #f6484a;
+						padding: 4rpx 6rpx;
+						border-radius: 20rpx;
+						color: white;
+					}
+				}
 			}
 		}
 	}

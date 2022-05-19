@@ -10,6 +10,7 @@
 
 <script>
 	import youlanSignIn from '@/components/youlan-SignIn/youlan-SignIn.vue'
+	import {isOverExpired} from '../api/request.js'
 	export default {
 		name:'SignInDetail',
 		data() {
@@ -40,8 +41,8 @@
 				  }
 				})
 			},
-			initData(){
-			
+			async initData(){
+				await this.$store.dispatch('isOverExpired',{action:'sigin' ,islogin:true}) 
 				const db = uniCloud.database() //代码块为cdb
 				const dbCmd = db.command
 				const date = new Date()

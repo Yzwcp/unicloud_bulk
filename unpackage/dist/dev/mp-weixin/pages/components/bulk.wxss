@@ -29,6 +29,7 @@
 /* 文章场景相关 */
 .home_body {
   padding: 0 0 50rpx 0;
+  background: #f6f6f6;
 }
 .home_body .body_title {
   display: flex;
@@ -39,41 +40,52 @@
   width: 250rpx;
   height: 56rpx;
 }
+.home_body .body_list {
+  margin: 0 30rpx;
+}
 .home_body .body_list .list_detail {
   position: relative;
+  border-radius: 20rpx;
   height: 250rpx;
   margin-bottom: 30rpx;
   background-color: white;
   display: flex;
-  padding: 0 30rpx;
-  align-items: center;
+  padding: 0rpx 0 0 0rpx;
+  align-items: flex-start;
+  border-bottom: 4rpx solid #f6f6f6;
+}
+.home_body .body_list .list_detail .partin {
+  position: absolute;
+  bottom: 30rpx;
+  right: 30rpx;
+  width: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  color: white;
+  border-radius: 40rpx;
+  background-color: #ff4848;
+  font-weight: 700;
 }
 .home_body .body_list .list_detail .img {
   position: relative;
-  top: 50%;
-  -webkit-transform: translate(0, -50%);
-          transform: translate(0, -50%);
   width: 218rpx;
   height: 230rpx;
+  border-radius: 20rpx;
 }
-.home_body .body_list .list_detail .img .img1 {
-  width: 218rpx;
-  height: 218rpx;
+.home_body .body_list .list_detail .img .img1, .home_body .body_list .list_detail .img .img2 {
+  width: 250rpx;
+  height: 250rpx;
   position: absolute;
   left: 0;
-}
-.home_body .body_list .list_detail .img .img2 {
-  width: 218rpx;
-  height: 218rpx;
-  position: absolute;
-  left: 0;
+  border-radius: 10rpx;
 }
 .home_body .body_list .list_detail .content {
   width: 450rpx;
-  margin-left: 30rpx;
+  margin-left: 70rpx;
+  margin-top: 10rpx;
 }
 .home_body .body_list .list_detail .content .content_title {
-  font-size: 28rpx;
+  font-size: 30rpx;
   font-weight: 700;
   display: -webkit-box;
   word-break: break-all;
@@ -81,11 +93,11 @@
   overflow: hidden;
   white-space: pre-line;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
 }
 .home_body .body_list .list_detail .content .content_img {
   height: 60rpx;
-  margin: 8rpx 0;
+  margin: 14rpx 0;
   font-size: 24rpx;
   display: flex;
   color: #ff4848;
@@ -96,12 +108,23 @@
   height: 50rpx;
   border-radius: 25rpx;
 }
-.home_body .body_list .list_detail .content .span {
-  margin-left: 8rpx;
+.home_body .body_list .list_detail .content .content_img .content_imgs {
+  position: relative;
+  width: 120rpx;
+}
+.home_body .body_list .list_detail .content .content_img image:nth-child(2) {
+  position: absolute;
+  left: 30rpx;
+}
+.home_body .body_list .list_detail .content .content_img image:nth-child(3) {
+  position: absolute;
+  left: 60rpx;
 }
 .home_body .body_list .list_detail .content .old_price {
+  margin-bottom: 10rpx;
   color: #c6c5cf;
   font-size: 26rpx;
+  text-decoration: line-through;
 }
 .home_body .body_list .list_detail .content .price {
   font-size: 30rpx;

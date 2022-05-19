@@ -17,4 +17,7 @@
 	.hightColor{
 		color: pink;
 	}
+	body{
+		background-color: white;
+	}
 </style>

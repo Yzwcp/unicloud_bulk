@@ -3,7 +3,6 @@
   "enablePullDownRefresh": false,
   "usingComponents": {
     "u-skeleton": "/node-modules/uview-ui/components/u-skeleton/u-skeleton",
-    "u-count-down": "/node-modules/uview-ui/components/u-count-down/u-count-down",
     "u-modal": "/node-modules/uview-ui/components/u-modal/u-modal"
   }
 }
