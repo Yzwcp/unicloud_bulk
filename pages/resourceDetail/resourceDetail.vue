@@ -52,17 +52,20 @@
 				this.$api.signincenter({post_id:this.id},'postsDetail').then(result=>{
 					console.log(result);
 					this.postsData = result.post
-					this.postsData.detail =result.post.detail.replace(/(\s\s)|(\n)/g,'<br/>')
+					let regExp = new RegExp('(\s\s)|(\n)', 'g');
+					this.postsData.detail =result.post.detail.replace(regExp,'<br/>')
 					this.filterData(this.postsData.detail,this.postsData.images)
 				})
 				
 			},
 			filterData(result,img=[]){
 				// const detailList=result.match(/(?<=<image>).*?(?=((,*,*<\/image>)|$))/g)
-				let detailList = result.match(/(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g) //筛选所有链接
+				let regExp = new RegExp('(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)', 'g');
+				let detailList = result.match(regExp) //筛选所有链接
 				let downlist = []//下载链接
 				let a  = null
-				a = result.replace(/(?<=<image>).*?(?=((,*,*<\/image>)|$))/g,'')
+				let regExp2 = new RegExp('(?<=<image>).*?(?=((,*,*<\/image>)|$))', 'g');
+				a = result.replace(regExp2)
 				if(detailList && detailList.length>0){
 					detailList.map((item,index)=>{
 						if(!(item.indexOf('cdn')>-1)){

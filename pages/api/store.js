@@ -123,18 +123,19 @@ const store = new Vuex.Store({
 					})
 				  },
 				  fail:res=>{
-					console.log(res);
+					this.$showToast('登录失败')
+					reject(false)
 				  }
 				});
 				
 			})
 		},
-		isOverExpired ({dispatch},p){
+		isOverExpired ({dispatch,getters},p){
 			return new Promise(async(res,err)=>{
-				let token = uni.getStorageSync('uni_id_token')
 				let expired = uni.getStorageSync('uni_id_token_expired')
 				let now  = new Date().getTime()
 				if(expired && now+60*60*5>=expired && p.action!='wxLogin' && p.islogin){
+					console.log(1);
 					await dispatch('refresh')
 					res()
 				}

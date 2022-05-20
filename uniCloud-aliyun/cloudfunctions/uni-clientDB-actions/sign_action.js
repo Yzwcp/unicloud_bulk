@@ -4,6 +4,7 @@ const dbCmd = db.command
 const signInTable = db.collection('wx_sign_in');
 module.exports = {
 	before: async (state, event) => {
+		if(!state.auth.uid) throw '没有登录'
 		function todayTimestamp() {
 			//时区
 			let timeZone = new Date().getTimezoneOffset() / 60

@@ -54,13 +54,11 @@
 				</view>
 			</view>
 			<view class="body_countdown">
-				<view class="people_title">{{allData.title || ''}}呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵将就将就军将就将就军将就将就军将就将就军解决</view>
+				<view class="people_title">{{allData.title || ''}}</view>
 				<view class="goodstype">
-					<view>
+					<view style="display: flex;align-items: center;">
 						<text class="title">运费：</text>
-						<view style="width: 74rpx;display: inline-block;margin:0 10rpx">
-							<u-tag text="包邮" type="success" size='mini' plain plainFill></u-tag>
-						</view>
+						<u-tag  style="margin:0 10rpx" text="包邮" type="success" size='mini' plain plainFill></u-tag>
 					</view>
 					<view style="display: flex;align-items: center;" @click="open">
 						<text style="font-size: 22rpx;">不包邮地区</text>

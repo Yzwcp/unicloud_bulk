@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "",
+  "navigationBarTitleText": "我的活动列表",
   "enablePullDownRefresh": false,
   "usingComponents": {
     "u-subsection": "/node-modules/uview-ui/components/u-subsection/u-subsection"

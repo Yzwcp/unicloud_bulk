@@ -1,38 +1,7 @@
 <template>
 	<view class="my_bulk">
 			<image class="bg" src="../../static/order-bg.png"></image>
-			<u-skeleton :loading="loading" :animate="true" rows="16"  rowsHeight='18'>
 			<view class="bulk_content">
-				<view></view>
-				<view class="bulk_headers">
-					<image :src="bannerList.url"></image>
-					<view class="headers_details"> 
-						<view class="title">{{bulkData.title}}哈哈哈哈哈哈哈哈哈哈或或或</view>
-						<view  style="color: grey;font-size: 24rpx;margin-top: 40rpx;">销量：55件</view>
-						<view class="title2">还差: <text style="color:  #f6484a;font-size: 48rpx;">{{bulkData.groupsize}}</text>人,即可完成</view>
-						<view class="title3">{{statusObj[allResult.status]}}</view>
-					</view>
-				</view>
-			</view>
-			<!-- <view class="bulk_headers">
-				<image :src="bannerList.url"></image>
-				<view>
-					<view class="headers_title">
-						{{bulkData.title}}
-					</view>
-					<view class="headers_details">
-						<text>￥{{bulkData.old_price}}</text>
-						<text>需参加人数:{{bulkData.groupsize}}</text>
-					</view>
-					<view class="headers_bulk">
-						<view>拼团价<text>￥200</text></view>
-						<view v-if='allResult.status'>{{statusObj[allResult.status]}}</view>
-					</view>
-				</view>
-			</view>
-			<view class="bulk_people" v-if="allResult.status==1">
-				<view class="people_title" v-if="!isOrderFinish">还差{{needsPeople}}人，快喊小伙伴一起拼团吧</view>
-				<view class="people_title" v-if="isOrderFinish ">恭喜完成啦</view>
 				<view class="people_countdown">
 					<u-count-down
 							:time="time"
@@ -42,40 +11,83 @@
 							@finish="finish"
 						>
 							<view class="time">
-								距结束仅剩:
-								<text class="time__item">{{ timeData.days }}&nbsp;</text>天
-								<text class="time__item">{{ timeData.hours>10?timeData.hours:'0'+timeData.hours}}&nbsp;</text>时
-								<text class="time__item">{{ timeData.minutes }}&nbsp;</text>分
-								<text class="time__item">{{ timeData.seconds }}&nbsp;</text>秒
+								<image src="../../static/ordernz.png" ></image>
+								<text class="time__item">{{ timeData.days }}&nbsp;</text>
+								<text class="d">天</text>
+								<text class="time__item">{{ timeData.hours>10?timeData.hours:'0'+timeData.hours}}&nbsp;</text>
+								<text class="d">时</text>
+								<text class="time__item">{{ timeData.minutes }}&nbsp;</text>
+								<text class="d">分</text>
+								<text class="time__item">{{ timeData.seconds }}&nbsp;</text>
+								<text class="d">秒</text>
 							</view>
 						</u-count-down>
 				</view>
-				<view class="people_totle">
-					<image v-for="item in group_adds" :src="item.header_url"></image>
+				<view class="bulk_headers">
+					<image :src="bannerList.url"></image>
+					<view class="headers_details"> 
+						<view class="title">{{bulkData.title || ''}}</view>
+						<view  style="color: grey;font-size: 24rpx;margin-top: 40rpx;">销量：55件</view>
+						<view class="title2">还差 <text style="color:  #f6484a;font-size: 48rpx;">{{needsPeople}}</text>人,即可完成</view>
+						<view class="title3">{{statusObj[allResult.status] || ''}}</view>
+					</view>
 				</view>
-				<button class="people_invitation" v-if="!invited && !isOrderFinish" data-name="" open-type="share">邀请好友</button>
-				<button class="people_invitation" @click="handleHelp" v-if="invited && !isOrderFinish" >帮助好友</button>
-				<button class="people_invitation" @click="setAddr" v-if="isOrderFinish" >该订单已完成请填写收货信息</button>
+				<view class="headers_addr" v-if=" allResult.status==3">
+					<view class="addr">
+						<view class="label">物流公司:</view>
+						<view v-if="allResult.way_name" class="value">{{allResult.way_name}}</view>
+					</view>
+					<view class="addr" @click="setClipboardData">
+						<view class="label">单号:</view>
+						<view v-if="allResult.way_number" class="value">{{allResult.way_number}} <text style="color: #007AFF;margin-left: 30rpx;">(复制单号)</text></view>
+					</view>
+				</view>
+				<view class="headers_addr"  v-if=" allResult.status==2">
+					<view class="addr">
+						<view class="label">姓名:</view>
+						<view v-if="allResult.address.userName" class="value">{{allResult.address.userName}}</view>
+					</view>
+					<view class="addr">
+						<view class="label">手机号:</view>
+						<view v-if="allResult.address.telNumber" class="value">{{allResult.address.telNumber}}</view>
+					</view>
+					<view class="addr">
+						<view class="label">所在地:</view>
+						<view class="value"> 
+						<text v-if="allResult.address.provinceName">{{allResult.address.provinceName}}{{allResult.address.cityName}}{{allResult.address.countyName}}{{allResult.address.countyName}}</text>
+					  </view>
+					</view>
+					<view class="addr">
+						<view class="label">详细地址:</view>
+						<view v-if="allResult.address.detailInfo" class="value">{{allResult.address.detailInfo}}</view>
+					</view>
+				</view>
+				<view class="btn">
+					<button class="people_my"  @click="go()" v-if="invited ">我也要参与</button>
+					<button class="people_invitation" @click="handleHelp" v-if="invited && !isOrderFinish" :loading='btnloading' :disabled="btnloading">帮助好友</button>
+					<button class="people_invitation"  @click="go()" v-if="invited && isOrderFinish">好友已经拿到活动商品</button>
+					
+					<button class="people_invitation" data-name="" v-if="!invited && !isOrderFinish" open-type="share">邀请好友</button>
+					<button class="people_invitation" v-if="!invited && isOrderFinish && allResult.status==1" @click="setAddr" >添加地址</button>
+				</view>
+				<view class="firtitle">好友列表</view>
+				<view class="all_group">
+					<view v-if="group_adds.length>0">
+						<view class="grouplist" v-for="item in group_adds" >
+							<image :src="item.header_url"></image>
+							<view class="time">
+								<text>{{item.nickname}}</text>
+								<text>{{filterDate(item.create_date)}}</text>
+							</view>
+						</view>
+					</view>
+					<view v-else>还没有好友帮助~</view>
+				</view>
+				<image src="../../static/ordergze.png"></image>
+				
+				
 			</view>
-			<view class="bulk_people" v-if="allResult.status==2">
-				<view class="people_title" >正在准备发货</view>
-				<view class="">
-					<view>
-					  地址：
-					  {{allResult.address.provinceName}}
-					  {{allResult.address.cityName}}
-					  {{allResult.address.countyName}}
-					  {{allResult.address.detailInfo}}
-					</view>
-					<view>
-						电话：{{allResult.address.telNumber}}
-					</view>
-					<view>邮编：{{allResult.address.postalCode}}</view>
-				</view>
-				<view class="people_totle">
-				</view>
-			</view> -->
-		</u-skeleton>
+
 		
 		<u-modal :show="addrShow"  title="请确定地址" :showCancelButton='true' @cancel='addrcancel' @confirm='addrconfirm' cancelText='重新选择地址'>
 			<view class="slot-content">
@@ -116,16 +128,16 @@
 					"1":'正在进行',
 					"2":'待发货',
 					"-1":'异常',
-					"3":'发货',
+					"3":'已发货',
 					"4":'签收'
 				},
-				loading:false
+				loading:true,
+				btnloading:false
 			}
 		},
 		onShareAppMessage(options){
 			  var that = this;
 			  // 设置菜单中的转发按钮触发转发事件时的转发内容
-			  console.log(token);
 			  var shareObj = {
 				title: "就差一人",    // 默认是小程序的名称(可以写slogan等)
 				path: `/pages/myBulk/myBulk?_id=${that.allResult._id}&creator=${1}`,    // 默认是当前页面，必须是以‘/'开头的完整路径
@@ -140,8 +152,10 @@
 		},
 		computed:{
 			needsPeople(){
-				return (this.bulkData.groupsize - this.group_adds.length) || 0
-			}
+				let a =this.bulkData.groupsize - this.group_adds.length
+				return a >=0? a:0
+			},
+			
 		},
 		onLoad(options) {
 			let _id = options._id
@@ -155,28 +169,56 @@
 			this.initData({order_id:_id},'detail');
 		},
 		methods: {
+			go(){
+				uni.switchTab({
+					url:'/pages/index/index'
+				})
+			},
+			setClipboardData(){
+				let that =this
+				uni.setClipboardData({
+					data: that.allResult.way_number,
+					success: function () {
+					}
+				});
+			},
+			filterDate(v){
+				if(v){
+					let y =new Date(v).getFullYear()
+					let m =new Date(v).getMonth()+1
+					let d =new Date(v).getDate()
+					let mi =new Date(v).getHours()
+					mi = mi <10 ? '0'+mi:mi
+					s = s <10 ? '0'+s:s
+					let s =new Date(v).getMinutes()
+					return y+"."+m+"."+d+" "+mi+':'+s
+				}
+				return "-"
+			},
 			async handleHelp(){
+				this.btnloading=true
 				const r = await this.$store.dispatch('login')
+				if(!r)return this.btnloading= false
 				let data = {
 					order_id:this.allResult._id,
 					bulk_id:this.bulkData._id,
 					user_id:this.allResult.user_id
 				}
-				this.$showLoading()
 				this.$api.bulkordercenter(data,'groupadd').then(res=>{
-					if(res.success ){
+					if(res.success){
+						this.$showToast('助力成功')
+						this.initData({order_id:this.allResult._id},'detail');
+					}else{
+						this.$showToast('不能给自己助力哦！')
 					}
 				}).finally(()=>{
-					uni.hideLoading()
+					this.btnloading=false
 				})
-				if(success){
-					this.$showToast('助力成功')
-				}else{
-					this.$showToast(result)
-				}
+				
 			},
 			async initData(data,action){
 				this.loading =true
+				this.$showLoading()
 				this.$api.bulkordercenter(data,action).then(res=>{
 					if(res.success ){
 						this.allResult = res.data
@@ -188,6 +230,7 @@
 					}
 				}).finally(()=>{
 					this.loading =false
+					uni.hideLoading()
 				})
 		    //    const {result} = await this.$request({url:'/order/detail',data:{_id}})
 			   // this.allResult =result
@@ -200,28 +243,26 @@
 			orderFinish(){
 				this.needsPeople<1? this.isOrderFinish=true :  this.isOrderFinish=false
 			},
-			setAddr(){
+			async setAddr(){
 				let that = this
-				uni.chooseAddress({
-				  success(res) {
-				    console.log(res.userName)
-				    console.log(res.postalCode)
-				    console.log(res.provinceName)
-				    console.log(res.cityName)
-				    console.log(res.countyName)
-				    console.log(res.detailInfo)
-				    console.log(res.nationalCode)
-				    console.log(res.telNumber)
-					that.addrShow=true
-					that.addrString = res
-				  }
-				})
+				let success = await this.$store.dispatch('login')
+				if(!success) return
+				setTimeout(()=>{
+					uni.chooseAddress({
+					  success(res) {
+						that.addrShow=true
+						that.addrString = res
+					  }
+					})
+				},800)
+				
 			},
 			addrcancel(){
 				this.addrShow=false
 				this.addrString={}
 			},
 			addrconfirm(){
+				this.$showLoading()
 				this.$api.bulkordercenter({
 				order_id:this.allResult._id,
 				address:this.addrString,
@@ -229,10 +270,14 @@
 				},'modify').then(res=>{
 					if(res.success){
 						this.initData({order_id:this.allResult._id},'detail');
-						uni.navigateTo({
-							url:'/pages/orderList/orderList?status=2'
-						})
+						// uni.navigateTo({
+						// 	url:'/pages/orderList/orderList?status=2'
+						// })
 					}
+					
+				}).finally(res=>{
+					uni.hideLoading()
+					this.addrShow=false
 				})
 			},
 			onChange(e) {
@@ -251,6 +296,7 @@
 </script>
 
 <style scoped lang="scss">
+
 	.my_bulk{
 		height: 100vh;
 		background: white;
@@ -264,7 +310,70 @@
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			padding: 20rpx;
+			padding: 20rpx 20rpx 60rpx 20rpx;
+			.people_countdown{
+				margin-bottom: 30rpx;
+				.time{
+					display: flex;
+					align-items: center;
+					image{
+						width: 70rpx;
+						height: 70rpx;
+						margin-right: 30rpx;
+					}
+					.d{
+						color: #ecff07;
+						margin:0 6rpx;
+					}
+					.time__item{
+						display: block;
+						width: 50rpx;
+						line-height: 50rpx;
+						text-align: center;
+						background-color: #ecff07;
+						color: #f6484a;
+						border: 4rpx black solid;
+						font-weight: 700;
+						font-size: 700;
+						border-radius: 20rpx;
+					}
+				}
+			}
+			.btn{
+				display: flex;
+				justify-content: space-around;
+				.people_invitation{
+					background-color: #ecff07;
+					width: 400rpx;
+					line-height: 90rpx;
+					border-radius: 45rpx;
+					font-weight: 700;
+					border: 4rpx black solid;
+					box-shadow: 0rpx 8rpx 6rpx red;
+					margin-top: 30rpx;
+					margin-bottom: 30rpx;
+					font-size: 34rpx;
+				}
+				.people_my{
+					font-size: 34rpx;
+					margin-right: 10rpx;
+					background-color: #0ff3e4;
+					width: 260rpx;
+					line-height: 90rpx;
+					border-radius: 45rpx;
+					font-weight: 700;
+					border: 4rpx black solid;
+					box-shadow: 0rpx 8rpx 6rpx red;
+					margin-top: 30rpx;
+					margin-bottom: 30rpx;
+				}
+			}
+			.firtitle{
+				line-height: 90rpx;
+				font-weight: 700;
+				color: #ecff07;
+				font-size: 40rpx;
+			}
 			.bulk_headers{
 				display: flex;
 				padding: 20rpx;
@@ -296,9 +405,61 @@
 						right: 0rpx;
 						font-size: 28rpx;
 						background: #f6484a;
-						padding: 4rpx 6rpx;
+						padding: 4rpx 8rpx;
 						border-radius: 20rpx;
 						color: white;
+					}
+				}
+				
+			}
+			.headers_addr{
+				padding: 20rpx;
+				background-color: white;
+				border-radius: 20rpx;
+				margin-top: 30rpx;
+				width: 605rpx;
+				.addr{
+					display: flex;
+					font-size: 32rpx;
+					border-bottom: 2rpx dashed  grey;
+					display: flex;
+					padding: 30rpx 10rpx;
+					align-items: center;
+					.label{
+						width: 200rpx;
+						color:grey;
+					}
+					.value{
+						width: 500rpx;
+					}
+				}
+			}
+			.all_group{
+				width: 605rpx;
+				border:6rpx #ebfd08 solid;
+				border-radius: 10rpx;
+				padding: 30rpx;
+				box-sizing: border-box;
+				color: white;
+				margin-bottom: 30rpx;
+				box-shadow: 6rpx 10rpx 10rpx red inset;
+				image{
+					width:80rpx;
+					height: 80rpx;
+					margin-right: 20rpx;
+					border-radius: 20rpx;
+				}
+				.grouplist{
+					display: flex;
+					margin-bottom: 30rpx;
+					border-bottom: 2rpx #7d2f31 dashed   ;
+					padding-bottom: 30rpx;
+					.time{
+						flex: 2;
+						display: flex;
+						align-items: center;
+						justify-content:space-between;
+						font-size: 28rpx;
 					}
 				}
 			}

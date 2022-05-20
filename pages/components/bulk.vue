@@ -15,7 +15,7 @@
 							<view class="content_imgs">
 								<image v-for="sub_img in item.group" :src="sub_img.header_url"></image>
 							</view>
-							<view class="span" v-if="item.group.length>0"><span style='color: #000000;margin-right: 8rpx;'>...</span>火热进行中</view>
+							<view class="span" v-if="item.group.length>0"><span style='color: #000000;margin-right: 8rpx;' v-if='item.group.length==3'>...</span>火热进行中</view>
 						</view>
 						<view class="old_price">￥{{item.old_price}}</view>
 						<view class="price">￥{{item.price}}【包邮】</view>

@@ -41,7 +41,70 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20rpx;
+  padding: 20rpx 20rpx 60rpx 20rpx;
+}
+.my_bulk .bulk_content .people_countdown.data-v-3ba3b806 {
+  margin-bottom: 30rpx;
+}
+.my_bulk .bulk_content .people_countdown .time.data-v-3ba3b806 {
+  display: flex;
+  align-items: center;
+}
+.my_bulk .bulk_content .people_countdown .time image.data-v-3ba3b806 {
+  width: 70rpx;
+  height: 70rpx;
+  margin-right: 30rpx;
+}
+.my_bulk .bulk_content .people_countdown .time .d.data-v-3ba3b806 {
+  color: #ecff07;
+  margin: 0 6rpx;
+}
+.my_bulk .bulk_content .people_countdown .time .time__item.data-v-3ba3b806 {
+  display: block;
+  width: 50rpx;
+  line-height: 50rpx;
+  text-align: center;
+  background-color: #ecff07;
+  color: #f6484a;
+  border: 4rpx black solid;
+  font-weight: 700;
+  font-size: 700;
+  border-radius: 20rpx;
+}
+.my_bulk .bulk_content .btn.data-v-3ba3b806 {
+  display: flex;
+  justify-content: space-around;
+}
+.my_bulk .bulk_content .btn .people_invitation.data-v-3ba3b806 {
+  background-color: #ecff07;
+  width: 400rpx;
+  line-height: 90rpx;
+  border-radius: 45rpx;
+  font-weight: 700;
+  border: 4rpx black solid;
+  box-shadow: 0rpx 8rpx 6rpx red;
+  margin-top: 30rpx;
+  margin-bottom: 30rpx;
+  font-size: 34rpx;
+}
+.my_bulk .bulk_content .btn .people_my.data-v-3ba3b806 {
+  font-size: 34rpx;
+  margin-right: 10rpx;
+  background-color: #0ff3e4;
+  width: 260rpx;
+  line-height: 90rpx;
+  border-radius: 45rpx;
+  font-weight: 700;
+  border: 4rpx black solid;
+  box-shadow: 0rpx 8rpx 6rpx red;
+  margin-top: 30rpx;
+  margin-bottom: 30rpx;
+}
+.my_bulk .bulk_content .firtitle.data-v-3ba3b806 {
+  line-height: 90rpx;
+  font-weight: 700;
+  color: #ecff07;
+  font-size: 40rpx;
 }
 .my_bulk .bulk_content .bulk_headers.data-v-3ba3b806 {
   display: flex;
@@ -76,8 +139,59 @@
   right: 0rpx;
   font-size: 28rpx;
   background: #f6484a;
-  padding: 4rpx 6rpx;
+  padding: 4rpx 8rpx;
   border-radius: 20rpx;
   color: white;
+}
+.my_bulk .bulk_content .headers_addr.data-v-3ba3b806 {
+  padding: 20rpx;
+  background-color: white;
+  border-radius: 20rpx;
+  margin-top: 30rpx;
+  width: 605rpx;
+}
+.my_bulk .bulk_content .headers_addr .addr.data-v-3ba3b806 {
+  display: flex;
+  font-size: 32rpx;
+  border-bottom: 2rpx dashed  grey;
+  display: flex;
+  padding: 30rpx 10rpx;
+  align-items: center;
+}
+.my_bulk .bulk_content .headers_addr .addr .label.data-v-3ba3b806 {
+  width: 200rpx;
+  color: grey;
+}
+.my_bulk .bulk_content .headers_addr .addr .value.data-v-3ba3b806 {
+  width: 500rpx;
+}
+.my_bulk .bulk_content .all_group.data-v-3ba3b806 {
+  width: 605rpx;
+  border: 6rpx #ebfd08 solid;
+  border-radius: 10rpx;
+  padding: 30rpx;
+  box-sizing: border-box;
+  color: white;
+  margin-bottom: 30rpx;
+  box-shadow: 6rpx 10rpx 10rpx red inset;
+}
+.my_bulk .bulk_content .all_group image.data-v-3ba3b806 {
+  width: 80rpx;
+  height: 80rpx;
+  margin-right: 20rpx;
+  border-radius: 20rpx;
+}
+.my_bulk .bulk_content .all_group .grouplist.data-v-3ba3b806 {
+  display: flex;
+  margin-bottom: 30rpx;
+  border-bottom: 2rpx #7d2f31 dashed;
+  padding-bottom: 30rpx;
+}
+.my_bulk .bulk_content .all_group .grouplist .time.data-v-3ba3b806 {
+  flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 28rpx;
 }
 

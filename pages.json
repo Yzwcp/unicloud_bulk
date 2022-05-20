@@ -10,14 +10,14 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "1"
+				"navigationBarTitleText": "首页"
 			}
 		},
 		{
 		    "path" : "pages/my/my",
 		    "style" :                                                                                    
 		    {
-		        "navigationBarTitleText": "1",
+		        "navigationBarTitleText": "我的",
 		        "enablePullDownRefresh": false
 		    }
 		    
@@ -35,8 +35,10 @@
             "path" : "pages/myBulk/myBulk",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
+                "navigationBarTitleText": "订单详情",
+                "enablePullDownRefresh": false,
+				"navigationBarBackgroundColor":"#f5484c",
+				"navigationBarTextStyle":"white"
             }
             
         }
@@ -45,7 +47,7 @@
             "path" : "pages/orderList/orderList",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "我的活动列表",
                 "enablePullDownRefresh": false
             }
             
@@ -54,7 +56,7 @@
             "path" : "pages/resourceDetail/resourceDetail",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "资源",
                 "enablePullDownRefresh": false
             }
             
@@ -64,7 +66,7 @@
             "path" : "pages/downUrl/downUrl",
             "style" :                                                                                    
             {
-                "navigationBarTitleText": "",
+                "navigationBarTitleText": "下载",
                 "enablePullDownRefresh": false
             }
             

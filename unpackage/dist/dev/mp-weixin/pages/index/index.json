@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "1",
+  "navigationBarTitleText": "首页",
   "usingComponents": {
     "u-notice-bar": "/node-modules/uview-ui/components/u-notice-bar/u-notice-bar",
     "u-back-top": "/node-modules/uview-ui/components/u-back-top/u-back-top",

@@ -3,14 +3,13 @@ const api_base_url = 'https://c8408139-ea9c-44fd-919f-b068e3b82a7c.bspapp.com'
 import store from './store.js'
 import {API} from './api.js'
 export async function  request  (options){
-	
-	
 	if(options.data.ex.islogin){
 		await store.dispatch('isOverExpired',{
 			action:options.data.ex.action ,islogin:options.data.ex.islogin
 		}) 
 		options.data.ex.token = store.getters.g_token
 	}
+	console.log(store.getters.g_token);
 	return new Promise((resolve, reject) => { //异步封装接口，使用Promise处理异步请求
 	    uni.request({ //发送请求
 	        url: api_base_url + options.url, //接收请求的API

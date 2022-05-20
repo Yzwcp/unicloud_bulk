@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<unicloud-db ref='udb' v-slot:default="{data, loading, error, options}" collection="wx_sign_in" :where="where" loadtime="manual">
+		<unicloud-db ref='udb' :needLoading='true' loadingTitle='加载中' v-slot:default="{data, loading, error, options}" collection="wx_sign_in" :where="where" loadtime="manual">
 		  <view>
 			<youlanSignIn  type="sign" @change="signDate" :history='data'  bgday="#fe5568" bgweek="#fe5568"/>
 		  </view>
@@ -24,10 +24,12 @@
 			
 		},
 		onLoad() {
+			this.setwhere()
 			this.initData()
 		},
 		methods:{
 			async signDate(e){
+				
 				this.$refs.udb.add({}, {
 				  action:'sign_action',
 				  toastTitle: '签到成功', // toast提示语
@@ -41,10 +43,7 @@
 				  }
 				})
 			},
-			async initData(){
-				await this.$store.dispatch('isOverExpired',{action:'sigin' ,islogin:true}) 
-				const db = uniCloud.database() //代码块为cdb
-				const dbCmd = db.command
+			setwhere(){
 				const date = new Date()
 				const y = date.getFullYear()
 				const m = date.getMonth()+1
@@ -52,10 +51,17 @@
 				const nowD = date.getDate()
 				let start = y+'-'+m+'-'+md
 				let end = y+'-'+m+'-'+nowD
-				this.where=`sign_date>=${new Date(start).getTime()} && sign_date<=${new Date(end).getTime()}`
+				this.where=`sign_date>=${new Date(start).getTime()} && sign_date<=${new Date(end).getTime() } && user_id==$cloudEnv_uid`
+			},
+			async initData(){
+				this.$showLoading()
+				await this.$store.dispatch('isOverExpired',{action:'sigin' ,islogin:true}) 
 				this.$nextTick(() => {
-				  this.$refs.udb.loadData()
+				  this.$refs.udb.loadData({},()=>{
+					  uni.hideLoading()
+				  })
 				})
+				
 				// db.collection('wx_sign_in')
 				//   .where()
 				// 	.get()

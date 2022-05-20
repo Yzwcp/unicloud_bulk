@@ -103,7 +103,8 @@
 				this.page.more =result.more
 				let r = list.filter(item=>{
 					if(item.notice!=1 && item.weight!=1 ){
-						item.imgs=item.detail.match(/(?<=<image>).*?(?=((,*,*<\/image>)|$))/g)
+						let regExp = new RegExp("(?<=<image>).*?(?=((,*,*<\/image>)|$))", 'g');
+						item.imgs=item.detail.match(regExp)
 						if(item.images.length>0){
 							item.img = item.images[0]
 						}else{
