@@ -27,6 +27,20 @@
           "query": "_id=62810fdaccfdfa0001453a84",
           "launchMode": "default",
           "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/orderList/orderList",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "",
+          "pathName": "pages/takeout/takeout",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

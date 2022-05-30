@@ -1,12 +1,24 @@
 <template>
-	<view>
-		<u-subsection :list="list" :current="current" @change='change'></u-subsection>
-		<view v-for="item in allList" :key='item._id' class="list" @click="go(item)">
-			<img :src="item.bulk.content_img[0].url" alt="">
-			<view class="detail">
-				<view>{{item.bulk.title}}</view>
+	<view style="background-color: #f8f8f8;	height: 100vh;">
+		<u-subsection :list="list" :current="current" @change='change' ></u-subsection>
+		<view  class="list" v-if="allList.length>0">
+			<view v-for="item in allList" :key='item._id' @click="go(item)" class="list_content">
+				<img :src="item.bulk.content_img[0].url" alt="">
+				<view class="detail">
+					<view class="title">{{item.bulk.title}}</view>
+					<view class="status">{{statusObj[item.status]}}</view>
+				</view>
 			</view>
 		</view>
+		<u-empty
+				style="margin-top: 100rpx;"
+				marginTop='100'
+				v-if="allList.length==0"
+				icon="http://cdn.uviewui.com/uview/empty/car.png"
+		        mode="data"
+				text='没有活动订单,赶快去参加活动吧'
+		>
+		</u-empty>
 	</view>
 </template>
 
@@ -21,7 +33,13 @@
 				allList:[
 					{bulk:{content_img:[{url:''}]}}
 				],
-				app:getApp().globalData.baseImageUrl
+				statusObj:{
+					"1":'正在进行',
+					"2":'待发货',
+					"-1":'异常',
+					"3":'已发货',
+					"4":'签收'
+				},
 			}
 		},
 		onLoad(query={status:1}) {
@@ -44,7 +62,7 @@
 			initData(data,action){
 				this.$api.bulkordercenter({...data},action).then(res=>{
 					console.log(res);
-					if(res.success && res.data && res.data.affectedDocs>0){
+					if(res.success){
 						this.allList = res.data.data
 						this.allList.forEach(item=>{
 							item.bulk = item.bulk[0]
@@ -68,13 +86,43 @@
 
 <style scoped lang="scss">
 .list{
-	display: flex;
-	justify-content: flex-start;
+	margin: 30rpx;
 	image{
 		width: 200rpx;
 		height: 200rpx;
 		margin-right: 40rpx;
 	}
-	padding: 30rpx;
+	.list_content{
+		display: flex;
+		padding:30rpx 20rpx;
+		border-radius:20rpx ;
+		background-color: white;
+		margin-bottom: 30rpx;
+		.detail{
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: space-between;
+			.title{
+				width: 200px;
+				word-break: break-all;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 2; /* 这里是超出几行省略 */
+				overflow: hidden;
+				font-size: 30rpx;
+				font-weight: 700;
+			}
+			.status{
+				align-self: flex-end;
+				color: white;
+				background-color: red;
+				padding: 6rpx 20rpx;
+				font-size: 26rpx;
+				border-radius: 30rpx;
+			}
+		}
+	}
 }
 </style>

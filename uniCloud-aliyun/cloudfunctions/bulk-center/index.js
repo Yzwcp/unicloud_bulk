@@ -55,9 +55,12 @@ exports.main = async (event, context) => {
 				    as: 'group',
 				  })
 				  .end()
+				  
 				return queryRes
 			case 'add':
 				reqData['create_date'] = timeStamp
+				reqData['hot'] = reqData['hot']==1?1:0
+				
 				let addRes = await blukCollection.add(reqData)
 				if(!addRes.id) throw addRes
 				return formatResult(addRes,true)
@@ -74,6 +77,12 @@ exports.main = async (event, context) => {
 				return formatResult(reRes,true)
 			case 'detail':
 				let detailRes = await blukCollection.doc(reqData._id).get()
+				let queryRes2 = await db.collection('wx_bulk_order')
+				.where({
+				  bulk_id:reqData._id
+				})
+				.count()
+				detailRes["count"] = queryRes2.total
 				if(!detailRes) throw detailRes
 				return formatResult(detailRes,true)
 		}

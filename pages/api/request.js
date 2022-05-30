@@ -7,9 +7,9 @@ export async function  request  (options){
 		await store.dispatch('isOverExpired',{
 			action:options.data.ex.action ,islogin:options.data.ex.islogin
 		}) 
-		options.data.ex.token = store.getters.g_token
+		options.data.ex.token = store.getters.g_token || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiI2MjgwZWZlZWY0MTk0ZjAwMDFjYTc0YTgiLCJyb2xlIjpbXSwicGVybWlzc2lvbiI6W10sImlhdCI6MTY1Mzg3MzIzOSwiZXhwIjoxNjU0MTMyNDM5fQ.ydh0qiwIELM2o2rXvP9BVPne2sQmNVlZ88wwMsnKz7M'
 	}
-	console.log(store.getters.g_token);
+	
 	return new Promise((resolve, reject) => { //异步封装接口，使用Promise处理异步请求
 	    uni.request({ //发送请求
 	        url: api_base_url + options.url, //接收请求的API

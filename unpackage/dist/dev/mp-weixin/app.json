@@ -7,7 +7,9 @@
     "pages/orderList/orderList",
     "pages/resourceDetail/resourceDetail",
     "pages/downUrl/downUrl",
-    "pages/signInDetail/signInDetail"
+    "pages/signInDetail/signInDetail",
+    "pages/takeout/takeout",
+    "pages/movie/movie"
   ],
   "subPackages": [],
   "window": {
@@ -29,6 +31,12 @@
         "text": "首页"
       },
       {
+        "pagePath": "pages/takeout/takeout",
+        "iconPath": "static/icon-my.png",
+        "selectedIconPath": "static/icon-my-active.png",
+        "text": "外卖"
+      },
+      {
         "pagePath": "pages/my/my",
         "iconPath": "static/icon-my.png",
         "selectedIconPath": "static/icon-my-active.png",
@@ -36,6 +44,5 @@
       }
     ]
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap.json"
+  "usingComponents": {}
 }

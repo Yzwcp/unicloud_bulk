@@ -28,7 +28,7 @@
 						<text>{{allData.price || "-"}}</text>
 					</view>
 					<view class="foot_num">
-						<text>{{}}人正在参加</text>
+						<text>{{count}}人正在参加</text>
 						<text>市场价{{allData.old_price || "-"}}</text>
 					</view>
 					<view class="foot_time">
@@ -84,8 +84,8 @@
 			<view class="body_items">
 				<div>
 					<span>商品详请</span>
-					<div v-for="item in imageList" :key='item'>
-						<image v-if="item" :src="item"></image>
+					<div v-for="item in imageList" :key='item' style='display: flex;justify-content: center;'>
+						<image mode="widthFix"  v-if="item" :src="item"></image>
 					</div>
 				</div>
 			</view>
@@ -127,6 +127,7 @@
 				isEnding:false,//活动是否结束
 				timeData:{},
 				time:9999999999,
+				count:0
 			}
 		},
 
@@ -141,7 +142,6 @@
 		methods: {
 			initData(data,action){
 				this.$api.bulkcenter(data,action).then(res=>{
-					console.log(res);
 					if(res.success && res.data && res.data.affectedDocs>0){
 						let d = res.data.data[0]
 						this.allData = d
@@ -151,6 +151,7 @@
 								arrimg.push(item.url)
 							})
 						}
+						this.count = res.data.count
 						this.imageList =arrimg
 						this.time =Number(d.endtime) - new Date().getTime()  > 0 ? Number(d.endtime) - new Date().getTime() : 0
 					}
@@ -169,7 +170,8 @@
 				await this.$store.dispatch('login')
 				this.$api.bulkordercenter({bulk_id:this.allData._id,},'add').then(({data,success})=>{
 					let title = '活动参加成功！'
-					if(!success && data && data._id) title='这个活动已经开始!...'
+					let id = data.id || data._id
+					if(!success && data && id) title='这个活动已经开始!...'
 					uni.showToast({
 						title,
 						icon:'none',
@@ -177,7 +179,7 @@
 						success() {
 							setTimeout(()=>{
 								uni.navigateTo({
-									url:'/pages/myBulk/myBulk?_id='+data._id
+									url:'/pages/myBulk/myBulk?_id='+id
 								})
 							},1500)
 						}
@@ -309,10 +311,7 @@
 				image{
 				}
 			}
-			image{
-				height: 700rpx;
-				width: 100%;
-			}
+			
 		}
 		.bottom_bar{
 			height: 50rpx;

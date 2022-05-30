@@ -7,11 +7,11 @@
 				<view class="list_detail" v-for="item in bulkData" :key='item._id' @click="handleGo(item)">
 					<view class="img">
 						<image class="img1" :src="longUrl(item.content_img)"></image>
-						<image class="img2" src="../../static/hot.png"></image>
+						<image class="img2" src="../../static/hot.png" v-if="item.hot==1"></image>
 					</view>
 					<view class="content">
 						<view class="content_title">{{item.title}}</view>
-						<view class="content_img"> 
+						<view class="content_img" > 
 							<view class="content_imgs">
 								<image v-for="sub_img in item.group" :src="sub_img.header_url"></image>
 							</view>

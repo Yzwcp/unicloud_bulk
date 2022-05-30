@@ -80,6 +80,24 @@
             }
             
         }
+		,{
+		    "path" : "pages/takeout/takeout",
+		    "style" :                                                                                    
+		    {
+		        "navigationBarTitleText": "外卖",
+		        "enablePullDownRefresh": false
+		    }
+		    
+		}
+        ,{
+            "path" : "pages/movie/movie",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"tabBar": {
 		"color": "#7A7E83",
@@ -92,6 +110,11 @@
 			"selectedIconPath": "static/icon-home-active.png",
 			"text": "首页"
 		}, {
+			"pagePath": "pages/takeout/takeout",
+			"iconPath": "static/icon-my.png",
+			"selectedIconPath": "static/icon-my-active.png",
+			"text": "外卖"
+		},{
 			"pagePath": "pages/my/my",
 			"iconPath": "static/icon-my.png",
 			"selectedIconPath": "static/icon-my-active.png",

@@ -84,14 +84,12 @@
 				val && this.dayArr.forEach(res=>{
 					val.map(item=>{
 						let a = new Date(item.sign_date).toLocaleDateString()
-						console.log(a);
 						if(a ===res.date ){
 							res.flag=true
 						}
 					})
 				})
 				if(val.length>0){
-					console.log(val);
 					this.lx = val[val.length-1].continuous
 					this.jf = val[val.length-1].points
 				}

@@ -124,10 +124,6 @@
   padding: 40rpx;
   display: inline-block;
 }
-.bulk .body_items image {
-  height: 700rpx;
-  width: 100%;
-}
 .bulk .bottom_bar {
   height: 50rpx;
   position: fixed;
