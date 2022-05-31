@@ -1,1 +1,0 @@
-<view><unicloud-db generic:scoped-slots-default="signInDetail-unicloud-db-default" data-vue-generic="scoped" class="vue-ref" vue-id="e7464a40-1" needLoading="{{true}}" loadingTitle="加载中" collection="wx_sign_in" where="{{where}}" loadtime="manual" data-ref="udb" bind:__l="__l" vue-slots="{{['default']}}"></unicloud-db></view>

@@ -1,8 +1,0 @@
-{
-  "navigationBarTitleText": "外卖",
-  "enablePullDownRefresh": false,
-  "usingComponents": {
-    "u-notice-bar": "/node-modules/uview-ui/components/u-notice-bar/u-notice-bar",
-    "u-tabs": "/node-modules/uview-ui/components/u-tabs/u-tabs"
-  }
-}

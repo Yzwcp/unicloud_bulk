@@ -1,9 +1,0 @@
-{
-  "navigationBarTitleText": "资源",
-  "enablePullDownRefresh": false,
-  "usingComponents": {
-    "u-parse": "/node-modules/uview-ui/components/u-parse/u-parse",
-    "u-album": "/node-modules/uview-ui/components/u-album/u-album",
-    "u-button": "/node-modules/uview-ui/components/u-button/u-button"
-  }
-}
