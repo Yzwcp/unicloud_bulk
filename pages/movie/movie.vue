@@ -1,6 +1,6 @@
 <template>
 	<view>
-	  <web-view src="https://bwc.woyangniya.cn/h5/#/pages/home/home?scene=7680"></web-view>
+	  <web-view src="https://umep.ltd"></web-view>
 	</view>
 </template>
 
@@ -8,8 +8,11 @@
 	export default {
 		data() {
 			return {
-				
+				url:''
 			};
+		},
+		onLoad(res) {
+			this.url = 'https://umep.ltd'
 		}
 	}
 </script>

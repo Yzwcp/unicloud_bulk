@@ -10,7 +10,10 @@
 	
 			<view class="content" style="padding:0rpx 0 30rpx 0;">
 				<view >
-						<view class='title' @click="godetail(currentMenuContent.url)">{{currentMenuContent.text}}</view>
+						<view class='title' @click="godetail(currentMenuContent.url)">
+							{{currentMenuContent.text}}						
+							<text class='tips' v-if="currentMenuContent.description">{{currentMenuContent.description}}</text>
+						</view>
 						<view v-if="currentMenuContent.fatherid!=202" >
 							<image v-for="(sub,index) in currentMenuContent.data" :src='sub.img' mode="widthFix" ></image>
 						</view>
@@ -34,8 +37,8 @@
 							    itemStyle="padding-left: 15px; padding-right: 15px; height: 34px;"
 							    >
 							    </u-tabs>
-								<view v-for="(sub,index) in currCityMsg"  >
-									{{sub.text}}
+								<view class="bwc" v-for="(sub,index) in currCityMsg"  @click="go(sub.url)">
+									<text>{{sub.text}}</text> <text>({{sub.description}})</text>
 								</view>
 						</view>
 				</view>
@@ -70,7 +73,7 @@
 				},{
 					id:200,
 					text:'电影票羊毛',
-					url:'/pages/movie/movie',
+					url:'/pages/movie/movie?url=https://bwc.woyangniya.cn/h5/#/pages/home/home?scene=7680',
 					children:{
 						fatherid:200,
 						text:'全品类电影票8折优惠',
@@ -78,17 +81,27 @@
 					},
 				},{
 					id:202,
-					text:'外卖霸王餐',
+					text:'霸王餐平台',
 					url:'/pages/movie/movie',
 					children:{
-						text:'外卖霸王餐',
+						text:'',
 						fatherid:202,
+						description:'什么是霸王餐？',
+						url:'https://m.bbaqw.com/cs/374738.htm',
 						data:[{
 							area:"杭州",
 							msg:[{
 								text:'小蚕',
 								description:'实测满1元提现，这个平台商家多，杭州地区推荐这个平台',
 								url:"https://gw.djtaoke.cn/static/silk/1653901287272/nauth.html?router=upper_61915706"
+							},{
+								text:'饭宝宝生活圈',
+								description:'实测满1元提现',
+								url:"https://www.nbjiazhi.top/?scene=5c7319a4126443f0"
+							},{
+								text:'团小淘',
+								description:'满1元提现',
+								url:"https://h5.lantu7.cn/#/pages/reward/share?scene=20220530045613386415236162"
 							},{
 								text:'三叔养你',
 								description:'实测满10元提现，大概吃一餐就可以提现了',
@@ -101,23 +114,7 @@
 								text:'撸餐',
 								description:'实测满20元提现，大概吃一餐就可以提现了，一天可以提现一次',
 								url:"https://mt.jzybox.com/?scene=41f7ef4163b9c25d&random=717764"
-							},{
-								text:'饭宝宝生活圈',
-								description:'实测满1元提现',
-								url:"https://www.nbjiazhi.top/?scene=5c7319a4126443f0"
-							},{
-								text:'团小淘',
-								description:'满1元提现',
-								url:"https://h5.lantu7.cn/#/pages/reward/share?scene=20220530045613386415236162"
-							},]
-						},{
-						area:"杭州",	
-						},{
-						area:"杭州",	
-						},{
-						area:"杭州",	
-						},{
-						area:"杭州",	
+							}]
 						}]
 					},
 				}],
@@ -128,6 +125,7 @@
 		},
 		onLoad() {
 			this.handlemenu(this.menu[0])
+			this.topchange(this.menu[2].children.data[0])
 		},
 		methods:{
 			handlemenu(item){
@@ -136,6 +134,13 @@
 			},
 			topchange(item){
 				this.currCityMsg = item.msg
+			},
+			go(url){
+				if(url){
+					uni.navigateTo({
+						url:'/pages/movie/movie?url='+url
+					})
+				}
 			},
 			godetail(url){
 				if(url){
@@ -182,6 +187,24 @@
 				margin-bottom: 30rpx;
 				color: #fd4d5f;
 				text-decoration: underline;
+			}
+			.tips{
+				color: #fd4d5f;
+				text-align: center;
+				text-decoration: underline;
+			}
+			.bwc{
+				padding: 30rpx;
+				text:nth-child(1){
+					color: red;
+					font-size: 30rpx;
+					text-decoration: underline;
+				}
+				text:nth-child(2){
+					font-size:28rpx ;
+					color: black;
+					text-decoration: none;
+				}
 			}
 		}
 		.body{

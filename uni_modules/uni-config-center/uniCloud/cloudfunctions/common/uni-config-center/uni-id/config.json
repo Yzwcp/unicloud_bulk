@@ -30,8 +30,8 @@
     "tokenExpiresIn": 259200,
     "oauth": {
       "weixin": {
-        "appid": "wx02ffce8331851305",
-        "appsecret": "5308e160f02baf4211b5f766dcb2507e"
+        "appid": "wx642a3710f8aee555",
+        "appsecret": "2d01bf2e68a79e6d8b48fe303616bfb9"
       }
     }
   },
