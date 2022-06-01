@@ -1,5 +1,6 @@
 'use strict';
 const uniID = require('uni-id')
+const nodemailer = require('./node_modules/nodemailer');
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	console.log('event : ', event)
@@ -103,11 +104,47 @@ exports.main = async (event, context) => {
 						order_id:reqData.order_id
 					}).count()
 					if(groupCollection.total>=groupsize){
+						
+						var transporter = nodemailer.createTransport({
+						
+						       // host: 'smtp.qq.email',
+						
+						       //  port: 465, // SMTP 端口 
+						
+						       // secureConnection: true, // 使用了 SSL
+						
+					           service: 'qq', //使用了内置传输发送邮件 支持列表传送门
+					            auth: {
+					              user: '1494993218@qq.com',//发送邮箱
+					              pass: 'hzetwiwgnfzehjgb' //授权码,通过QQ邮箱中的设置获取
+					            }
+						
+						 });
+						
+						 var message = {
+				            from: '"梁总办公室" <xxx@qq.com>', // 发送者
+				            to: 'yyy@xx.com', // 接受者,可以同时发送多个,以逗号隔开
+				            // cc:'', // 抄送,可以同时发送多个,以逗号隔开
+				            //bcc:'',//暗抄送,可以同时发送多个,以逗号隔开
+				            subject: '发送标题', // 标题
+				            text: '发送文本内容', // 文本
+				            //  html: `<h2>nodemailer基本使用:</h2><h3>`
+						  };
+						 transporter.sendMail(message, function (err, info) {
+				            if (err) {
+				              console.log("==邮件发送失败==");
+				              console.log(err);
+				              return;
+				            }
+						    console.log('==邮件发送成功==');
+						
+						 });
 						let modifyRes = await blukOrderCollection.doc(reqData.order_id)
 						.update({
 						  address:reqData.address,
 						  status:2
 						});
+						// 成功后发送一份邮件到管理员
 						if(!modifyRes) throw '更新失败'
 						return formatResult(modifyRes)
 					}else{

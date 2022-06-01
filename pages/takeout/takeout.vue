@@ -15,7 +15,7 @@
 							<text class='tips' v-if="currentMenuContent.description">{{currentMenuContent.description}}</text>
 						</view>
 						<view v-if="currentMenuContent.fatherid!=202" >
-							<image v-for="(sub,index) in currentMenuContent.data" :src='sub.img' mode="widthFix" ></image>
+							<image @click='gooutxcx(sub)' v-for="(sub,index) in currentMenuContent.data" :src='sub.img' mode="widthFix" ></image>
 						</view>
 						<view v-else>
 							 <u-tabs
@@ -61,11 +61,15 @@
 						text:'午餐红包10元一餐',
 						fatherid:201,
 						data:[{
-							text:'美团',
+							text:'饿了么',
 							img:'../../static/elm.jpg',
+							appId:'wxece3a9a4c82f58c9',
+							url:'commercialize/pages/compose-guide/index?scene=4b8f644c77474ee7a451ba012ca6718c',
 							id:100
 						},{
 							text:'美团',
+							appId:'wxde8ac0a21135c07d',
+							url:'/index/pages/h5/h5?lch=cps:waimai:5:854f6c8aa13544375e1b4d0881f0baf8:09a12c24fd0057f7d07a:33:65604&f_userId=1&weburl=https%3A%2F%2Fclick.meituan.com%2Ft%3Ft%3D1%26c%3D2%26p%3DN6OQUL5zVRcL&f_token=1',
 							img:'../../static/mt.png',
 							id:101
 						}]
@@ -115,6 +119,13 @@
 								description:'实测满20元提现，大概吃一餐就可以提现了，一天可以提现一次',
 								url:"https://mt.jzybox.com/?scene=41f7ef4163b9c25d&random=717764"
 							}]
+						},{
+							area:"成都",
+							msg:[{
+								text:'嗨吃喵',
+								description:'积分制会员制 100积分一元',
+								url:"https://prod.haichimiao.com/h5/main?nonceNo=39486717666"
+							}]
 						}]
 					},
 				}],
@@ -141,6 +152,17 @@
 						url:'/pages/movie/movie?url='+url
 					})
 				}
+			},
+			gooutxcx(item){
+				uni.navigateToMiniProgram({
+				  appId: item.appId,
+				  path: item.path,
+				  extraData: {
+				  },
+				  success(res) {
+				    // 打开成功
+				  }
+				})
 			},
 			godetail(url){
 				if(url){

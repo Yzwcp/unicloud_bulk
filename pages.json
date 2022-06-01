@@ -84,13 +84,22 @@
 		    "path" : "pages/takeout/takeout",
 		    "style" :                                                                                    
 		    {
-		        "navigationBarTitleText": "外卖",
+		        "navigationBarTitleText": "发现",
 		        "enablePullDownRefresh": false
 		    }
 		    
 		}
         ,{
             "path" : "pages/movie/movie",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/resource/resource",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
@@ -113,7 +122,13 @@
 			"pagePath": "pages/takeout/takeout",
 			"iconPath": "static/icon-my.png",
 			"selectedIconPath": "static/icon-my-active.png",
-			"text": "外卖"
+			"text": "发现"
+		},
+		{
+			"pagePath": "pages/resource/resource",
+			"iconPath": "static/icon-my.png",
+			"selectedIconPath": "static/icon-my-active.png",
+			"text": "福利资源"
 		},{
 			"pagePath": "pages/my/my",
 			"iconPath": "static/icon-my.png",

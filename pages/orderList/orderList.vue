@@ -1,7 +1,7 @@
 <template>
 	<view style="background-color: #f8f8f8;	height: 100vh;">
 		<u-subsection :list="list" :current="current" @change='change' ></u-subsection>
-		<view  class="list" v-if="allList.length>0">
+		<view  class="list" v-if="allList.length>0 && !loading">
 			<view v-for="item in allList" :key='item._id' @click="go(item)" class="list_content">
 				<img :src="item.bulk.content_img[0].url" alt="">
 				<view class="detail">
@@ -40,6 +40,7 @@
 					"3":'已发货',
 					"4":'签收'
 				},
+				loading:false
 			}
 		},
 		onLoad(query={status:1}) {
@@ -60,6 +61,7 @@
 				}
 			},
 			initData(data,action){
+				this.loading=true
 				this.$api.bulkordercenter({...data},action).then(res=>{
 					console.log(res);
 					if(res.success){
@@ -69,6 +71,7 @@
 						})
 					}
 				}).finally(()=>{
+					this.loading=false
 				})
 			},
 			change(index){

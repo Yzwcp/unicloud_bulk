@@ -60,12 +60,12 @@
 			},
 			filterData(result,img=[]){
 				// const detailList=result.match(/(?<=<image>).*?(?=((,*,*<\/image>)|$))/g)
-				let regExp = new RegExp('(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)', 'g');
-				let detailList = result.match(regExp) //筛选所有链接
+				// let regExp = new RegExp('', 'g');
+				let detailList = result.match(/(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g) //筛选所有链接
 				let downlist = []//下载链接
 				let a  = null
 				let regExp2 = new RegExp('(?<=<image>).*?(?=((,*,*<\/image>)|$))', 'g');
-				a = result.replace(regExp2)
+				a = result.replace(regExp2,'滑到底部')
 				if(detailList && detailList.length>0){
 					detailList.map((item,index)=>{
 						if(!(item.indexOf('cdn')>-1)){
