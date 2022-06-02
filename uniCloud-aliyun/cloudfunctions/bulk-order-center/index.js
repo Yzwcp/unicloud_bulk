@@ -32,7 +32,7 @@ exports.main = async (event, context) => {
 		}
 	}
 	
-	if(!tokenWhite.includes(action)){
+	if(!tokenWhite.includes(action) && ex.role!=1){
 		payload = await uniID.checkToken(token)
 		if(payload.code!=0){
 			return formatResult(payload,false,'token错误')
@@ -44,12 +44,20 @@ exports.main = async (event, context) => {
 	try{
 		switch(action){
 			case 'query':
+				let p = {}
+				if(ex.role==1){
+					p={
+						status:reqData.status,
+					}
+				}else{
+					p={
+						user_id: payload.uid,
+						status:reqData.status,
+					}
+				}
 				let queryRes = await db.collection('wx_bulk_order')
 				.aggregate()
-				.match({
-				  user_id: payload.uid,
-				  status:reqData.status
-				})
+				.match(p)
 				.lookup({
 				  from: 'wx_bulk',
 				  localField: 'bulk_id',
