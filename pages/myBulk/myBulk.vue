@@ -27,7 +27,7 @@
 					<image :src="bannerList.url"></image>
 					<view class="headers_details"> 
 						<view class="title">{{bulkData.title || ''}}</view>
-						<view  style="color: grey;font-size: 24rpx;margin-top: 40rpx;">销量：55件</view>
+						<view  style="color: grey;font-size: 24rpx;margin-top: 40rpx;">已拿：55件</view>
 						<view class="title2">还差 <text style="color:  #f6484a;font-size: 48rpx;">{{needsPeople}}</text>人,即可完成</view>
 						<view class="title3">{{statusObj[allResult.status] || ''}}</view>
 					</view>
@@ -222,6 +222,7 @@
 				this.$api.bulkordercenter(data,action).then(res=>{
 					if(res.success ){
 						this.allResult = res.data
+						this.allResult.address = JSON.parse(res.data.address)
 						this.bulkData = res.data.bulk[0]
 						this.bannerList = res.data.bulk[0].content_img[0]
 						this.group_adds = res.data.group

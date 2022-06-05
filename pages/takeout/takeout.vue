@@ -57,6 +57,7 @@
 					id:201,
 					text:'外卖羊毛',
 					url:"",
+					type:'out',
 					children:{
 						text:'午餐红包10元一餐',
 						fatherid:201,
@@ -77,9 +78,10 @@
 				},{
 					id:200,
 					text:'电影票羊毛',
-					url:'/pages/movie/movie?url=https://bwc.woyangniya.cn/h5/#/pages/home/home?scene=7680',
+					type:'in',
 					children:{
 						fatherid:200,
+						url:'/pages/movie/movie',
 						text:'全品类电影票8折优惠',
 						data:[]
 					},
@@ -87,6 +89,7 @@
 					id:202,
 					text:'霸王餐平台',
 					url:'/pages/movie/movie',
+					type:'in',
 					children:{
 						text:'',
 						fatherid:202,

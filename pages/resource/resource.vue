@@ -4,7 +4,7 @@
 			<view @click="godetail(item)" class="box-detail" v-for="item in postList" :enableBackToTop='true'> 
 			
 				<view  class="detail-cover">
-					<u--image :showLoading="true" :src="item.img"  width="220rpx" height="120rpx" mode='aspectFill'   @click="click"/>
+					<u--image :showLoading="true" :src="item.img"  width="220rpx" height="120rpx" mode='aspectFill'  />
 				</view>
 				<view class="detail-left">
 					<view class="detail-title" v-html="item.title"></view>
