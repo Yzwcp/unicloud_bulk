@@ -16,14 +16,15 @@
 		data() {
 			return {
 				history:[],
-				where:{}
+				where:{},
+				list:[]
 			};
 		},
 		components:{youlanSignIn},
 		created() {
 			
 		},
-		onLoad() {
+		onReady() {
 			this.setwhere()
 			this.initData()
 		},
@@ -57,7 +58,7 @@
 				this.$showLoading()
 				await this.$store.dispatch('isOverExpired',{action:'sigin' ,islogin:true}) 
 				this.$nextTick(() => {
-				  this.$refs.udb.loadData({},()=>{
+				  this.$refs.udb.loadData({},(data)=>{
 					  uni.hideLoading()
 				  })
 				})

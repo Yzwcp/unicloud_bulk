@@ -198,6 +198,7 @@
 			async handleHelp(){
 				this.btnloading=true
 				const r = await this.$store.dispatch('login')
+				console.log(r);
 				if(!r)return this.btnloading= false
 				let data = {
 					order_id:this.allResult._id,
@@ -222,7 +223,7 @@
 				this.$api.bulkordercenter(data,action).then(res=>{
 					if(res.success ){
 						this.allResult = res.data
-						this.allResult.address = JSON.parse(res.data.address)
+						this.allResult.address =res.data.address &&  JSON.parse(res.data.address)
 						this.bulkData = res.data.bulk[0]
 						this.bannerList = res.data.bulk[0].content_img[0]
 						this.group_adds = res.data.group

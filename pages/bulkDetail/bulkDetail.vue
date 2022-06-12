@@ -29,7 +29,7 @@
 					</view>
 					<view class="foot_num">
 						<text>{{count}}人正在参加</text>
-						<text>市场价{{allData.old_price || "-"}}</text>
+						<text>市场价{{allData.old_price || "-"}}元</text>
 					</view>
 					<view class="foot_time">
 						<text>限时活动</text>
@@ -43,7 +43,7 @@
 							    >
 							 </u-count-down> 
 							<text class="time__item">{{ timeData.days }}&nbsp;</text>天
-							<text class="time__item">{{ timeData.hours>10?timeData.hours:'0'+timeData.hours}}&nbsp;</text>时
+							<text class="time__item">{{ timeData.hours>=10?timeData.hours:'0'+timeData.hours}}&nbsp;</text>时
 							<text class="time__item">{{ timeData.minutes }}&nbsp;</text>分
 							<text class="time__item">{{ timeData.seconds }}&nbsp;</text>秒
 						</text>

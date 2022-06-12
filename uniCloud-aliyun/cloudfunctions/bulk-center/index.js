@@ -41,12 +41,15 @@ exports.main = async (event, context) => {
 				let queryRes = await db.collection('wx_bulk')
 				.aggregate()
 				.lookup({
-				    from: 'wx_group_add',
+				    from: 'wx_bulk_order',
 				    let: {
-				      bulk_id: '$_id', //连接wx_bulk
+				      order_id: '$_id', //连接wx_bulk
 				    },
 				    pipeline: $.pipeline() //连接wx_group_add
-				      .match(dbCmd.expr($.eq(['$bulk_id', '$$bulk_id'])))
+				      .match(dbCmd.expr($.eq(['$bulk_id', '$$order_id'])))
+					  .project({
+						  avatar:1
+					   })
 					  .sort({
 						  create_date:-1
 					  })

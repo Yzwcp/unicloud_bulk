@@ -5,10 +5,10 @@
 			<text @click="handleTabItem(item)" v-for="item in topBar" :key='item.id' :class="item.id==currentIndex?'hightColor':''">{{item.name}}</text>
 		</view> -->
 		<!-- <view style="height: 80rpx;"> </view> -->
-		<u-notice-bar :text="notice" ></u-notice-bar>
+		<!-- <u-notice-bar :text="notice" ></u-notice-bar> -->
 		<view class="banner">
 			<image src="../../static/top_backgrounnd.png"></image>
-			<image src="../../static/banner1.png"></image>
+			<image style="border-radius: 20rpx;" src="https://umep.ltd/yzw/1655046748426_homebanner.jpg"></image>
 		</view>
 		<Bulk :reachBottom='reachBottom' :bulkData='dataSource' v-show="currentIndex==891" />
 		<!-- <Resources  v-show="currentIndex==892" /> -->

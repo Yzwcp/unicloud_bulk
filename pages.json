@@ -120,14 +120,14 @@
 			"text": "首页"
 		}, {
 			"pagePath": "pages/takeout/takeout",
-			"iconPath": "static/icon-my.png",
-			"selectedIconPath": "static/icon-my-active.png",
+			"iconPath": "static/faxian.png",
+			"selectedIconPath": "static/faxian-active.png",
 			"text": "发现"
 		},
 		{
 			"pagePath": "pages/resource/resource",
-			"iconPath": "static/icon-my.png",
-			"selectedIconPath": "static/icon-my-active.png",
+			"iconPath": "static/res.png",
+			"selectedIconPath": "./static/res-active.png",
 			"text": "福利资源"
 		},{
 			"pagePath": "pages/my/my",

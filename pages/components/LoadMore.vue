@@ -27,7 +27,7 @@ export default {
 	data: () => ({ _observer: null,showBackTop:false ,onScroll:null}),
 	mounted() {
 		//监听返回顶部
-		addEventListener('scroll',this.onScroll)
+		window.addEventListener('scroll',this.onScroll)
 		const options = this.options || {};
 		//核心
 		console.log(options);

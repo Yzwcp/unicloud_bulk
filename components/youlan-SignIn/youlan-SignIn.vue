@@ -2,7 +2,7 @@
 	<view class="calendar-box">
 		<view class="top">
 			<view>
-				<h4>积分 <span> {{jf}} </span> </h4>
+				<h4>积分 <span> {{jf}} </span> (次月清零)</h4>
 				<p>连续签到{{lx}}天</p>
 			</view>
 			<view class="rig">
@@ -83,8 +83,11 @@
 			history(val=[]){
 				val && this.dayArr.forEach(res=>{
 					val.map(item=>{
-						let a = new Date(item.sign_date).toLocaleDateString()
-						if(a ===res.date ){
+						let y = new Date(item.sign_date).getFullYear()
+						let m = new Date(item.sign_date).getMonth()+1
+						let d = new Date(item.sign_date).getDate()
+						let timeTtring = y+'/'+m+'/'+d
+						if(timeTtring == res.date ){
 							res.flag=true
 						}
 					})

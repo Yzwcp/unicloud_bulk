@@ -38,10 +38,12 @@ module.exports = {
 				state.newData.continuous =record.continuous+1
 				state.newData.points = record.points + (state.newData.continuous>6?7:state.newData.continuous)
 				state.newData.scores = (state.newData.continuous>6?7:state.newData.continuous)
-			}else{
+			}else if(record.sign_date != timeStamp){
 				state.newData.continuous =1
 				state.newData.points = record.points+1
 				state.newData.scores =1
+			}else{
+			    throw new Error("今天已经签到")
 			}
 			
 		}

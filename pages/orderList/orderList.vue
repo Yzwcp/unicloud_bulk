@@ -62,6 +62,7 @@
 			},
 			initData(data,action){
 				this.loading=true
+				this.$showLoading()
 				this.$api.bulkordercenter({...data},action).then(res=>{
 					console.log(res);
 					if(res.success){
@@ -71,6 +72,7 @@
 						})
 					}
 				}).finally(()=>{
+					uni.hideLoading()
 					this.loading=false
 				})
 			},

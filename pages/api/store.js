@@ -90,42 +90,45 @@ const store = new Vuex.Store({
 				    provider: 'weixin',
 				    success: function (infoRes) {
 						console.log(infoRes);
-					uni.login({
-						provider: 'weixin',
-						 success: async(res) =>{
-							 console.log(res);
-							try{
-								uni.showLoading({
-									title:'正在登录...'
-								})
-								const result = await API.usercenter({code:res.code,user:infoRes.userInfo,},'wxLogin')
-								commit('setUser',{userInfo:result.userInfo,token:result.token})
-								function setToken({token,tokenExpired}) {
-								  uni.setStorageSync('uni_id_token', token)
-								  uni.setStorageSync('uni_id_token_expired', tokenExpired)
+						uni.login({
+							provider: 'weixin',
+							 success: async(res) =>{
+								 console.log(res);
+								try{
+									uni.showLoading({
+										title:'正在登录...'
+									})
+									const result = await API.usercenter({code:res.code,user:infoRes.userInfo,},'wxLogin')
+									commit('setUser',{userInfo:result.userInfo,token:result.token})
+									function setToken({token,tokenExpired}) {
+									  uni.setStorageSync('uni_id_token', token)
+									  uni.setStorageSync('uni_id_token_expired', tokenExpired)
+									}
+									setToken({token:result.token,tokenExpired:result.tokenExpired})
+									// 绑定刷新token事件
+									uni.setStorage({
+										key:"USER",
+										data:result.userInfo
+									})
+									uni.hideLoading()
+									resolve(true)
+								}catch(e){
+									uni.showToast({
+										title:"网络加载失败..."+JSON.stringify(e)
+									})
+									console.log(e);
+									reject(false)
 								}
-								setToken({token:result.token,tokenExpired:result.tokenExpired})
-								// 绑定刷新token事件
-								uni.setStorage({
-									key:"USER",
-									data:result.userInfo
-								})
-								uni.hideLoading()
-								resolve(true)
-							}catch(e){
-								uni.showToast({
-									title:"网络加载失败..."+JSON.stringify(e)
-								})
-								console.log(e);
-								reject(false)
-							}
-						},
-					})
-				  },
-				  fail:res=>{
-					this.$showToast('登录失败')
-					reject(false)
-				  }
+							},
+						})
+					},
+				    fail:res=>{
+					  uni.showToast({
+						title:'登录失败',
+						icon:"none"
+					  })
+					  resolve(false)
+				    }
 				});
 				
 			})

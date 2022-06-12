@@ -13,16 +13,16 @@
 				</view>
 				<!-- <view></view> -->
 			</view>
-			<LoadMore @scrolltolower='scrolltolower' :page='page'></LoadMore>
+			<u-loading-icon mode="circle" v-if='page.more==1' inactive-color="red"></u-loading-icon>
+			<u-divider v-else text="暂无更多数据"></u-divider>
 			
 	</view>
 </template>
 
 <script>
-	import {LoadMore} from '../components/LoadMore.vue'
 	export default {
 		name:"resources",
-		components:{LoadMore},
+		components:{},
 		data() {
 			return {
 				postsData: {},
@@ -32,7 +32,7 @@
 				},
 				page:{
 					count:20,
-					more:0,
+					more:1,
 					start:0
 				},
 				keyword:'',
@@ -67,6 +67,9 @@
 					this.initData()
 				}
 				
+			},
+			onReachBottom(){
+				this.scrolltolower()
 			},
 			clear(){
 				this.isSearch=false

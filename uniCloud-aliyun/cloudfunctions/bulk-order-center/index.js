@@ -73,7 +73,8 @@ exports.main = async (event, context) => {
 				let hasOneOrderRes = await blukOrderCollection.where({
 					status:1,
 					user_id:payload.uid,
-					bulk_id:reqData.bulk_id
+					bulk_id:reqData.bulk_id,
+					
 				}).get()
 				if(hasOneOrderRes.affectedDocs>0){
 					return formatResult(hasOneOrderRes.data[0],false)
@@ -82,6 +83,7 @@ exports.main = async (event, context) => {
 					user_id:payload.uid,
 					bulk_id:reqData.bulk_id,
 					status:1,
+					avatar:payload.userInfo.avatar,
 					create_date:timeStamp,
 					update_date:timeStamp
 					})

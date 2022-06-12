@@ -13,7 +13,7 @@
 						<view class="content_title">{{item.title}}</view>
 						<view class="content_img" > 
 							<view class="content_imgs">
-								<image v-for="sub_img in item.group" :src="sub_img.header_url"></image>
+								<image v-for="sub_img in item.group" :key='sub_img._id' :src="sub_img.avatar"></image>
 							</view>
 							<view class="span" v-if="item.group.length>0"><span style='color: #000000;margin-right: 8rpx;' v-if='item.group.length==3'>...</span>火热进行中</view>
 						</view>
@@ -70,6 +70,7 @@
 	.home_body{
 		padding: 0 0 50rpx 0;
 		background: $uni-bg-color-grey;
+		height: calc(100vh - 81rpx - 156rpx);
 		.body_title{
 			display: flex;
 			justify-content: center;
@@ -113,7 +114,8 @@
 						height: 250rpx;
 						position: absolute;
 						left: 0;
-						border-radius:10rpx;
+						border-top-left-radius: 10rpx;
+						border-bottom-left-radius: 10rpx;
 					}
 					
 				}
