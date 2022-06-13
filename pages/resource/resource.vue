@@ -1,10 +1,10 @@
 <template>
 	<view class="box" >
-			<view class="search"><u-search placeholder="请输入关键字" @clear='clear' @search='search' v-model="keyword"></u-search></view>
+			<view class="search"><u-search placeholder="请输入关键字" @clear='clear' @search='search' @input='onInput' v-model="keyword"></u-search></view>
 			<view @click="godetail(item)" class="box-detail" v-for="item in postList" :enableBackToTop='true'> 
 			
 				<view  class="detail-cover">
-					<u--image :showLoading="true" :src="item.img"  width="220rpx" height="120rpx" mode='aspectFill'  />
+					<u--image :showLoading="true" :src="filterimg(item.img)"  width="220rpx" height="120rpx" mode='aspectFill'  />
 				</view>
 				<view class="detail-left">
 					<view class="detail-title" v-html="item.title"></view>
@@ -37,6 +37,7 @@
 				},
 				keyword:'',
 				isSearch:false,
+				tokenguo:false,
 			}
 		},
 		created() {
@@ -55,7 +56,7 @@
 			},
 			clearParams(){
 				this.postList =[]
-				this.page={count:20,more:0}
+				this.page={count:20,more:1}
 			},
 			scrolltolower(){
 				if(this.page.more!=1)return 
@@ -67,6 +68,11 @@
 					this.initData()
 				}
 				
+			},
+			onInput(){
+				if(this.keyword==''){
+					this.clear()
+				}
 			},
 			onReachBottom(){
 				this.scrolltolower()
@@ -81,11 +87,17 @@
 				// console.log(s.match(/(?<=<image>).*?(?=((,*,*<\/image>)|$))/g));
 				// let t = "【32】5】"
 				// console.log(t.indexOf('】'))
+				if(this.tokenguo == true)return this.$showToast('搜索服务更新中，两分钟后尝试')
 				let data={}
 				data.count=this.page.count
 				data.start=this.page.start
 				if(key)data.keyword=key
 				this.$api.signincenter(data,'postsListSearch').then(result=>{
+					if(result.msg=='未登录'){
+						this.$showToast('搜索服务更新中,两分钟后尝试')
+						this.tokenguo = true
+						return
+					}
 					this.filterData(result)
 				})
 			},
@@ -96,23 +108,40 @@
 					this.filterData(res)
 				})
 			},
-			godetail(item){
+			async godetail(item){
+				const r = await this.$store.dispatch('login')
+				if(!r)return this.$showToast('登录失败')
 				uni.navigateTo({
 					url:'/pages/resourceDetail/resourceDetail?id='+item.postID
 				})
+			},
+			filterimg(str){
+				
+				if(str.indexOf('image')>-1){
+					str = str.replace("<image>",'')
+					str=str.replace("</image>",'')
+					// console.log(str);
+				}
+				
+				return str.split(',')[0]
 			},
 			filterData(result){
 				let list = result.posts
 				this.page.more =result.more
 				let r = list.filter(item=>{
 					if(item.notice!=1 && item.weight!=1 ){
-						let regExp = new RegExp("(?<=<image>).*?(?=((,*,*<\/image>)|$))", 'g');
-						item.imgs=item.detail.match(regExp)
+						let strArr = []
+						// let regExp = new RegExp("(?<=<image>).*?(?=((,*,*<\/image>)|$))", 'g');
+						let regx = /\<image\>(.*?)\<\/image\>/g
+						strArr = item.detail.match(regx)
+						item.strArr = strArr
+						// item.imgs=item.detail.match(regExp)
 						if(item.images.length>0){
 							item.img = item.images[0]
 						}else{
-							if(item.imgs && item.imgs.length>0){
-								item.img = item.imgs[0].split(',')[0]
+							if(item.strArr && item.strArr.length>0){
+								let str  = item.strArr[0]
+								item.img = str
 							}
 						}
 						item.createTimeFormat = new Date(item.createTime).toLocaleDateString()

@@ -12,9 +12,10 @@
 		</view>
 		<Bulk :reachBottom='reachBottom' :bulkData='dataSource' v-show="currentIndex==891" />
 		<!-- <Resources  v-show="currentIndex==892" /> -->
-		<view class="wrap">
+<!-- 		<view class="wrap">
 			<u-back-top :scroll-top="scrollTop" :iconStyle="iconStyle" :customStyle='customstyle'></u-back-top>
-		</view>
+		</view> -->
+		
 	</view>
 </template>
 

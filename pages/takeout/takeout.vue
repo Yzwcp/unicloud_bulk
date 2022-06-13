@@ -93,8 +93,9 @@
 				 this.topchange(this.menu[2].children.data[0])
 			},
 			gooutxcx(item){
+				console.log(item);
 				uni.navigateToMiniProgram({
-				  appId: item.appId,
+				  appId: item.appid,
 				  path: item.path,
 				  extraData: {
 				  },

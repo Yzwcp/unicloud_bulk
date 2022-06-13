@@ -4,23 +4,27 @@
 				<image  src="../../static/tuijian.png" ></image>
 			</view>
 			<view class="body_list">
-				<view class="list_detail" v-for="item in bulkData" :key='item._id' @click="handleGo(item)">
-					<view class="img">
-						<image class="img1" :src="longUrl(item.content_img)"></image>
-						<image class="img2" src="../../static/hot.png" v-if="item.hot==1"></image>
-					</view>
-					<view class="content">
-						<view class="content_title">{{item.title}}</view>
-						<view class="content_img" > 
-							<view class="content_imgs">
-								<image v-for="sub_img in item.group" :key='sub_img._id' :src="sub_img.avatar"></image>
+				<view class="" v-for="item in bulkData" :key='item._id' @click="handleGo(item)">
+					<view  v-if="item.stand==1">
+						<view class="list_detail">
+							<view class="img">
+								<image class="img1" :src="longUrl(item.content_img)"></image>
+								<image class="img2" src="../../static/hot.png" v-if="item.hot==1"></image>
 							</view>
-							<view class="span" v-if="item.group.length>0"><span style='color: #000000;margin-right: 8rpx;' v-if='item.group.length==3'>...</span>火热进行中</view>
+							<view class="content">
+								<view class="content_title">{{item.title}}</view>
+								<view class="content_img" > 
+									<view class="content_imgs">
+										<image v-for="sub_img in item.group" :key='sub_img._id' :src="sub_img.avatar"></image>
+									</view>
+									<view class="span" v-if="item.group.length>0"><span style='color: #000000;margin-right: 8rpx;' v-if='item.group.length==3'>...</span>火热进行中</view>
+								</view>
+								<view class="old_price">￥{{item.old_price}}</view>
+								<view class="price">￥{{item.price}}【包邮】</view>
+							</view>
+							<view class="partin">参</view>
 						</view>
-						<view class="old_price">￥{{item.old_price}}</view>
-						<view class="price">￥{{item.price}}【包邮】</view>
 					</view>
-					<view class="partin">参</view>
 				</view>
 			</view>
 <!-- 		<view class="body_detail" @click="handleGo(item)" v-for="item in bulkData" :key='item'>
@@ -37,7 +41,7 @@
 				<div><span>限时价格：</span><span>{{item.price}}元</span></div>
 			</view>
 		</view> -->
-		<u-divider text="暂无更多拼团"></u-divider>
+		<u-divider text="暂无更多活动"></u-divider>
 	</view>
 </template>
 

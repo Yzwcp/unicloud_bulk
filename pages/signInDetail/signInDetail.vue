@@ -50,8 +50,8 @@
 				const m = date.getMonth()+1
 				const md = "01"
 				const nowD = date.getDate()
-				let start = y+'-'+m+'-'+md
-				let end = y+'-'+m+'-'+nowD
+				let start = y+'/'+m+'/'+md
+				let end = y+'/'+m+'/'+nowD
 				this.where=`sign_date>=${new Date(start).getTime()} && sign_date<=${new Date(end).getTime() } && user_id==$cloudEnv_uid`
 			},
 			async initData(){
@@ -59,6 +59,7 @@
 				await this.$store.dispatch('isOverExpired',{action:'sigin' ,islogin:true}) 
 				this.$nextTick(() => {
 				  this.$refs.udb.loadData({},(data)=>{
+					  console.log(data);
 					  uni.hideLoading()
 				  })
 				})

@@ -27,39 +27,59 @@
 					<image :src="bannerList.url"></image>
 					<view class="headers_details"> 
 						<view class="title">{{bulkData.title || ''}}</view>
-						<view  style="color: grey;font-size: 24rpx;margin-top: 40rpx;">已拿：55件</view>
-						<view class="title2">还差 <text style="color:  #f6484a;font-size: 48rpx;">{{needsPeople}}</text>人,即可完成</view>
+						<view  style="color: grey;font-size: 24rpx;margin-top: 40rpx;">已拿：{{bulkData.taked || 10}}件</view>
+						<view class="title2">还差 <text style="color:  #f6484a;font-size: 48rpx;">{{needsPeople || 0}}</text>人,即可完成</view>
 						<view class="title3">{{statusObj[allResult.status] || ''}}</view>
 					</view>
 				</view>
-				<view class="headers_addr" v-if=" allResult.status==3">
-					<view class="addr">
-						<view class="label">物流公司:</view>
-						<view v-if="allResult.way_name" class="value">{{allResult.way_name}}</view>
+				<view v-if='bulkData.virtual==0'>
+					<view class="headers_addr" v-if=" allResult.status==3">
+						<view class="addr">
+							<view class="label">物流公司:</view>
+							<view v-if="allResult.way_name" class="value">{{allResult.way_name}}</view>
+						</view>
+						<view class="addr" @click="setClipboardData">
+							<view class="label">单号:</view>
+							<view v-if="allResult.way_number" class="value">{{allResult.way_number}} <text style="color: #007AFF;margin-left: 30rpx;">(复制单号)</text></view>
+						</view>
 					</view>
-					<view class="addr" @click="setClipboardData">
-						<view class="label">单号:</view>
-						<view v-if="allResult.way_number" class="value">{{allResult.way_number}} <text style="color: #007AFF;margin-left: 30rpx;">(复制单号)</text></view>
+					<view class="headers_addr"  v-if=" allResult.status==2">
+						<view class="addr">
+							<view class="label">姓名:</view>
+							<view v-if="allResult.address.userName" class="value">{{allResult.address.userName}}</view>
+						</view>
+						<view class="addr">
+							<view class="label">手机号:</view>
+							<view v-if="allResult.address.telNumber" class="value">{{allResult.address.telNumber}}</view>
+						</view>
+						<view class="addr">
+							<view class="label">所在地:</view>
+							<view class="value"> 
+							<text v-if="allResult.address.provinceName">{{allResult.address.provinceName}}{{allResult.address.cityName}}{{allResult.address.countyName}}{{allResult.address.countyName}}</text>
+						  </view>
+						</view>
+						<view class="addr">
+							<view class="label">详细地址:</view>
+							<view v-if="allResult.address.detailInfo" class="value">{{allResult.address.detailInfo}}</view>
+						</view>
 					</view>
 				</view>
-				<view class="headers_addr"  v-if=" allResult.status==2">
-					<view class="addr">
-						<view class="label">姓名:</view>
-						<view v-if="allResult.address.userName" class="value">{{allResult.address.userName}}</view>
+				<view  v-if='bulkData.virtual==1'>
+					<view class="headers_addr"  v-if="allResult.status==2">
+						<view class="addr" >
+							<view class="label">账号:</view>
+							<view v-if="allResult.address" class="value">{{allResult.address}}</view>
+						</view>
 					</view>
-					<view class="addr">
-						<view class="label">手机号:</view>
-						<view v-if="allResult.address.telNumber" class="value">{{allResult.address.telNumber}}</view>
-					</view>
-					<view class="addr">
-						<view class="label">所在地:</view>
-						<view class="value"> 
-						<text v-if="allResult.address.provinceName">{{allResult.address.provinceName}}{{allResult.address.cityName}}{{allResult.address.countyName}}{{allResult.address.countyName}}</text>
-					  </view>
-					</view>
-					<view class="addr">
-						<view class="label">详细地址:</view>
-						<view v-if="allResult.address.detailInfo" class="value">{{allResult.address.detailInfo}}</view>
+					<view class="headers_addr" v-if="allResult.status==3">
+						<view class="addr" @click="setClipboardData(allResult.way_name)">
+							<view class="label">兑换地址:</view>
+							<view v-if="allResult.way_name"  class="value">{{allResult.way_name.substring(0,16)+'...'}}<text style="color: #007AFF;margin-left: 30rpx;">(复制)</text></view>
+						</view>
+						<view class="addr"  @click="setClipboardData(allResult.way_number)">
+							<view class="label">卡密:</view>
+							<view v-if="allResult.way_number" class="value">{{allResult.way_number}} <text style="color: #007AFF;margin-left: 30rpx;">(复制)</text></view>
+						</view>
 					</view>
 				</view>
 				<view class="btn">
@@ -68,7 +88,8 @@
 					<button class="people_invitation"  @click="go()" v-if="invited && isOrderFinish">好友已经拿到活动商品</button>
 					
 					<button class="people_invitation" data-name="" v-if="!invited && !isOrderFinish" open-type="share">邀请好友</button>
-					<button class="people_invitation" v-if="!invited && isOrderFinish && allResult.status==1" @click="setAddr" >添加地址</button>
+					<button class="people_invitation" v-if="!invited && isOrderFinish && allResult.status==1 && bulkData.virtual==0" @click="setAddr" >添加收货地址</button>
+					<button class="people_invitation" v-if="!invited && isOrderFinish && allResult.status==1 && bulkData.virtual==1"  @click="setAcc" >添加收货账号</button>
 				</view>
 				<view class="firtitle">好友列表</view>
 				<view class="all_group">
@@ -104,6 +125,15 @@
 				  <view>邮编：{{addrString.postalCode}}</view>
 			</view>
 		</u-modal>
+		<u-modal :show="iptshow"  title="请填入账号" :showCancelButton='true' @cancel='addrcancel' @confirm='addrconfirm' cancelText='返回' >
+			<view class="slot-content">
+			<u--input
+				placeholder="请输入内容"
+				border="surround"
+				v-model="addrString"
+			  ></u--input>
+			</view>
+		</u-modal>
 	</view>
 </template>
 
@@ -116,7 +146,12 @@
 				baseImgUrl:getApp().globalData.baseImageUrl,
 				headerImgUrl:'',
 				isEnding:false,//活动是否结束
-				timeData:{},
+				timeData:{
+					minutes:0,
+					days:0,
+					seconds:0,
+					hours:0
+				},
 				time:9999999999,
 				invited:false,//是否受邀
 				group_adds:[],
@@ -132,14 +167,15 @@
 					"4":'签收'
 				},
 				loading:true,
-				btnloading:false
+				btnloading:false,
+				iptshow:false,
 			}
 		},
 		onShareAppMessage(options){
 			  var that = this;
 			  // 设置菜单中的转发按钮触发转发事件时的转发内容
 			  var shareObj = {
-				title: "就差一人",    // 默认是小程序的名称(可以写slogan等)
+				title: "我需要你的帮助",    // 默认是小程序的名称(可以写slogan等)
 				path: `/pages/myBulk/myBulk?_id=${that.allResult._id}&creator=${1}`,    // 默认是当前页面，必须是以‘/'开头的完整路径
 				imageUrl: '',   //自定义图片路径，可以是本地文件路径、代码包文件路径或者网络图片路径，支持PNG及JPG，不传入 imageUrl 则使用默认截图。显示图片长宽比是 5:4
 			  };
@@ -174,10 +210,10 @@
 					url:'/pages/index/index'
 				})
 			},
-			setClipboardData(){
+			setClipboardData(item){
 				let that =this
 				uni.setClipboardData({
-					data: that.allResult.way_number,
+					data: item + "",
 					success: function () {
 					}
 				});
@@ -223,8 +259,12 @@
 				this.$api.bulkordercenter(data,action).then(res=>{
 					if(res.success ){
 						this.allResult = res.data
-						this.allResult.address =res.data.address &&  JSON.parse(res.data.address)
 						this.bulkData = res.data.bulk[0]
+						if(this.bulkData.virtual==1){
+							this.allResult.address = res.data.address
+						}else{
+							this.allResult.address = res.data.address &&  JSON.parse(res.data.address)
+						}
 						this.bannerList = res.data.bulk[0].content_img[0]
 						this.group_adds = res.data.group
 						this.time =Number(this.bulkData.endtime) - new Date().getTime()  > 0 ? Number(this.bulkData.endtime) - new Date().getTime() : 0
@@ -241,6 +281,9 @@
 			   // this.headerImgUrl = this.baseImgUrl + this.bannerList[0]
 			   // this.group_adds=result.group_adds
 			   // this.time =Number(result.endtime) - new Date().getTime()  > 0 ? Number(result.endtime) - new Date().getTime() : 0
+			},
+			setAcc(){
+				this.iptshow = true
 			},
 			orderFinish(){
 				this.needsPeople<1? this.isOrderFinish=true :  this.isOrderFinish=false
@@ -261,13 +304,15 @@
 			},
 			addrcancel(){
 				this.addrShow=false
-				this.addrString={}
+				this.addrString=null
+				this.iptshow=false
 			},
 			addrconfirm(){
 				this.$showLoading()
+				if(!this.addrString)return this.$showToast('不能为空')
 				this.$api.bulkordercenter({
 				order_id:this.allResult._id,
-				address:this.addrString,
+				address:JSON.stringify(this.addrString),
 				bulk_id:this.bulkData._id
 				},'modify').then(res=>{
 					if(res.success){
@@ -280,6 +325,7 @@
 				}).finally(res=>{
 					uni.hideLoading()
 					this.addrShow=false
+					this.iptshow=false
 				})
 			},
 			onChange(e) {

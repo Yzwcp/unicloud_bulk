@@ -26,7 +26,7 @@
 				<text>待发货</text>
 			</view> -->
 		</view>
-		<view class="version" @click="clear">版本号：2.0.1</view>
+		<view class="version" >版本号：1.0.1</view>
 	</view>
 </template>
 
@@ -52,7 +52,11 @@
 				const r = await this.$store.dispatch('login',p)
 			},
 			async go(url){
-				await this.handleLogin()
+				let r = await this.$store.dispatch('login')
+				if(!r){
+					 this.$showToast('登录失败')
+					 return
+				}
 				uni.navigateTo({
 					url:url
 				})

@@ -1,4 +1,5 @@
 'use strict';
+const nodemailer = require('./node_modules/nodemailer');
 exports.main = async (event, context) => {
 	//event为客户端上传的参数
 	console.log('event : ', event)
@@ -20,7 +21,7 @@ exports.main = async (event, context) => {
 	  app_version : '4.1.0.8',
 	  versioncode : '20141459',
 	  market_id : 'floor_xiaomi',
-	  _key : '623B9A993C1C9BB6D74990BF5CD9BA8141FC4732347F17606D68C5EF8ABB8E9C2342C67D61B365F1D7A04AD4F2C0B70939BA7C2E18B526D0',
+	  _key : '623B9A993C1C9BB6D74990BF5CD9BA8141FC4732347F17606D68C5EF8ABB8E9C2342C67D61B365F1D7A04AD4F2C0B70939BA7C2E18B526D1',
 	  device_code : '%5Bd%5Dcd4ec618-1646-4b76-894c-6b1ae580feb0',
 	  phone_brand_type : 'VO',
 	}
@@ -73,7 +74,7 @@ exports.main = async (event, context) => {
 	//     ctx.body=formatResult(result,false)
 	//   }
 	
-	 
+	 return []
 	// }); 
 	switch(action){
 		case "categoryQuery":
@@ -121,6 +122,42 @@ exports.main = async (event, context) => {
 				contentType: 'json', // 指定以application/json发送data内的数据
 				dataType: 'json' // 指定返回值为json格式，自动进行parse
 			  })
+			if( postsListSearchRes.data.msg=='未登录' || postsListSearchRes.data.status==0){
+				var transporter = nodemailer.createTransport({
+						
+						       // host: 'smtp.qq.email',
+						
+						       //  port: 465, // SMTP 端口 
+						
+						       // secureConnection: true, // 使用了 SSL
+						
+					           service: 'qq', //使用了内置传输发送邮件 支持列表传送门
+					            auth: {
+					              user: '1494993218@qq.com',//发送邮箱
+					              pass: 'hzetwiwgnfzehjgb' //授权码,通过QQ邮箱中的设置获取
+					            }
+						
+						 });
+						
+						 var message = {
+				            from: '1494993218@qq.com', // 发送者
+				            to: '1774570823@qq.com', // 接受者,可以同时发送多个,以逗号隔开
+				            // cc:'', // 抄送,可以同时发送多个,以逗号隔开
+				            //bcc:'',//暗抄送,可以同时发送多个,以逗号隔开
+				            subject: '三楼token过了', // 标题
+				            text: '及时更换', // 文本
+				            //  html: `<h2>nodemailer基本使用:</h2><h3>`
+						  };
+						 transporter.sendMail(message, function (err, info) {
+				            if (err) {
+				              console.log("==邮件发送失败==");
+				              console.log(err);
+				              return;
+				            }
+						    console.log('==邮件发送成功==');
+						
+						 });
+			}
 			if(postsListSearchRes.status==200){
 				return postsListSearchRes.data
 			}

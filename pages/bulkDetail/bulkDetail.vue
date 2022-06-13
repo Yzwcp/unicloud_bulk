@@ -28,7 +28,7 @@
 						<text>{{allData.price || "-"}}</text>
 					</view>
 					<view class="foot_num">
-						<text>{{count}}人正在参加</text>
+						<text>{{count || 99}}人正在参加</text>
 						<text>市场价{{allData.old_price || "-"}}元</text>
 					</view>
 					<view class="foot_time">
@@ -92,12 +92,11 @@
 		</view>
 		<view style="height: 200rpx;"></view>
 		<view class="bottom_bar">
-			<view class="img">
+			<view class="img" @click="gokefu">
 				<image  src="../../static/kf.png"  mode="widthFix"></image>
 				<text>联系客服</text>
 			</view>
-			<view class="create" :class="isEnding?'greyColor': ''" @click="handleCreateOrder">{{isEnding?'活动结束':'立即开团'}}</view>
-			
+			<button  :class="isEnding?'greyColor create': 'create'" @click="handleCreateOrder" :loading='createloading' :disabled="createloading">{{isEnding?'活动结束':'立即开团'}}</button>
 		</view>
 	</view>
 </template>
@@ -120,14 +119,19 @@
 				allData:{},
 				app:{},
 				endtime:{
-					
 				},
 				imageList:[],
 				timer:null,
 				isEnding:false,//活动是否结束
-				timeData:{},
+				timeData:{
+					minutes:0,
+					days:0,
+					seconds:0,
+					hours:0
+				},
 				time:9999999999,
-				count:0
+				count:0,
+				createloading:false,
 			}
 		},
 
@@ -166,12 +170,20 @@
 				return item[0].url
 			},
 			async handleCreateOrder(){
+				let that = this
+				if(this.createloading)return
+				this.createloading = true
 				if(this.isEnding) return uni.showToast({title:'活动结束！',icon:'none'})
-				await this.$store.dispatch('login')
+				let r = await this.$store.dispatch('login')
+				if(!r){
+					 this.createloading = false
+					 this.$showToast('登录失败')
+					 return
+				}
 				this.$api.bulkordercenter({bulk_id:this.allData._id,},'add').then(({data,success})=>{
 					let title = '活动参加成功！'
 					let id = data.id || data._id
-					if(!success && data && id) title='这个活动已经开始!...'
+					if(!success && data && id) title='这个活动已经开始啦...'
 					uni.showToast({
 						title,
 						icon:'none',
@@ -181,9 +193,12 @@
 								uni.navigateTo({
 									url:'/pages/myBulk/myBulk?_id='+id
 								})
-							},1500)
+								that.createloading = false
+							},1000)
 						}
 					})
+				}).catch(()=>{
+					this.createloading = false
 				})
 			},
 			open(){
@@ -195,6 +210,11 @@
 			onChange(e) {
 				// console.log(e);÷
 				this.timeData = e
+			},
+			gokefu(){
+				uni.navigateTo({
+					url:'/pages/movie/movie'
+				})
 			},
 			finish(){
 				// uni.showToast({
@@ -340,12 +360,14 @@
 			}
 			.create{
 				display: inline-block;
-				width: 200rpx;
+				width: 300rpx;
+				font-size: 28rpx;
 				border-radius: 100rpx;
 				line-height: 80rpx;
 				background-color: #f9464a;
 				color: white;
-				text-align: center;
+				align-content: flex-end;
+				margin: 0;
 			}
 		}
 	}

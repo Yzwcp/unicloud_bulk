@@ -64,8 +64,10 @@
 				let detailList = result.match(/(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|&|-)+)/g) //筛选所有链接
 				let downlist = []//下载链接
 				let a  = null
-				let regExp2 = new RegExp('(?<=<image>).*?(?=((,*,*<\/image>)|$))', 'g');
-				a = result.replace(regExp2,'滑到底部')
+				let regExp2 = /\<image\>(.*?)\<\/image\>/g
+		
+				a = result.replace(regExp2,'')
+		
 				if(detailList && detailList.length>0){
 					detailList.map((item,index)=>{
 						if(!(item.indexOf('cdn')>-1)){
@@ -84,6 +86,7 @@
 				if(img.length>0){
 					this.imgList = img
 				}else{
+					console.log(detailList);
 					this.imgList = detailList.filter(item=>item)
 				}
 				this.postsData.title=this.postsData.title.substring(this.postsData.title.indexOf('】')+1,this.postsData.title.length)
