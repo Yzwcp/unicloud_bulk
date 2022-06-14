@@ -24,9 +24,7 @@ exports.main = async (event, context) => {
 					let resUpdateUser = await uniID.updateUser({
 						uid: loginRes.uid,
 						sessionKey: loginRes.sessionKey,
-						avatar:reqData.user.avatarUrl,
-						gender:reqData.user.gender,
-						nickName:reqData.user.nickName
+						...reqData.user,
 					})
 					let userInfo = await uniID.getUserInfo({
 						uid: loginRes.uid,

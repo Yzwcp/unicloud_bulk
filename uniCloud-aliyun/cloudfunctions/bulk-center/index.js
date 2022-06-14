@@ -48,7 +48,7 @@ exports.main = async (event, context) => {
 				    pipeline: $.pipeline() //连接wx_group_add
 				      .match(dbCmd.expr($.eq(['$bulk_id', '$$order_id'])))
 					  .project({
-						  avatar:1
+						  avatarUrl:1
 					   })
 					  .sort({
 						  create_date:-1
@@ -60,6 +60,10 @@ exports.main = async (event, context) => {
 				  .end()
 				  
 				return queryRes
+			case 'adminquery':
+				let adminquery = await db.collection('wx_bulk').get()
+				  
+				return adminquery
 			case 'add':
 				reqData['create_date'] = timeStamp
 				reqData['hot'] = reqData['hot']==1?1:0

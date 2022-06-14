@@ -3,7 +3,7 @@
 		<!-- <uni-sign-in ref="signIn"></uni-sign-in> -->
 		<view class="my_header"  @click='handleLogin'>
 			<view class="header_avatar"  v-if="Object.keys(g_userInfo).length>0">
-				<image class="header_avatar_img" :src="g_userInfo.avatar"></image>
+				<image class="header_avatar_img" :src="g_userInfo.avatarUrl"></image>
 				<text>{{g_userInfo.nickName}}</text>
 			</view>
 			<view class="header_avatar" v-else>

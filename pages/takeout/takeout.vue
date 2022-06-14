@@ -4,7 +4,7 @@
 		<view class="body">
 			<view class="menu">
 			  <view v-for="item in menu" :key='item.id' :class="currentindex==item.id?'active_border':'border'" @click="handlemenu(item)">
-				<view class="title">{{item.text}}</view>
+				<view class="title" >{{item.text}}</view>
 			  </view>
 			</view>
 	
@@ -17,7 +17,7 @@
 						<view v-if="currentMenuContent.fatherid!=202" >
 							<image @click='gooutxcx(sub)' v-for="(sub,index) in currentMenuContent.data" :src='sub.img' mode="widthFix" ></image>
 						</view>
-						<view v-else>
+						<view v-else class="bwc_box">
 							 <u-tabs
 								@change="topchange"
 							    :list="currentMenuContent.data"
@@ -117,6 +117,8 @@
 
 <style lang="scss">
 	.takeout{
+		height: 100vh;
+		overflow: hidden;
 		.active_border{
 			border-left:8rpx solid #2979FF;
 			border-radius: 10rpx;
@@ -138,6 +140,7 @@
 			}
 			
 		}
+		
 		.content{
 			width: calc(100vw - 180rpx);
 			image{margin-bottom: 30rpx;width: 100%;}
@@ -154,6 +157,10 @@
 				color: #fd4d5f;
 				text-align: center;
 				text-decoration: underline;
+			}
+			.bwc_box{
+				overflow: auto;
+				height: calc(100vh - 21rpx - 37rpx);
 			}
 			.bwc{
 				padding: 30rpx;

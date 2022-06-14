@@ -14,7 +14,7 @@
 								<image src="../../static/ordernz.png" ></image>
 								<text class="time__item">{{ timeData.days }}&nbsp;</text>
 								<text class="d">天</text>
-								<text class="time__item">{{ timeData.hours>10?timeData.hours:'0'+timeData.hours}}&nbsp;</text>
+								<text class="time__item">{{ timeData.hours>=10?timeData.hours:'0'+timeData.hours}}&nbsp;</text>
 								<text class="d">时</text>
 								<text class="time__item">{{ timeData.minutes }}&nbsp;</text>
 								<text class="d">分</text>
@@ -27,7 +27,7 @@
 					<image :src="bannerList.url"></image>
 					<view class="headers_details"> 
 						<view class="title">{{bulkData.title || ''}}</view>
-						<view  style="color: grey;font-size: 24rpx;margin-top: 40rpx;">已拿：{{bulkData.taked || 10}}件</view>
+						<view  style="color: grey;font-size: 24rpx;margin-top: 40rpx;">已拿：{{count}}件</view>
 						<view class="title2">还差 <text style="color:  #f6484a;font-size: 48rpx;">{{needsPeople || 0}}</text>人,即可完成</view>
 						<view class="title3">{{statusObj[allResult.status] || ''}}</view>
 					</view>
@@ -169,6 +169,7 @@
 				loading:true,
 				btnloading:false,
 				iptshow:false,
+				count:15,
 			}
 		},
 		onShareAppMessage(options){
@@ -246,7 +247,7 @@
 						this.$showToast('助力成功')
 						this.initData({order_id:this.allResult._id},'detail');
 					}else{
-						this.$showToast('不能给自己助力哦！')
+						this.$showToast(res.msg)
 					}
 				}).finally(()=>{
 					this.btnloading=false
@@ -260,6 +261,7 @@
 					if(res.success ){
 						this.allResult = res.data
 						this.bulkData = res.data.bulk[0]
+						this.count = res.count
 						if(this.bulkData.virtual==1){
 							this.allResult.address = res.data.address
 						}else{

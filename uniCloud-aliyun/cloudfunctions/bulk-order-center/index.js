@@ -14,7 +14,7 @@ exports.main = async (event, context) => {
 	let reqData = null //数据
 	let token = null
 	let timeStamp = new Date().getTime()
-	const tokenWhite = ['detail']//token白名单
+	const tokenWhite = ['detail','modi']//token白名单
 	let payload = null //token 校验结果
 	if(body){
 		cloudUrlBodydata = JSON.parse(body)
@@ -40,7 +40,6 @@ exports.main = async (event, context) => {
 	}
 	const db = uniCloud.database();
 	const blukOrderCollection = db.collection('wx_bulk_order');
-	
 	try{
 		switch(action){
 			case 'query':
@@ -64,9 +63,29 @@ exports.main = async (event, context) => {
 				  foreignField: '_id',
 				  as: 'bulk'
 				})
+				
 				.end()
 				// let queryRes =await blukOrderCollection.where({user_id:payload.uid,status:reqData.status}).get()
 				return formatResult(queryRes)
+			case 'adminquery':
+				let adminqueryRes = await db.collection('wx_bulk_order')
+				.aggregate()
+				.match({status:reqData.status,})
+				.lookup({
+				  from: 'wx_bulk',
+				  localField: 'bulk_id',
+				  foreignField: '_id',
+				  as: 'bulk'
+				})
+				.lookup({
+				  from: 'wx_group_add',
+				  localField: '_id',
+				  foreignField: 'order_id',
+				  as: 'group'
+				})
+				.end()
+				// let queryRes =await blukOrderCollection.where({user_id:payload.uid,status:reqData.status}).get()
+				return formatResult(adminqueryRes)
 			case 'add':
 				if(!reqData.bulk_id)return formatResult({},true,"没有活动id")
 				//先查询这个人有没有活动订单 有的话就不创建
@@ -83,11 +102,12 @@ exports.main = async (event, context) => {
 					user_id:payload.uid,
 					bulk_id:reqData.bulk_id,
 					status:1,
-					avatar:payload.userInfo.avatar,
+					avatarUrl:payload.userInfo.avatarUrl,
+					nickName:payload.userInfo.nickName,
 					create_date:timeStamp,
 					update_date:timeStamp
 					})
-				if(!addRes.id) throw addRes
+				if(!addRes.id) return formatResult(addRes,false)
 				return formatResult(addRes,true)
 			case 'edit':
 				reqData['update_date'] = timeStamp
@@ -186,11 +206,18 @@ exports.main = async (event, context) => {
 				  as: 'group'
 				})
 				.end()
-				// let detailRes = await db.collection('wx_bulk_order')
-				// let detailRes = await blukOrderCollection.doc(reqData._id).get()
+				const dbCmd = db.command
+				let formatDetailRes=formatResult(detailRes,true,'成功',action)
+				let querycountRes2 = await db.collection('wx_bulk_order')
+				.where({
+				  bulk_id:formatDetailRes.data.bulk_id,
+				  status:dbCmd.gte(2)
+				})
+				.count()
+				formatDetailRes["count"] = querycountRes2.total
 				
 				if(!detailRes) throw detailRes
-				return formatResult(detailRes,true,'成功',action)
+				return formatDetailRes
 			case 'groupadd':
 				if(!(reqData.bulk_id &&  reqData.order_id )) throw ('没有id')
 				if(payload.uid===reqData.user_id)return formatResult({},false,'不能给自己助力！')
@@ -207,7 +234,7 @@ exports.main = async (event, context) => {
 					bulk_id:reqData.bulk_id,
 					order_id:reqData.order_id,
 					nickname:payload.userInfo.nickName,
-					header_url:payload.userInfo.avatar,
+					header_url:payload.userInfo.avatarUrl,
 					create_date:timeStamp
 				})
 				return formatResult(groupAddRes)

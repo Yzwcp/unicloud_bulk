@@ -13,8 +13,12 @@
 				</view>
 				<!-- <view></view> -->
 			</view>
+		
 			<u-loading-icon mode="circle" v-if='page.more==1' inactive-color="red"></u-loading-icon>
 			<u-divider v-else text="暂无更多数据"></u-divider>
+<!-- 			<view v-if='page.more==1' style="text-align: center;font-size: 26rpx;color: red;">
+				资源采集自葫芦侠
+			</view> -->
 			
 	</view>
 </template>

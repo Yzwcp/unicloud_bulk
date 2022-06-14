@@ -15,7 +15,7 @@
 <!-- 		<view class="wrap">
 			<u-back-top :scroll-top="scrollTop" :iconStyle="iconStyle" :customStyle='customstyle'></u-back-top>
 		</view> -->
-		
+		<u-divider text="暂无更多活动"></u-divider>
 	</view>
 </template>
 
@@ -93,7 +93,8 @@
 
 <style scoped lang="scss">
 	.home{
-		background: $my-bodybg;
+		background:$uni-bg-color-grey;
+		height: 100vh;
 		.home_topbar{
 			display: flex;
 			padding: 20rpx 0;

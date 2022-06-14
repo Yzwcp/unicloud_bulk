@@ -173,7 +173,11 @@
 				let that = this
 				if(this.createloading)return
 				this.createloading = true
-				if(this.isEnding) return uni.showToast({title:'活动结束！',icon:'none'})
+				if(this.isEnding) {
+					 uni.showToast({title:'活动结束！',icon:'none'})
+					 this.createloading=false
+					 return
+				}
 				let r = await this.$store.dispatch('login')
 				if(!r){
 					 this.createloading = false

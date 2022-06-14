@@ -4,7 +4,7 @@
 				<image  src="../../static/tuijian.png" ></image>
 			</view>
 			<view class="body_list">
-				<view class="" v-for="item in bulkData" :key='item._id' @click="handleGo(item)">
+				<view class="bulk_detail" v-for="item in bulkData" :key='item._id' @click="handleGo(item)">
 					<view  v-if="item.stand==1">
 						<view class="list_detail">
 							<view class="img">
@@ -15,7 +15,7 @@
 								<view class="content_title">{{item.title}}</view>
 								<view class="content_img" > 
 									<view class="content_imgs">
-										<image v-for="sub_img in item.group" :key='sub_img._id' :src="sub_img.avatar"></image>
+										<image v-for="sub_img in item.group" :key='sub_img._id' :src="sub_img.avatarUrl"></image>
 									</view>
 									<view class="span" v-if="item.group.length>0"><span style='color: #000000;margin-right: 8rpx;' v-if='item.group.length==3'>...</span>火热进行中</view>
 								</view>
@@ -26,6 +26,7 @@
 						</view>
 					</view>
 				</view>
+				
 			</view>
 <!-- 		<view class="body_detail" @click="handleGo(item)" v-for="item in bulkData" :key='item'>
 			<view class="detail_header">
@@ -41,7 +42,6 @@
 				<div><span>限时价格：</span><span>{{item.price}}元</span></div>
 			</view>
 		</view> -->
-		<u-divider text="暂无更多活动"></u-divider>
 	</view>
 </template>
 
@@ -72,9 +72,7 @@
 
 <style lang="scss">
 	.home_body{
-		padding: 0 0 50rpx 0;
-		background: $uni-bg-color-grey;
-		height: calc(100vh - 81rpx - 156rpx);
+		padding: 0 0 40rpx 0;
 		.body_title{
 			display: flex;
 			justify-content: center;
@@ -84,11 +82,13 @@
 				height: 56rpx ;
 			}
 		}
+	
 		.body_list{
 			margin: 0 30rpx;
 			.list_detail{
 				position: relative;
 				border-radius: 20rpx;
+				background: white;
 				height: 250rpx;
 				margin-bottom: 30rpx;
 				background-color: white;

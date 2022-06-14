@@ -77,6 +77,13 @@ const store = new Vuex.Store({
 					console.log('获取到缓存数据');
 					return
 				}
+				uni.showLoading({
+					title: '加载中...'
+				});
+				
+				setTimeout(function () {
+					uni.hideLoading();
+				}, 500);
 				if(p=='init'){
 					uni.showToast({
 						title:'请登录',
@@ -98,6 +105,7 @@ const store = new Vuex.Store({
 									uni.showLoading({
 										title:'正在登录...'
 									})
+									// console.log(result.userInfo);
 									const result = await API.usercenter({code:res.code,user:infoRes.userInfo,},'wxLogin')
 									commit('setUser',{userInfo:result.userInfo,token:result.token})
 									function setToken({token,tokenExpired}) {
