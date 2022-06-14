@@ -39,20 +39,15 @@ exports.main = async (event, context) => {
 		}
 	}
 	const db = uniCloud.database();
+	const dbCmd = db.command
 	const blukOrderCollection = db.collection('wx_bulk_order');
 	try{
 		switch(action){
 			case 'query':
 				let p = {}
-				if(ex.role==1){
-					p={
-						status:reqData.status,
-					}
-				}else{
-					p={
-						user_id: payload.uid,
-						status:reqData.status,
-					}
+				p={
+					user_id: payload.uid,
+					status: dbCmd.in(reqData.status) ,
 				}
 				let queryRes = await db.collection('wx_bulk_order')
 				.aggregate()
@@ -152,12 +147,15 @@ exports.main = async (event, context) => {
 						 });
 						
 						 var message = {
-				            from: '"梁总办公室" <xxx@qq.com>', // 发送者
-				            to: 'yyy@xx.com', // 接受者,可以同时发送多个,以逗号隔开
+				            from: '1494993218@qq.com', // 发送者
+				            to: '1774570823@qq.com', // 接受者,可以同时发送多个,以逗号隔开
 				            // cc:'', // 抄送,可以同时发送多个,以逗号隔开
 				            //bcc:'',//暗抄送,可以同时发送多个,以逗号隔开
-				            subject: '发送标题', // 标题
-				            text: '发送文本内容', // 文本
+				            subject: '[省大家]小程序来订单啦', // 标题
+				            html: `<div>
+									<h2>订单id:</h2>
+									<div>商品名:</div>
+								   <div>`, // 文本
 				            //  html: `<h2>nodemailer基本使用:</h2><h3>`
 						  };
 						 transporter.sendMail(message, function (err, info) {
@@ -206,7 +204,6 @@ exports.main = async (event, context) => {
 				  as: 'group'
 				})
 				.end()
-				const dbCmd = db.command
 				let formatDetailRes=formatResult(detailRes,true,'成功',action)
 				let querycountRes2 = await db.collection('wx_bulk_order')
 				.where({
