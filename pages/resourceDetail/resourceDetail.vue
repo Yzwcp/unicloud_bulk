@@ -1,14 +1,29 @@
 <template>
 	<view class="box" >
-			<view style="text-align: center;line-height: 100rpx;font-size: 30rpx;">{{postsData.title}}</view>
-			<view class="box-parse">
-				<u-parse :content="postsData.detail"></u-parse>
-			</view>
-			<u-album v-if='imgList && imgList.length>0' :urls="imgList"></u-album>
-			<view style="padding: 50rpx 0;">
-			</view>
-			<view style='height:50rpx;'></view>
-			<u-button @click="goDown" text="查看链接"></u-button>
+			
+			<unicloud-db
+				v-slot:default="{data, loading, error, options}" 
+				ref='h_home_ref_udb'
+				collection="h_postdetail" 
+				ssr-key='h_home'
+				loadtime = "manual"
+				getone
+				@load='load'
+				:spaceInfo='spaceInfo'
+				:limit='1'
+				:where="h_homeCollection.where"
+				>
+				<view style="text-align: center;line-height: 100rpx;font-size: 30rpx;">{{data.title}}</view>
+				<view class="box-parse">
+					<u-parse :content="data.detail"></u-parse>
+				</view>
+				<u-album v-if='data && data.images && data.images.length>0' :urls="data.images"></u-album>
+				<view style="padding: 50rpx 0;">
+				</view>
+				<view style='height:50rpx;'></view>
+				
+			</unicloud-db>
+			<u-button @click="goDown" v-if="isDownList" text="查看链接"></u-button>
 	</view>
 </template>
 
@@ -24,6 +39,11 @@
 				imgstyle:{
 					
 				},
+				spaceInfo:{
+					provider: 'aliyun',
+				    spaceId: '180418df-0c01-4d88-b075-eec3cf0b0ca2',
+				    clientSecret: 'ldVDdRsrkNBRhw3+1BDJVA=='
+				},
 				page:{
 					count:10,
 					more:0
@@ -35,28 +55,44 @@
 					view:'width:750rpx;display:block'
 				},
 				downUrl:'',
+				h_homeCollection:{
+					where:''
+				},
+				isDownList:true
 			}
 		},
 		onLoad(options) {
 			this.id=options.id
 			this.initData()
 		}, 
-	
+		onReady() {
+		},
 		methods: {
+			load(res){
+				// console.log(res);
+				if(res&&res.downlist&&res.downlist.length>0){
+					this.$store.commit('setDownUrlList',res.downlist)
+				}else{
+					this.isDownList = false
+				}
+			},
 			goDown(){
 				uni.navigateTo({
 					url:'/pages/downUrl/downUrl'
 				})
 			},
 			initData(){
-				this.$api.signincenter({post_id:this.id},'postsDetail').then(result=>{
-					console.log(result);
-					this.postsData = result.post
-					let regExp = new RegExp('(\s\s)|(\n)', 'g');
-					this.postsData.detail =result.post.detail.replace(regExp,'<br/>')
-					this.filterData(this.postsData.detail,this.postsData.images)
+				// this.$api.signincenter({post_id:this.id},'postsDetail').then(result=>{
+				// 	console.log(result);
+				// 	this.postsData = result.post
+				// 	let regExp = new RegExp('(\s\s)|(\n)', 'g');
+				// 	this.postsData.detail =result.post.detail.replace(regExp,'<br/>')
+				// 	this.filterData(this.postsData.detail,this.postsData.images)
+				// })
+				this.h_homeCollection.where = `postID == ${this.id-0}`
+				this.$nextTick(() => {
+				  this.$refs.h_home_ref_udb.loadData()
 				})
-				
 			},
 			filterData(result,img=[]){
 				// const detailList=result.match(/(?<=<image>).*?(?=((,*,*<\/image>)|$))/g)

@@ -14,6 +14,21 @@
 .u-back-top{
 	background: red;
 }
+.detail_title{
+	width: 400rpx;
+	font-size: 24rpx;
+	overflow:hidden;
+	
+	text-overflow:ellipsis;
+	
+	display:-webkit-box;
+	
+	-webkit-box-orient:vertical;
+	
+	-webkit-line-clamp:2;
+	text-indent: 2em;
+	margin-top: 28rpx;
+}
 /* 颜色变量 */
 @import "./uni_modules/uview-ui/theme.scss";
 /* 行为相关颜色 */
