@@ -74,7 +74,7 @@ exports.main = async (event, context) => {
 	//     ctx.body=formatResult(result,false)
 	//   }
 	
-	 return []
+	 // return []
 	// }); 
 	switch(action){
 		case "categoryQuery":
