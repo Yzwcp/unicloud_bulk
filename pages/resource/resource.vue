@@ -29,6 +29,7 @@
 				</view>
 				<u-loading-icon mode="circle" v-if='loading' inactive-color="red"></u-loading-icon>
 				<u-divider   :text="loading?'正在玩命加载中...':'暂无更多数据'"></u-divider>
+				<view style="height: 40rpx;"></view>
 			</unicloud-db>
 			<u-back-top :scroll-top="scrollTop" :iconStyle="iconStyle" :customStyle='customstyle'></u-back-top>
 <!-- 			<view v-if='page.more==1' style="text-align: center;font-size: 26rpx;color: red;">
@@ -103,6 +104,7 @@
 				})
 			},
 			clear(){
+				this.keyword=''
 				this.removeCondition()
 				this.$nextTick(() => {
 				  this.$refs.h_flhd.loadData({},(data)=>{})
@@ -208,12 +210,13 @@
 				font-size: 28rpx;
 				margin-bottom: 10rpx;
 				position: absolute;
-				bottom: 0;
-				right: 0;
+				bottom: -8rpx;
+				right: 12rpx;
+				font-size: 26rpx;
 			}
 			.detail-content{
 				color: $uni-text-color;
-				font-size: 28rpx;
+				font-size: 30rpx;
 				width: 350rpx;
 				display: -webkit-box;
 				-webkit-box-orient:vertical;

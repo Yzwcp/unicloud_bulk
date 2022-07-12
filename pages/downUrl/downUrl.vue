@@ -49,6 +49,7 @@
 		padding: 60rpx;
 		background-color: $my-bg;
 		.item{
+			width: 600rpx;
 			background: white;
 			border-radius: 20rpx;
 			padding: 30rpx;

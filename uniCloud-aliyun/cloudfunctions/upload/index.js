@@ -1,5 +1,6 @@
 'use strict';
 let qiniu = require('qiniu')
+const fs = require('fs')
 exports.main = async (event, context) => {
 	const {
 		params,
@@ -18,34 +19,48 @@ exports.main = async (event, context) => {
 		reqData = cloudUrlBodydata.data
 	}
 	
-	let bucket = 'wx-hd'
-	var accessKey = '9Rs05s8ijmyLOQwux2YJyNufUs6NaKJ-Iijk7Hm3';
-	var secretKey = 'cZ9xusjl_QR-XhEBkKQYWOAD1eGx7YhaRt_42EVh';
-	var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
-	var options = {
-	  scope: bucket,
-	};
+	// let bucket = 'wx-hd'
+	// var accessKey = '9Rs05s8ijmyLOQwux2YJyNufUs6NaKJ-Iijk7Hm3';
+	// var secretKey = 'cZ9xusjl_QR-XhEBkKQYWOAD1eGx7YhaRt_42EVh';
+	// var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+	// var options = {
+	//   scope: bucket,
+	// };
 	
 	
 	switch(action){
-		case "querytoken":
-			var putPolicy = new qiniu.rs.PutPolicy(options);
-			var uploadToken=putPolicy.uploadToken(mac);
-			return formatResult(uploadToken,true)
-		case "removeImage":
-			var config = new qiniu.conf.Config();
-			//config.useHttpsDomain = true;
-			config.zone = qiniu.zone.Zone_z0;
-			var bucketManager = new qiniu.rs.BucketManager(mac, config);
-			await bucketManager.delete(bucket,'yzw/1652595433241_Armored+Titan+-+Store+photo+2021 454.384.jpg', function(err, respBody, respInfo) {
-			  if (err) {
-			    return formatResult(respBody,false)
-			    //throw err;
-			  } else {
-			    return formatResult(respBody,true)
-			  }
-			});
+		case "add":
+		var imgData = reqData.imgbase64;
+		var name = reqData.name;
+		//过滤data:URL
+		var base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
+		var dataBuffer = new Buffer(base64Data, 'base64');
+		let result = await uniCloud.uploadFile({
+			cloudPath: name,
+			fileContent: dataBuffer
+		});
+		return {...result,name:name,timeStamp}
+	
 	}
+	// switch(action){
+	// 	case "querytoken":
+	// 		var putPolicy = new qiniu.rs.PutPolicy(options);
+	// 		var uploadToken=putPolicy.uploadToken(mac);
+	// 		return formatResult(uploadToken,true)
+	// 	case "removeImage":
+	// 		var config = new qiniu.conf.Config();
+	// 		//config.useHttpsDomain = true;
+	// 		config.zone = qiniu.zone.Zone_z0;
+	// 		var bucketManager = new qiniu.rs.BucketManager(mac, config);
+	// 		await bucketManager.delete(bucket,'yzw/1652595433241_Armored+Titan+-+Store+photo+2021 454.384.jpg', function(err, respBody, respInfo) {
+	// 		  if (err) {
+	// 		    return formatResult(respBody,false)
+	// 		    //throw err;
+	// 		  } else {
+	// 		    return formatResult(respBody,true)
+	// 		  }
+	// 		});
+	// }
 	
 
 	// let result = await uniCloud.uploadFile({
