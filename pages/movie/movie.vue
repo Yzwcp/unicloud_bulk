@@ -12,7 +12,7 @@
 			<view>点击图片，长按识别二维码联系客服</view>
 			<view class="img">
 				<view class="img_load"><u-loading-icon  color="red"></u-loading-icon></view>
-				<view class="img_content"><u-album  singleSize='230' singleMode='widthFix' :urls="['https://umep.ltd/yzw/1655042978157_wxkefu.jpg']"></u-album></view>
+				<view class="img_content"><u-album  singleSize='230' singleMode='widthFix' :urls="['https://vkceyugu.cdn.bspapp.com/VKCEYUGU-c8408139-ea9c-44fd-919f-b068e3b82a7c/16d488ea-ad80-4358-8cf0-ae00b864c548.png']"></u-album></view>
 			</view>
 		</view>
 	</view>

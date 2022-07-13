@@ -24,7 +24,13 @@
 				<view style='height:50rpx;'></view>
 				
 			</unicloud-db>
-			<u-button @click="goDown" v-if="isDownList" text="查看链接"></u-button>
+			<view  @click="goDown" v-if="isDownList" style='position: fixed;z-index: 100;text-align: center;font-size: 26rpx;bottom: 263rpx;right: 0rpx;width:120rpx;line-height: 120rpx;background-color: #E45656;color: white;border-radius: 100rpx;'>
+				查看链接
+			</view>
+			<view  @click="mz"  style='position: fixed;z-index: 100;text-align: center;font-size: 26rpx;bottom: 180rpx;right: 0rpx;width:120rpx;line-height: 50rpx;background-color: #5f81fb;color: white;'>
+				免责声明
+			</view>
+			<!-- <u-button text="查看链接"></u-button> -->
 	</view>
 </template>
 
@@ -77,6 +83,11 @@
 				}else{
 					this.isDownList = false
 				}
+			},
+			mz(){
+				uni.navigateTo({
+					url:'/pages/mz/mz'
+				})
 			},
 			goDown(){
 				uni.navigateTo({

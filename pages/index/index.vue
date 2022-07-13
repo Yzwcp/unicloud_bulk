@@ -8,7 +8,7 @@
 		<!-- <u-notice-bar :text="notice" ></u-notice-bar> -->
 		<view class="banner">
 			<image src="../../static/top_backgrounnd.png"></image>
-			<image style="border-radius: 20rpx;" src="https://umep.ltd/yzw/1655046748426_homebanner.jpg"></image>
+			<image style="border-radius: 20rpx;" src="https://vkceyugu.cdn.bspapp.com/VKCEYUGU-c8408139-ea9c-44fd-919f-b068e3b82a7c/aafa84c7-9bc4-41b4-981e-05f076b847bb.png"></image>
 		</view>
 		<Bulk :reachBottom='reachBottom' :bulkData='dataSource' v-show="currentIndex==891" />
 		<!-- <Resources  v-show="currentIndex==892" /> -->

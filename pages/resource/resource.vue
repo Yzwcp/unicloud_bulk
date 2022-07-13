@@ -1,8 +1,10 @@
 <template>
 	<view class="box" >
+			<u-sticky bgColor="#ffffff">
 			<u-tabs :list="menu" @change='tabsChange' lineColor='#ff4153'></u-tabs>
+			</u-sticky>
 			<view style="height: 30rpx;"></view>
-			<view class="search"><u-search placeholder="请输入关键字" @clear='clear' @search='search' v-model="keyword"></u-search></view>
+			    <view class="search"><u-search placeholder="请输入关键字" @clear='clear' @search='search' v-model="keyword"></u-search></view>
 			<unicloud-db 
 			v-slot:default="{data,pagination, loading, error, options,hasMore}" 
 			:collection="selectCondition.collection"  
@@ -119,7 +121,7 @@
 				// console.log(item.celection);
 				this.$nextTick(() => {
 				  this.$refs.h_flhd.loadData({},(data)=>{
-					  
+					this.scrollTop = 0  
 				  })
 				})
 			},
@@ -151,12 +153,12 @@
 
 <style lang="scss" scoped>
 	.box{
-		padding: 30rpx;
+		padding: 30rpx 0;
 		background-color:$uni-bg-color-grey ;
 		box-sizing: content-box;
 		min-height: 100vh;
 		.search{
-			padding: 20rpx 0;
+			padding: 20rpx 30rpx;
 		}
 		.box-detail{
 			background: white;
