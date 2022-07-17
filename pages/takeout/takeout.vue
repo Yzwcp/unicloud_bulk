@@ -83,8 +83,7 @@
 				}
 			},
 			async initData(){
-				 let res = await take_collection.get()
-				 console.log(res);
+				 let res = await take_collection.doc('62a57f0b7ab3bd000112850a').get()
 				 let menu = res.result.data[0].menu
 				 let notice = res.result.data[0].notice
 				 this.menu=menu

@@ -26,7 +26,7 @@
 				<text>待发货</text>
 			</view> -->
 		</view>
-		<view class="version" >版本号：1.0.1</view>
+		<view class="version" >版本号：1.0.2</view>
 	</view>
 </template>
 
