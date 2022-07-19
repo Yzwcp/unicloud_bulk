@@ -60,9 +60,9 @@ const store = new Vuex.Store({
 				})
 			})
 		},
-		login({commit,state},p){
+		login({commit,state,dispatch},p){
 			const that = this
-			return new Promise((resolve,reject)=>{
+			return new Promise(async(resolve,reject)=>{
 				
 				if(state.token){
 					resolve(true)
@@ -72,9 +72,16 @@ const store = new Vuex.Store({
 				const res = uni.getStorageSync('USER')
 				const token = uni.getStorageSync('uni_id_token')
 				if(token){
+					let expired = uni.getStorageSync('uni_id_token_expired')
+					let now  = new Date().getTime()
+					if(expired && now+60*60*5>=expired ){
+						console.log('缓存token过期，自动刷新token中');
+						await dispatch('refresh')
+						resolve(true)
+						return
+					}
 					commit('setUser',{userInfo:res,token:token})
 					resolve(true)
-					console.log('获取到缓存数据');
 					return
 				}
 				uni.showLoading({

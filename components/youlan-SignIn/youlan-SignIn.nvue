@@ -29,6 +29,7 @@
 			</view>
 		</view>
 		<view class="but">
+			
 			<button :style="'background:'+(bgday)+';'" @click="daySign(dayArr[aheadDay + day - 1])">签到</button>
 		</view>
 	</view>

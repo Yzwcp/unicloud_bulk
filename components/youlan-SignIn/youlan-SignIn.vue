@@ -31,8 +31,12 @@
 			</view>
 		</view>
 		<view class="but">
-			<button :style="'background:'+(bgday)+';'" @click="daySign(dayArr[aheadDay + day - 1])">签到</button>
+			<ad-rewarded-video adpid="1175562471" :loadnext="true" v-slot:default="{loading, error}" @load="onadload" @close="onadclose" @error="onaderror">
+			  <button class="people_invitation" :disabled="loading" :loading="loading">{{loading?'正在获取签到信息...':'获取双倍积分'}}</button>
+			  <view v-if="error">{{error}}</view>
+			</ad-rewarded-video>
 		</view>
+		<button  @click="daySign(1)"  class="people_invitation_nomarl" :disabled="nomarl" :loading="nomarl">普通签到</button>
 	</view>
 </template>
 
@@ -76,7 +80,8 @@
 				weekArr: ['日', '一', '二', '三', '四', '五', '六'], // 每周
 				aheadDay: 0,	// 前方空白天数数量，
 				jf:0,//积分
-				lx:0//连续签到天数
+				lx:0,//连续签到天数
+				nomarl:true
 			}
 		},
 		watch:{
@@ -116,8 +121,48 @@
 				
 				
 			}
+			setTimeout(()=>{
+				this.nomarl=false
+			},2000)
 		},
 		methods: {
+			onadload(e) {
+			  console.log('广告数据加载成功');
+			},
+			onadclose(e) {
+			  const detail = e.detail
+			  // 用户点击了【关闭广告】按钮
+			  if (detail && detail.isEnded) {
+				// 正常播放结束
+				this.showResource = true
+				this.$api.adcenter({
+					type:'签到激励视频',
+					status:100,
+					why:"none"
+				},'add').then(res=>{
+					if(res.success){
+						this.$showToast('恭喜获得双倍积分')
+					}
+				})
+				this.daySign(2)		
+			  				
+			  } else {
+				// 播放中途退出
+				this.$api.adcenter({
+					type:'签到激励视频',
+					status:1,
+					why:'中途退出'
+				},'add').then(res=>{
+					if(res.success){
+						this.$showToast('中途退出，双倍积分获取失败')
+					}
+				})
+			  }
+			},
+			onaderror(e) {
+			  // 广告加载失败
+			  console.log("onaderror: ", e.detail);
+			},
 			// 选择年月
 			changeDate(e) {
 				let that = this;
@@ -126,7 +171,7 @@
 				that.initDate();
 			},
 			// 今日签到
-			daySign() {
+			daySign(type) {
 				// 今天日期加上前方空白日期数量
 				let index = this.aheadDay + this.day - 1
 				if(this.dayArr[index].flag){
@@ -137,7 +182,7 @@
 					return
 				}
 				this.$set(this.dayArr[index], 'flag', true);
-				this.$emit('change', this.dayArr[index].date);
+				this.$emit('change', {actionflag:type},);
 				
 			},
 			// 点击补签
@@ -243,6 +288,31 @@
 </script>
 
 <style scoped>
+	.people_invitation_nomarl{
+		background-color: #b2d2ff;
+		width:300rpx;
+		line-height: 60rpx;
+		border-radius: 45rpx;
+		font-weight: 700;
+		text-align: center;
+		border: 4rpx black solid;
+		box-shadow: 0rpx 4rpx 4rpx #b2d2ff;
+		margin-top: 30rpx;
+		margin-bottom: 30rpx;
+		font-size: 34rpx;
+	}
+	.people_invitation{
+		background-color: #ecff07;
+		width: 600rpx;
+		line-height: 90rpx;
+		border-radius: 45rpx;
+		font-weight: 700;
+		border: 4rpx black solid;
+		box-shadow: 0rpx 8rpx 6rpx red;
+		margin-top: 30rpx;
+		margin-bottom: 30rpx;
+		font-size: 34rpx;
+	}
 	.calendar-box {
 		width: 100%;
 		flex-direction: column;

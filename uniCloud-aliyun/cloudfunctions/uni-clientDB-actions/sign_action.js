@@ -36,26 +36,35 @@ module.exports = {
 			}
 			if(islx==1){
 				state.newData.continuous =record.continuous+1
-				state.newData.points = record.points + (state.newData.continuous>6?7:state.newData.continuous)
-				state.newData.scores = (state.newData.continuous>6?7:state.newData.continuous)
+				
+				state.newData.points = record.points + ((state.newData.continuous>6?7:state.newData.continuous)*state.newData.actionflag)
+				state.newData.scores = (state.newData.continuous>6?7:state.newData.continuous)*state.newData.actionflag
 			}else if(record.sign_date != timeStamp){
 				state.newData.continuous =1
-				state.newData.points = record.points+1
-				state.newData.scores =1
+				state.newData.points = record.points+1*state.newData.actionflag
+				state.newData.scores =1*state.newData.actionflag
 			}else{
 			    throw new Error("今天已经签到")
 			}
 			
 		}
 		state.newData.user_id =state.auth.uid
+		// state.newData.user_id =JSON.stringify(event)
+		// state.newData.user_id =JSON.stringify(state.newData)
+		
 		state.newData.sign_date =todayTimestamp()
 		state.newData.type = 1
+		if(state.newData.actionflag==2){
+			state.newData.form = '激励'
+		}else if(state.newData.actionflag==1){
+			state.newData.form = '正常'
+		}
 	},
 	after: async (state, event, error, result) => {
 
 		if (error) {
 			throw error
 		}
-		return result
+		return state.newData
 	}
 }

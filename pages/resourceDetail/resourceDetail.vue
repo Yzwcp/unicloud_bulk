@@ -1,6 +1,8 @@
 <template>
 	<view class="box" >
-			
+			<view class="ad-view">
+				  <ad adpid="1507441712" appid='wx642a3710f8aee555' @load="onadload" @close="onadclose" @error="onaderror"></ad>
+			</view> 
 			<unicloud-db
 				v-slot:default="{data, loading, error, options}" 
 				ref='h_home_ref_udb'
@@ -24,6 +26,9 @@
 				<view style='height:50rpx;'></view>
 				
 			</unicloud-db>
+			<view class="ad-view">
+				  <ad adpid="1402154760" appid='wx642a3710f8aee555' ></ad>
+			</view> 
 			<view  @click="goDown" v-if="isDownList" style='position: fixed;z-index: 100;text-align: center;font-size: 26rpx;bottom: 263rpx;right: 0rpx;width:120rpx;line-height: 120rpx;background-color: #E45656;color: white;border-radius: 100rpx;'>
 				查看链接
 			</view>
@@ -75,6 +80,15 @@
 		onReady() {
 		},
 		methods: {
+			onadload(e) {
+			      console.log('广告数据加载成功');
+			    },
+			onadclose(e) {
+			},
+			onaderror(e) {
+			  // 广告加载失败
+			  console.log("onaderror: ", e.detail);
+			},
 			load(res){
 				// console.log(res);
 				if(res&&res.downlist&&res.downlist.length>0){
