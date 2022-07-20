@@ -25,8 +25,8 @@ module.exports = {
 		let timeStamp = todayTimestamp()
 		let {data: [record]} = await signInTable
 		//筛选最新签到的数据第一条
-		.where({user_id:state.auth.uid,type:1})
-		.orderBy("sign_date", "desc")
+		.where({user_id:state.auth.uid})
+		.orderBy("create_date", "desc")
 		.limit(1)
 		.get()
 		if(record){
@@ -47,6 +47,10 @@ module.exports = {
 			    throw new Error("今天已经签到")
 			}
 			
+		}else{
+			state.newData.continuous =1
+			state.newData.points = state.newData.actionflag
+			state.newData.scores =1*state.newData.actionflag
 		}
 		state.newData.user_id =state.auth.uid
 		// state.newData.user_id =JSON.stringify(event)
@@ -55,9 +59,9 @@ module.exports = {
 		state.newData.sign_date =todayTimestamp()
 		state.newData.type = 1
 		if(state.newData.actionflag==2){
-			state.newData.form = '激励'
+			state.newData.form = '观看视频签到'
 		}else if(state.newData.actionflag==1){
-			state.newData.form = '正常'
+			state.newData.form = '签到'
 		}
 	},
 	after: async (state, event, error, result) => {

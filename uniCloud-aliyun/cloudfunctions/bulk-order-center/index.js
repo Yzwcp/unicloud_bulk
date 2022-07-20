@@ -90,6 +90,24 @@ exports.main = async (event, context) => {
 					bulk_id:reqData.bulk_id,
 					
 				}).get()
+				let signData = await db.collection('wx_sign_in').where({
+					user_id:payload.uid,
+				})
+				.orderBy('create_date','desc')
+				.limit(1)
+				.get()
+				let lastSign = null
+				let points = 0
+				if(signData.affectedDocs>0){
+					if(signData.data && signData.data.length>0) {
+						lastSign = signData.data[0]
+						points = lastSign.points
+					}
+					
+				}
+				if(points<reqData.points){
+					return formatResult({},false,'获得此商品需要'+reqData.points+'积分,您的积分为' +points+ '，积分不足可以签到获得积分')
+				}
 				if(hasOneOrderRes.affectedDocs>0){
 					return formatResult(hasOneOrderRes.data[0],false)
 				}
@@ -102,6 +120,11 @@ exports.main = async (event, context) => {
 					create_date:timeStamp,
 					update_date:timeStamp
 					})
+				if(lastSign){
+					delete lastSign._id
+					delete lastSign.sign_date
+					await db.collection('wx_sign_in').add({...lastSign,type:-1,points:points-reqData.points,scores:0-reqData.points,form:'参加活动',create_date:timeStamp,update_date:timeStamp})
+				}	
 				if(!addRes.id) return formatResult(addRes,false)
 				return formatResult(addRes,true)
 			case 'edit':

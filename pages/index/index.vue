@@ -15,6 +15,9 @@
 <!-- 		<view class="wrap">
 			<u-back-top :scroll-top="scrollTop" :iconStyle="iconStyle" :customStyle='customstyle'></u-back-top>
 		</view> -->
+		<button @click="clearC('wx_bulk_order')">清除订单wx_bulk_order</button>
+		<button @click="clearC('ad-log')">清除ad-log</button>
+		<button @click="clearC('wx_sign_in')">清除签到</button>
 		<u-divider text="暂无更多活动"></u-divider>
 	</view>
 </template>
@@ -65,6 +68,11 @@
 			this.scrollTop = e.scrollTop;
 		},
 		methods: {
+			async clearC(e){
+				const db = uniCloud.database();
+				const c =await db.collection(e).remove()
+				console.log(c);
+			},
 			initData(data,action){
 				console.log(this.$api);
 				this.$api.bulkcenter(data,action).then(res=>{

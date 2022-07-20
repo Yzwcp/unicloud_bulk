@@ -1,9 +1,9 @@
 <template>
 	<view>
 
-		<unicloud-db ref='udb' :needLoading='true' loadingTitle='加载中' v-slot:default="{data, loading, error, options}" collection="wx_sign_in" :where="where" loadtime="manual">
+		<unicloud-db ref='udb'  :needLoading='true' loadingTitle='加载中' v-slot:default="{data, loading, error, options}" collection="wx_sign_in" :where="where" loadtime="manual">
 		  <view>
-			<youlanSignIn  type="sign" @change="signDate" :history='data'  bgday="#fe5568" bgweek="#fe5568"/>
+			<youlanSignIn  :signData='signData' type="sign" @change="signDate" :history='data'  bgday="#fe5568" bgweek="#fe5568"/>
 		  </view>
 		</unicloud-db>
 
@@ -19,7 +19,8 @@
 			return {
 				history:[],
 				where:{},
-				list:[]
+				list:[],
+				signData:{}
 			};
 		},
 		components:{youlanSignIn},
@@ -29,18 +30,34 @@
 		onReady() {
 			this.setwhere()
 			this.initData()
+			this.getSignData()
 		},
 		methods:{
-			
+			async getSignData(){
+				// this.$showLoading('加载中...')
+				const db = uniCloud.database()
+				let {result} = await db.collection('wx_sign_in').where({
+					user_id:this.$store.getters.g_userInfo._id,
+				})
+				.orderBy('create_date','desc')
+				.limit(1)
+				.get()
+				console.log(result);
+				if(result && result.data && result.data.length>0){
+					this.signData = result.data[0]
+				}
+				// uni.hideLoading()
+			},
 			async signDate(e){
-				
 				this.$refs.udb.add(e, {
 				  action:'sign_action',
+				  showToast:false,
 				  toastTitle: '签到成功', // toast提示语
 				  success: (res) => { // 新增成功后的回调
 					let d = res.result
-					this.$showToast(`你已经连续签到${d.continuous}天,本次获得${d.scores}积分`)
+					this.$showToast(`你已经连续签到${d.continuous}天,本次${e.actionflag==2?'双倍签到':'普通签到'}获得${d.scores}积分`)
 					this.$refs.udb.loadData()
+					this.getSignData()
 				  },
 				  fail: (err) => { // 新增失败后的回调
 				    const { message } = err

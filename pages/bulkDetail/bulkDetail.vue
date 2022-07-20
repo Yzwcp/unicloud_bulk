@@ -96,7 +96,7 @@
 				<image  src="../../static/kf.png"  mode="widthFix"></image>
 				<text>联系客服</text>
 			</view>
-			<button  :class="isEnding?'greyColor create': 'create'" @click="handleCreateOrder" :loading='createloading' :disabled="createloading">{{isEnding?'活动结束':'立即开团'}}</button>
+			<button  :class="isEnding?'greyColor create': 'create'" @click="handleCreateOrder" :loading='createloading' :disabled="createloading">{{isEnding?'活动结束':'立即获得'}}</button>
 		</view>
 	</view>
 </template>
@@ -184,9 +184,19 @@
 					 this.$showToast('登录失败')
 					 return
 				}
-				this.$api.bulkordercenter({bulk_id:this.allData._id,},'add').then(({data,success})=>{
+				this.$api.bulkordercenter({bulk_id:this.allData._id,points:this.allData.points},'add').then(({data,success,msg})=>{
 					let title = '活动参加成功！'
 					let id = data.id || data._id
+					if(!success && msg.indexOf('积分不足')>-1){
+						this.createloading = false
+						// this.$showToast(msg)
+						uni.showModal({
+							title:'提示',
+							content:msg
+						})
+						return
+					}
+					 
 					if(!success && data && id) title='这个活动已经开始啦...'
 					uni.showToast({
 						title,

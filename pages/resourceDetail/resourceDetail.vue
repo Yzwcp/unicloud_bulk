@@ -15,7 +15,7 @@
 				:limit='1'
 				:where="h_homeCollection.where"
 				>
-				<view style="text-align: center;line-height: 100rpx;font-size: 30rpx;">{{data.title}}</view>
+				<view style="text-align: center;line-height: 100rpx;font-size: 30rpx;font-weight: 700;">{{data.title}}</view>
 				<u-loading-icon v-if='loading'  textColor='red' text='加载中' color="red"></u-loading-icon>
 				<view class="box-parse">
 					<u-parse :content="data.detail"></u-parse>

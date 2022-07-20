@@ -20,7 +20,16 @@
 				<image src="../../static/icon-order.png"></image>
 				<text>订单记录</text>
 			</view>
-		
+			<view  v-if="Object.keys(g_userInfo).length>0">
+				
+				<ad-rewarded-video adpid="1175562471" :loadnext="true" v-slot:default="{loading, error}" @load="onadload" @close="onadclose" @error="onaderror">
+				  <!-- <button class="people_invitation" :disabled="loading" :loading="loading">{{loading?'正在获取签到信息...':'签到获取双倍积分'}}</button> -->
+				  <div v-show="loading" style='display: flex;flex-direction: column;align-items: center;'>
+					  <image src="../../static/video.png"></image>
+					  <text >获取积分</text>
+				  </div>
+				</ad-rewarded-video>
+			</view>
 <!-- 			<view @click="addr">
 				<image src="../../static/icon-order.png"></image>
 				<text>待发货</text>
@@ -31,6 +40,7 @@
 </template>
 
 <script>
+	const db = uniCloud.database()
 	import { mapGetters } from 'vuex';
 	export default {
 		data() {
@@ -38,7 +48,11 @@
 				user: {},
 				userInfo:{},
 				addrShow:false,
-				address:''
+				address:'',
+				showResource:false,
+				signData:{
+					points:0
+				}
 			}
 		},
 		computed:{
@@ -47,9 +61,85 @@
 		onLoad() {
 			this.handleLogin('init')
 		}, 
+		onShow() {
+			if(Object.keys(this.g_userInfo).length>0){
+				this.getSignData()
+			}
+		},
 		methods: {
+			onadload(e) {
+			  console.log('广告数据加载成功');
+			},
+			async onadclose(e) {
+			  const detail = e.detail
+			  // 用户点击了【关闭广告】按钮
+			  if (detail && detail.isEnded) {
+				// 正常播放结束
+				this.showResource = true
+				this.$api.adcenter({
+					type:'个人观看激励视频',
+					status:100,
+					why:"none"
+				},'add').then(res=>{
+					if(res.success){
+						this.$showToast('恭喜获得+1积分')
+					}
+				})
+				let signdata = {...this.signData}
+				let points = 0 
+				if(signdata.points>0){
+					points = signdata.points
+				}
+				delete signdata._id
+				delete signdata.create_date
+				delete signdata.update_date
+				db.collection('wx_sign_in').add({
+					...signdata,
+					points:points+1,
+					type:1,
+					scores:1,
+					user_id:this.$store.getters.g_userInfo._id,
+					form:'个人主页观看视频',
+				}).then(res=>{
+					this.getSignData()
+				})
+				
+					
+				
+			  } else {
+				// 播放中途退出
+				this.$api.adcenter({
+					type:'签到激励视频',
+					status:1,
+					why:'中途退出'
+				},'add').then(res=>{
+					if(res.success){
+						this.$showToast('中途退出，积分获取失败')
+					}
+				})
+			  }
+			},
+			onaderror(e) {
+			  // 广告加载失败
+			  console.log("onaderror: ", e.detail);
+			},
+			async getSignData(){
+				this.$showLoading('加载中...')
+				let {result} = await db.collection('wx_sign_in').where({
+					user_id:this.$store.getters.g_userInfo._id,
+				})
+				.orderBy('create_date','desc')
+				.limit(1)
+				.get()
+				
+				if(result && result.data && result.data.length>0){
+					this.signData = result.data[0]
+				}
+				uni.hideLoading()
+			},
 			async handleLogin(p){
 				const r = await this.$store.dispatch('login',p)
+				this.getSignData()
 			},
 			async go(url){
 				let r = await this.$store.dispatch('login')

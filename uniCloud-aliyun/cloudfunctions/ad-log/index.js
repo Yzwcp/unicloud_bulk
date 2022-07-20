@@ -43,7 +43,7 @@ exports.main = async (event, context) => {
 	
 	try{
 		switch(action){
-			case 'adds':
+			case 'add':
 				//先查询这个人有没有活动订单 有的话就不创建
 				// status:100 用户观看成功 
 				// let hasOneOrderRes = await collection.where({
@@ -55,11 +55,19 @@ exports.main = async (event, context) => {
 				// if(hasOneOrderRes.affectedDocs>13){
 				// 	return formatResult({},false,'10条查看')
 				// }
+				var d = new Date();
+				var str = d.getFullYear().toString() + addZero(d.getMonth() + 1) + addZero(d.getDate()) + addZero(d.getHours()) + addZero(d.getMinutes()) + addZero(d.getSeconds());
+				function addZero(v)
+				{
+				    if(v<10)
+				        return '0'+v;
+				    return v.toString();
+				}
 				let addRes = await collection.add({
 					user_id:payload.uid,
 					status:reqData.status,
 					type:reqData.type,
-					formatTime:new Date(timeStamp).toLocaleDateString(),
+					formatTime:str,
 					create_date:timeStamp,
 				})
 				return formatResult({},true,'获取链接成功')

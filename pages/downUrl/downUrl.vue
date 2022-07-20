@@ -3,7 +3,7 @@
 	
 		<ad-rewarded-video adpid="1175562471" :loadnext="true" v-slot:default="{loading, error}" @load="onadload" @close="onadclose" @error="onaderror">
 		  <button class="people_invitation" :disabled="loading" :loading="loading">{{loading?'正在获取链接...':'查看链接'}}</button>
-		  <view v-if="error">{{error}}</view>
+		  <view v-if="error">链接获取失败请返回，重新获取</view>
 		</ad-rewarded-video>
 <!-- 		<view class="ad-view">
 		      <ad adpid="1111111111" @load="onload" @close="onclose" @error="onerror"></ad>

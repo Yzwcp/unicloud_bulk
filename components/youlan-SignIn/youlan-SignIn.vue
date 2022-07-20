@@ -2,8 +2,8 @@
 	<view class="calendar-box">
 		<view class="top">
 			<view>
-				<h4>积分 <span> {{jf}} </span> (次月清零)</h4>
-				<p>连续签到{{lx}}天</p>
+				<h4>积分 <span> {{signData.points || 0}} </span> <span style='color: #999;font-weight: normal;font-size: 28rpx;'>(次月清零)</span></h4>
+				<p>连续签到{{signData.continuous || 0}}天</p>
 			</view>
 			<view class="rig">
 				<!-- <span>补签</span> -->
@@ -32,7 +32,7 @@
 		</view>
 		<view class="but">
 			<ad-rewarded-video adpid="1175562471" :loadnext="true" v-slot:default="{loading, error}" @load="onadload" @close="onadclose" @error="onaderror">
-			  <button class="people_invitation" :disabled="loading" :loading="loading">{{loading?'正在获取签到信息...':'获取双倍积分'}}</button>
+			  <button class="people_invitation" :disabled="loading" :loading="loading">{{loading?'正在获取签到信息...':'签到获取双倍积分'}}</button>
 			  <view v-if="error">{{error}}</view>
 			</ad-rewarded-video>
 		</view>
@@ -67,6 +67,13 @@
 			history:{
 				type: Array,
 				default: []
+			},
+			signData:{
+				type:Object,
+				default:{
+					continuous:0,
+					points:0
+				}
 			}
 		},
 		data() {
@@ -81,7 +88,8 @@
 				aheadDay: 0,	// 前方空白天数数量，
 				jf:0,//积分
 				lx:0,//连续签到天数
-				nomarl:true
+				nomarl:true,
+				
 			}
 		},
 		watch:{
@@ -97,10 +105,10 @@
 						}
 					})
 				})
-				if(val.length>0){
-					this.lx = val[val.length-1].continuous
-					this.jf = val[val.length-1].points
-				}
+				// if(val.length>0){
+				// 	this.lx = val[val.length-1].continuous
+				// 	this.jf = val[val.length-1].points
+				// }
 			}
 		},
 		computed:{
@@ -121,11 +129,13 @@
 				
 				
 			}
+			
 			setTimeout(()=>{
 				this.nomarl=false
 			},2000)
 		},
 		methods: {
+			
 			onadload(e) {
 			  console.log('广告数据加载成功');
 			},
