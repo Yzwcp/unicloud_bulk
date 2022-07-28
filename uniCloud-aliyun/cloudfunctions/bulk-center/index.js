@@ -10,7 +10,7 @@ exports.main = async (event, context) => {
 	let action =null //操作
 	let ex=null //body额外字段
 	let reqData = null //数据
-	let timeStamp = new Date().getTime()
+	let timeStamp = new Date().getTime() +3600000*8
 	if(body){
 		cloudUrlBodydata = JSON.parse(body)
 		ex = cloudUrlBodydata.ex

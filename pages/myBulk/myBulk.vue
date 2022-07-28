@@ -269,6 +269,17 @@
 						}
 						this.bannerList = res.data.bulk[0].content_img[0]
 						this.group_adds = res.data.group
+						if(this.group_adds.length>0){
+							this.group_adds.forEach(item=>{
+								let name = item.nickname.split('')
+								let s = ''
+								name.map(i=>{
+									s+="*"
+								})
+								item.nickname=name[0]+s+ (name.length==2?'*':name[name.length-1])
+								if(name.length==1)item.nickname='*'
+							})
+						}
 						this.time =Number(this.bulkData.endtime) - new Date().getTime()  > 0 ? Number(this.bulkData.endtime) - new Date().getTime() : 0
 						this.orderFinish()
 					}

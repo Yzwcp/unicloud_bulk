@@ -3,7 +3,7 @@
 
 		<unicloud-db ref='udb'  :needLoading='true' loadingTitle='加载中' v-slot:default="{data, loading, error, options}" collection="wx_sign_in" :where="where" loadtime="manual">
 		  <view>
-			<youlanSignIn  :signData='signData' type="sign" @change="signDate" :history='data'  bgday="#fe5568" bgweek="#fe5568"/>
+			<youlanSignIn  :signData='g_SignData' type="sign" @change="signDate" :history='data'  bgday="#fe5568" bgweek="#fe5568"/>
 		  </view>
 		</unicloud-db>
 
@@ -13,6 +13,7 @@
 <script>
 	import youlanSignIn from '@/components/youlan-SignIn/youlan-SignIn.vue'
 	import {isOverExpired} from '../api/request.js'
+	import { mapGetters } from 'vuex';
 	export default {
 		name:'SignInDetail',
 		data() {
@@ -20,44 +21,33 @@
 				history:[],
 				where:{},
 				list:[],
-				signData:{}
 			};
 		},
 		components:{youlanSignIn},
 		created() {
 			
+			
+		},
+		computed:{
+			...mapGetters(['g_userInfo','g_SignData'])
 		},
 		onReady() {
 			this.setwhere()
 			this.initData()
-			this.getSignData()
 		},
 		methods:{
-			async getSignData(){
-				// this.$showLoading('加载中...')
-				const db = uniCloud.database()
-				let {result} = await db.collection('wx_sign_in').where({
-					user_id:this.$store.getters.g_userInfo._id,
-				})
-				.orderBy('create_date','desc')
-				.limit(1)
-				.get()
-				console.log(result);
-				if(result && result.data && result.data.length>0){
-					this.signData = result.data[0]
-				}
-				// uni.hideLoading()
-			},
+	
 			async signDate(e){
 				this.$refs.udb.add(e, {
 				  action:'sign_action',
 				  showToast:false,
+				  needLoading:false,
 				  toastTitle: '签到成功', // toast提示语
 				  success: (res) => { // 新增成功后的回调
 					let d = res.result
 					this.$showToast(`你已经连续签到${d.continuous}天,本次${e.actionflag==2?'双倍签到':'普通签到'}获得${d.scores}积分`)
 					this.$refs.udb.loadData()
-					this.getSignData()
+					this.$store.dispatch('getSignData')
 				  },
 				  fail: (err) => { // 新增失败后的回调
 				    const { message } = err
@@ -79,6 +69,7 @@
 			async initData(){
 				this.$showLoading()
 				await this.$store.dispatch('isOverExpired',{action:'sigin' ,islogin:true}) 
+				
 				this.$nextTick(() => {
 				  this.$refs.udb.loadData({},(data)=>{
 					  console.log(data);

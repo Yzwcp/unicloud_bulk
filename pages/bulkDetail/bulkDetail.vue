@@ -148,6 +148,18 @@
 				this.$api.bulkcenter(data,action).then(res=>{
 					if(res.success && res.data && res.data.affectedDocs>0){
 						let d = res.data.data[0]
+						if(d.stand!=1){
+							uni.showModal({
+								title:'提示',
+								content:'活动已经结束，请返回首页重新选取',
+								complete(){
+									uni.switchTab({
+										url:'../index/index'
+									})
+								},
+							})
+							
+						}
 						this.allData = d
 						let arrimg = []
 						if(d.content_img.length>0){
@@ -198,6 +210,7 @@
 					}
 					 
 					if(!success && data && id) title='这个活动已经开始啦...'
+					this.$store.dispatch('getSignData')
 					uni.showToast({
 						title,
 						icon:'none',

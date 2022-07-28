@@ -11,7 +11,7 @@ exports.main = async (event, context) => {
 	let ex=null //body额外字段
 	let reqData = null //数据
 	let token = null
-	let timeStamp = new Date().getTime()
+	let timeStamp = new Date().getTime() +3600000*8
 	const tokenWhite = ['detail','modi']//token白名单
 	let payload = null //token 校验结果
 	if(body){
@@ -55,8 +55,8 @@ exports.main = async (event, context) => {
 				// if(hasOneOrderRes.affectedDocs>13){
 				// 	return formatResult({},false,'10条查看')
 				// }
-				var d = new Date();
-				var str = d.getFullYear().toString() + addZero(d.getMonth() + 1) + addZero(d.getDate()) + addZero(d.getHours()) + addZero(d.getMinutes()) + addZero(d.getSeconds());
+				var d = new Date(timeStamp);
+				var str = d.getFullYear().toString() +'-'+ addZero(d.getMonth() + 1)+'-' + addZero(d.getDate()) +'-'+ addZero(d.getHours()) +':'+ addZero(d.getMinutes())+':' + addZero(d.getSeconds());
 				function addZero(v)
 				{
 				    if(v<10)

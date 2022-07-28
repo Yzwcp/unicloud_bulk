@@ -151,7 +151,7 @@
 					why:"none"
 				},'add').then(res=>{
 					if(res.success){
-						this.$showToast('恭喜获得双倍积分')
+						// this.$showToast('恭喜获得双倍积分')
 					}
 				})
 				this.daySign(2)		

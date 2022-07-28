@@ -2,9 +2,9 @@
 	<view class="my">
 		<!-- <uni-sign-in ref="signIn"></uni-sign-in> -->
 		<view class="my_header"  @click='handleLogin'>
-			<view class="header_avatar"  v-if="Object.keys(g_userInfo).length>0">
+			<view class="header_avatar" style="display: flex;"  v-if="Object.keys(g_userInfo).length>0">
 				<image class="header_avatar_img" :src="g_userInfo.avatarUrl"></image>
-				<text>{{g_userInfo.nickName}}</text>
+				<div><div>{{g_userInfo.nickName}}</div> <div style="margin-top: 10rpx;font-size: 26rpx;">积分：{{g_SignData.points}}</div>	</div>
 			</view>
 			<view class="header_avatar" v-else>
 				<image class="header_avatar_img" src="../../static/icon-empty.png"></image>
@@ -24,9 +24,9 @@
 				
 				<ad-rewarded-video adpid="1175562471" :loadnext="true" v-slot:default="{loading, error}" @load="onadload" @close="onadclose" @error="onaderror">
 				  <!-- <button class="people_invitation" :disabled="loading" :loading="loading">{{loading?'正在获取签到信息...':'签到获取双倍积分'}}</button> -->
-				  <div v-show="loading" style='display: flex;flex-direction: column;align-items: center;'>
-					  <image src="../../static/video.png"></image>
-					  <text >获取积分</text>
+				  <div v-show="!loading" style='display: flex;flex-direction: column;align-items: center;'>
+					  <image  src="../../static/video.png"></image>
+					  <text >获取积分({{g_videoTotal}}/5)</text>
 				  </div>
 				</ad-rewarded-video>
 			</view>
@@ -35,7 +35,7 @@
 				<text>待发货</text>
 			</view> -->
 		</view>
-		<view class="version" >版本号：1.0.2</view>
+		<view class="version" >版本号：1.0.3</view>
 	</view>
 </template>
 
@@ -50,22 +50,16 @@
 				addrShow:false,
 				address:'',
 				showResource:false,
-				signData:{
-					points:0
-				}
 			}
 		},
 		computed:{
-			...mapGetters(['g_userInfo'])
+			...mapGetters(['g_userInfo','g_SignData','g_videoTotal'])
 		},
 		onLoad() {
 			this.handleLogin('init')
+			
 		}, 
-		onShow() {
-			if(Object.keys(this.g_userInfo).length>0){
-				this.getSignData()
-			}
-		},
+		
 		methods: {
 			onadload(e) {
 			  console.log('广告数据加载成功');
@@ -75,17 +69,27 @@
 			  // 用户点击了【关闭广告】按钮
 			  if (detail && detail.isEnded) {
 				// 正常播放结束
+				
 				this.showResource = true
+				if(this.g_videoTotal>=5){
+					uni.showModal({
+						title:'提示',
+						confirmText: '确定',
+						cancelText: '取消',
+						content: '主动获取积分奖励，每天能获取5次哦'
+					})
+					return 
+				}
 				this.$api.adcenter({
 					type:'个人观看激励视频',
-					status:100,
+					status:101,
 					why:"none"
 				},'add').then(res=>{
 					if(res.success){
 						this.$showToast('恭喜获得+1积分')
 					}
 				})
-				let signdata = {...this.signData}
+				let signdata = {...this.g_SignData}
 				let points = 0 
 				if(signdata.points>0){
 					points = signdata.points
@@ -101,7 +105,7 @@
 					user_id:this.$store.getters.g_userInfo._id,
 					form:'个人主页观看视频',
 				}).then(res=>{
-					this.getSignData()
+					this.$store.dispatch('getSignData')
 				})
 				
 					
@@ -123,23 +127,12 @@
 			  // 广告加载失败
 			  console.log("onaderror: ", e.detail);
 			},
-			async getSignData(){
-				this.$showLoading('加载中...')
-				let {result} = await db.collection('wx_sign_in').where({
-					user_id:this.$store.getters.g_userInfo._id,
-				})
-				.orderBy('create_date','desc')
-				.limit(1)
-				.get()
-				
-				if(result && result.data && result.data.length>0){
-					this.signData = result.data[0]
-				}
-				uni.hideLoading()
-			},
+
 			async handleLogin(p){
 				const r = await this.$store.dispatch('login',p)
-				this.getSignData()
+				if(r){
+					this.$store.dispatch('getSignData')
+				}
 			},
 			async go(url){
 				let r = await this.$store.dispatch('login')

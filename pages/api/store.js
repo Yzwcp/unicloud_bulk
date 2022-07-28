@@ -11,6 +11,8 @@ const store = new Vuex.Store({
 			integral:0,//积分
 			signcount:0,//连续签到
 		},
+		signData:{points:0},
+		total:0
 	},
     mutations: {
 		setUser(state,playload){
@@ -96,6 +98,7 @@ const store = new Vuex.Store({
 						title:'请登录',
 						icon:'none'
 					})
+					reject(false)
 					return
 				}
 				
@@ -159,14 +162,59 @@ const store = new Vuex.Store({
 				}
 				res()
 			})
+		},
+		getSignData({commit,state,dispatch},p){
+			const db = uniCloud.database()
+			
+			db.collection('wx_sign_in').where({
+				user_id:state.userInfo._id,
+			})
+			.orderBy('create_date','desc')
+			.limit(1)
+			.get()
+			.then(({result})=>{
+				if(result && result.data && result.data.length>0){
+					state.signData = result.data[0]
+				}
+				dispatch('getSignLog')
+			})
+			.finally(()=>{
+			})
+		},
+		getSignLog({commit,state,dispatch},p){
+			const db = uniCloud.database()
+			const dbCmd = db.command
+			db.collection('ad-log').where({
+				user_id:state.userInfo._id,
+				create_date: dbCmd.gte(todayTimestamp()),
+				status:101
+			})
+			.count()
+			.then(res=>{
+				console.log(res);
+				state.total  = res.result.total
+			})
 		}
+		
 	},
 	getters:{
 		g_userInfo:(state)=>state.userInfo,
 		g_token:(state)=>state.token,
 		g_downList:(state)=>state.downUrlList,
 		g_integral:(state)=>state.integral,
+		g_SignData:(state)=>state.signData,
+		g_videoTotal:(state)=>state.total,
 		
 	}
 })
+function todayTimestamp() {
+	//时区
+	let timeZone = new Date().getTimezoneOffset() / 60
+	//获得相对于北京时间的时间戳
+	let timestamp = Date.now() + 3600 * 1000 * (8 + timeZone)
+	//一天一共多少毫秒
+	const D = 3600 * 24 * 1000
+	//去掉余数，再减去东8区的8小时 得到当天凌晨的时间戳
+	return parseInt(timestamp / D) * D - 3600 * 1000 * 8
+}
 export default store

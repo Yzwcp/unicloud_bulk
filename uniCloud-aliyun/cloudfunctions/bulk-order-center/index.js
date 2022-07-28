@@ -13,7 +13,7 @@ exports.main = async (event, context) => {
 	let ex=null //body额外字段
 	let reqData = null //数据
 	let token = null
-	let timeStamp = new Date().getTime()
+	let timeStamp = new Date().getTime() 
 	const tokenWhite = ['detail','modi']//token白名单
 	let payload = null //token 校验结果
 	if(body){
@@ -41,6 +41,24 @@ exports.main = async (event, context) => {
 	const db = uniCloud.database();
 	const dbCmd = db.command
 	const blukOrderCollection = db.collection('wx_bulk_order');
+	const transporter = nodemailer.createTransport({
+	         service: '126', //使用了内置传输发送邮件 支持列表传送门
+	            auth: {
+	              user: 'shengdajiagzh@126.com',//发送邮箱
+	              pass: 'LFKDSSKYCEICNGVO' //授权码,通过QQ邮箱中的设置获取
+	            }
+		});
+	function emailMsg(html,subject='省大家资源网更新通知'){
+		return{
+			from: 'shengdajiagzh@126.com', // 发送者
+            to: 'yuanzhiwen@sdj357.wecom.work', // 接受者,可以同时发送多个,以逗号隔开
+//             cc:'1774570823@qq.com', // 抄送,可以同时发送多个,以逗号隔开
+            //bcc:'',//暗抄送,可以同时发送多个,以逗号隔开
+            subject, // 标题
+//             text: '', // 文本
+			html
+		}
+	}
 	try{
 		switch(action){
 			case 'query':
@@ -98,6 +116,9 @@ exports.main = async (event, context) => {
 				.get()
 				let lastSign = null
 				let points = 0
+				if(hasOneOrderRes.affectedDocs>0){
+					return formatResult(hasOneOrderRes.data[0],false)
+				}
 				if(signData.affectedDocs>0){
 					if(signData.data && signData.data.length>0) {
 						lastSign = signData.data[0]
@@ -108,9 +129,7 @@ exports.main = async (event, context) => {
 				if(points<reqData.points){
 					return formatResult({},false,'获得此商品需要'+reqData.points+'积分,您的积分为' +points+ '，积分不足可以签到获得积分')
 				}
-				if(hasOneOrderRes.affectedDocs>0){
-					return formatResult(hasOneOrderRes.data[0],false)
-				}
+				
 				let addRes = await blukOrderCollection.add({
 					user_id:payload.uid,
 					bulk_id:reqData.bulk_id,
@@ -152,44 +171,14 @@ exports.main = async (event, context) => {
 						order_id:reqData.order_id
 					}).count()
 					if(groupCollection.total>=groupsize){
-						
-						var transporter = nodemailer.createTransport({
-						
-						       // host: 'smtp.qq.email',
-						
-						       //  port: 465, // SMTP 端口 
-						
-						       // secureConnection: true, // 使用了 SSL
-						
-					           service: 'qq', //使用了内置传输发送邮件 支持列表传送门
-					            auth: {
-					              user: '1494993218@qq.com',//发送邮箱
-					              pass: 'hzetwiwgnfzehjgb' //授权码,通过QQ邮箱中的设置获取
-					            }
-						
-						 });
-						
-						 var message = {
-				            from: '1494993218@qq.com', // 发送者
-				            to: '1774570823@qq.com', // 接受者,可以同时发送多个,以逗号隔开
-				            // cc:'', // 抄送,可以同时发送多个,以逗号隔开
-				            //bcc:'',//暗抄送,可以同时发送多个,以逗号隔开
-				            subject: '[省大家]小程序来订单啦', // 标题
-				            html: `<div>
-									<h2>订单id:</h2>
-									<div>商品名:</div>
-								   <div>`, // 文本
-				            //  html: `<h2>nodemailer基本使用:</h2><h3>`
-						  };
-						 transporter.sendMail(message, function (err, info) {
-				            if (err) {
-				              console.log("==邮件发送失败==");
-				              console.log(err);
-				              return;
-				            }
-						    console.log('==邮件发送成功==');
-						
-						 });
+						let html = `
+							订单id:${reqData.order_id}
+						`
+						try{
+							emailRes = await transporter.sendMail(emailMsg(html,'省大家小程来订单啦'));
+						}catch(e){
+							//TODO handle the exception
+						}
 						let modifyRes = await blukOrderCollection.doc(reqData.order_id)
 						.update({
 						  address:reqData.address,
