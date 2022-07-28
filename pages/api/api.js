@@ -16,6 +16,6 @@ export const API = {
         return request({url:'/upload',method:'post',data:{data:{...data},ex:{action}}})
     },
 	adcenter:(data,action)=>{
-	    return request({url:'/adcenter',method:'post',data:{data:{...data},ex:{action}}})
+	    return request({url:'/adcenter',method:'post',data:{data:{...data},ex:{action,islogin:true}}})
 	},
 }

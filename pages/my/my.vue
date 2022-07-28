@@ -20,7 +20,7 @@
 				<image src="../../static/icon-order.png"></image>
 				<text>订单记录</text>
 			</view>
-			<view  v-if="Object.keys(g_userInfo).length>0">
+			<view  v-if="Object.keys(g_userInfo).length>0" >
 				
 				<ad-rewarded-video adpid="1175562471" :loadnext="true" v-slot:default="{loading, error}" @load="onadload" @close="onadclose" @error="onaderror">
 				  <!-- <button class="people_invitation" :disabled="loading" :loading="loading">{{loading?'正在获取签到信息...':'签到获取双倍积分'}}</button> -->
@@ -35,7 +35,7 @@
 				<text>待发货</text>
 			</view> -->
 		</view>
-		<view class="version" >版本号：1.0.3</view>
+		<view class="version" >版本号：1.0.4</view>
 	</view>
 </template>
 
@@ -61,15 +61,16 @@
 		}, 
 		
 		methods: {
+			
 			onadload(e) {
 			  console.log('广告数据加载成功');
 			},
 			async onadclose(e) {
 			  const detail = e.detail
+			  
 			  // 用户点击了【关闭广告】按钮
 			  if (detail && detail.isEnded) {
 				// 正常播放结束
-				
 				this.showResource = true
 				if(this.g_videoTotal>=5){
 					uni.showModal({

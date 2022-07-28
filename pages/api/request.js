@@ -9,19 +9,31 @@ export async function  request  (options){
 		}) 
 		
 	}
-	options.data.ex.token = store.getters.g_token 
-	return new Promise((resolve, reject) => { //异步封装接口，使用Promise处理异步请求
+	options.data.ex.token = store.getters.g_token
+	return new Promise(async(resolve, reject) => { //异步封装接口，使用Promise处理异步请求
 	    uni.request({ //发送请求
 	        url: api_base_url + options.url, //接收请求的API
 	        method: options.method || 'POST', //接收请求的方式,如果不传默认为GET
 	        data: options.data || {}, //接收请求的data,不传默认为空
-	        success: (res) => { //数据获取成功
+	        success:async (res) => { //数据获取成功
 			// console.log(res);
 	            if (res.statusCode !== 200) { //因为200是返回成功的状态码，如果不等于200,则代表获取失败,
 	                return uni.showToast({
 	                    title: "数据获取失败！"
 	                })
 	            }
+				if(res &&  res.data && res.data && res.data.msg==('token错误')){
+					
+					await store.dispatch('refresh')
+					uni.showToast({ title: "登录成功！"})
+					setTimeout(()=>{
+						uni.switchTab({
+							url:'/pages/my/my'
+						})
+					},1000)
+					return 
+				}
+			
 				if(options.loading)uni.hideLoading()
 	            resolve(res.data) //成功,将数据返回
 	        },

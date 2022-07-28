@@ -35,7 +35,7 @@ const store = new Vuex.Store({
 					 success: async(res) =>{
 						try{
 							uni.showLoading({
-								title:'正在登录...'
+								title:'登录过期，自动登录...'
 							})
 							const result = await API.usercenter({code:res.code},'wxLogin')
 							commit('setUser',{userInfo:result.userInfo,token:result.token})
@@ -156,7 +156,6 @@ const store = new Vuex.Store({
 				let expired = uni.getStorageSync('uni_id_token_expired')
 				let now  = new Date().getTime()
 				if(expired && now+60*60*5>=expired && p.action!='wxLogin' && p.islogin){
-					console.log(1);
 					await dispatch('refresh')
 					res()
 				}

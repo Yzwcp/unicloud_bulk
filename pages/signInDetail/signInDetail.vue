@@ -43,11 +43,13 @@
 				  showToast:false,
 				  needLoading:false,
 				  toastTitle: '签到成功', // toast提示语
-				  success: (res) => { // 新增成功后的回调
+				  success:  (res) => { // 新增成功后的回调
 					let d = res.result
-					this.$showToast(`你已经连续签到${d.continuous}天,本次${e.actionflag==2?'双倍签到':'普通签到'}获得${d.scores}积分`)
 					this.$refs.udb.loadData()
 					this.$store.dispatch('getSignData')
+					setTimeout(()=>{
+						this.$showToast(`你已经连续签到${d.continuous}天,本次${e.actionflag==2?'双倍签到':'普通签到'}获得${d.scores}积分`)
+					},1200)
 				  },
 				  fail: (err) => { // 新增失败后的回调
 				    const { message } = err
